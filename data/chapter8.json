@@ -103,6 +103,23 @@
           "question": null
         },
         {
+          "id": "structured-output",
+          "title": "Structured Output",
+          "definition": "Structured output is a technique that constrains a model's response to a specific, well-defined format like JSON or XML, rather than allowing free-form text. This is especially useful for integrating LLM outputs directly into applications and databases. By requesting structured output (e.g., \"respond with valid JSON containing fields: stem, a, b, c, d, correct_answer\"), you reduce ambiguity, make parsing reliable, enable validation against a schema, and significantly reduce hallucinations since the model is constrained by the expected structure. Many modern LLM APIs now have native support for structured output, automatically enforcing the schema.",
+          "keywords": [
+            "JSON",
+            "schema validation",
+            "constraint",
+            "parseable"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/structured-output.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
           "id": "plugins--tools-api",
           "title": "Plugins / Tools API",
           "definition": "A Plugins or Tools API serves as a standardized interface or \"capabilities registry\" that an LLM can use to discover and interact with a wide array of external, third-party tools. This concept, popularized by ChatGPT Plugins, allows a model to dynamically access new capabilities (e.g., booking flights, ordering food, or querying a specific database) without being retrained. The system typically handles permissions and standardizes the way the LLM \"talks\" to these diverse external services.",

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structured Output - JSON Example</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: #d1d5db;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #60a5fa;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .section {
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            color: #93c5fd;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #4b5563;
+        }
+
+        /* Prompt Section */
+        .prompt-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 3px solid #8b5cf6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-text {
+            color: #e0e7ff;
+            margin-bottom: 0.5rem;
+        }
+
+        /* JSON Schema */
+        .schema-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .schema-box {
+            background: rgba(20, 25, 35, 0.9);
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .schema-box h3 {
+            color: #34d399;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+        }
+
+        .key-value {
+            margin-bottom: 0.6rem;
+            padding: 0.5rem;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        .key {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .type {
+            color: #60a5fa;
+            margin-left: 0.5rem;
+        }
+
+        .description {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Output Example */
+        .output-section {
+            background: rgba(20, 25, 35, 0.9);
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .json-output {
+            color: #d1d5db;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* JSON Syntax Highlighting */
+        .json-bracket {
+            color: #9ca3af;
+        }
+
+        .json-key {
+            color: #fbbf24;
+        }
+
+        .json-string {
+            color: #34d399;
+        }
+
+        .json-number {
+            color: #60a5fa;
+        }
+
+        .json-boolean {
+            color: #f87171;
+        }
+
+        .json-indent {
+            display: inline-block;
+            width: 2rem;
+        }
+
+        /* Array Items */
+        .array-item {
+            background: rgba(30, 41, 59, 0.4);
+            border-left: 2px solid #8b5cf6;
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.25rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: #bfdbfe;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 1rem;
+        }
+
+        .info-box strong {
+            color: #60a5fa;
+        }
+
+        /* Toggle Button */
+        .toggle-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .toggle-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .schema-container {
+                grid-template-columns: 1fr;
+            }
+
+            .json-output {
+                font-size: 0.75rem;
+            }
+
+            .json-indent {
+                width: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Structured Output Example: MCQ Generation</h1>
+
+        <!-- Prompt Section -->
+        <div class="section">
+            <div class="section-title">📝 User Prompt</div>
+            <div class="prompt-box">
+                <div class="prompt-text">
+                    "Generate 3 multiple choice questions about AI concepts in valid JSON format. Each question should have: a stem (the question), four options (a, b, c, d), and indicate which one is the correct answer."
+                </div>
+            </div>
+        </div>
+
+        <!-- Expected Structure -->
+        <div class="section">
+            <div class="section-title">🏗️ Expected JSON Structure</div>
+            <div class="schema-container">
+                <div class="schema-box">
+                    <h3>Top-Level Keys</h3>
+                    <div class="key-value">
+                        <span class="key">questions</span>
+                        <span class="type">Array</span>
+                    </div>
+                </div>
+                <div class="schema-box">
+                    <h3>Per Question Object</h3>
+                    <div class="key-value">
+                        <span class="key">stem</span>
+                        <span class="type">String</span>
+                        <div class="description">The question text</div>
+                    </div>
+                    <div class="key-value">
+                        <span class="key">a, b, c, d</span>
+                        <span class="type">String</span>
+                        <div class="description">Answer options</div>
+                    </div>
+                    <div class="key-value">
+                        <span class="key">correct_answer</span>
+                        <span class="type">String</span>
+                        <div class="description">One of: "a", "b", "c", or "d"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Example -->
+        <div class="section">
+            <div class="section-title">✅ Model Output (Valid JSON)</div>
+            <div class="output-section">
+                <pre class="json-output"><span class="json-bracket">{</span>
+  <span class="json-key">"questions"</span><span class="json-bracket">:</span> <span class="json-bracket">[</span>
+    <span class="json-bracket">{</span>
+      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What does an embedding represent in machine learning?"</span><span class="json-bracket">,</span>
+      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"A hand-crafted feature vector"</span><span class="json-bracket">,</span>
+      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"A learned numeric representation capturing semantic meaning"</span><span class="json-bracket">,</span>
+      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Random numbers between 0 and 1"</span><span class="json-bracket">,</span>
+      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"A binary encoding of the input"</span><span class="json-bracket">,</span>
+      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
+    <span class="json-bracket">},</span>
+    <span class="json-bracket">{</span>
+      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What is the primary benefit of using RAG (Retrieval-Augmented Generation)?"</span><span class="json-bracket">,</span>
+      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"Reduces model size by 50%"</span><span class="json-bracket">,</span>
+      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"Grounds answers in external knowledge sources"</span><span class="json-bracket">,</span>
+      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Eliminates the need for model training"</span><span class="json-bracket">,</span>
+      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"Increases inference speed by 10x"</span><span class="json-bracket">,</span>
+      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
+    <span class="json-bracket">},</span>
+    <span class="json-bracket">{</span>
+      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"Which of the following is a hallucination in LLM responses?"</span><span class="json-bracket">,</span>
+      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"The model generating plausible but false information"</span><span class="json-bracket">,</span>
+      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"The model refusing to answer a question"</span><span class="json-bracket">,</span>
+      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Excessive memory usage during inference"</span><span class="json-bracket">,</span>
+      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"The model taking too long to respond"</span><span class="json-bracket">,</span>
+      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"a"</span>
+    <span class="json-bracket">}</span>
+  <span class="json-bracket">]</span>
+<span class="json-bracket">}</span></pre>
+            </div>
+        </div>
+
+        <!-- Benefits Box -->
+        <div class="section">
+            <div class="section-title">💡 Why Structured Output Matters</div>
+            <div class="info-box">
+                <strong>Reliability:</strong> JSON structure ensures consistent parsing. No guessing about format.<br><br>
+                <strong>Automation:</strong> Code can directly load and process the response without text parsing.<br><br>
+                <strong>Validation:</strong> Can verify data against a schema before using it.<br><br>
+                <strong>Integration:</strong> JSON works seamlessly with APIs, databases, and applications.<br><br>
+                <strong>Reduced Hallucination:</strong> Explicit structure constraints guide the model toward accurate outputs.
+            </div>
+        </div>
+
+        <!-- Unstructured Comparison -->
+        <div class="section">
+            <div class="section-title">⚠️ Without Structured Output (Unstructured)</div>
+            <div class="toggle-container">
+                <button class="toggle-btn" onclick="toggleComparison()">Show Unstructured Example</button>
+            </div>
+            <div id="unstructured" class="hidden output-section">
+                <pre class="json-output" style="color: #f87171;"><span class="json-key"># Unpredictable format</span>
+<span class="json-string">"Question 1: What does an embedding represent?
+Possible answers: A) hand-crafted features, B) learned numeric representation,
+C) random numbers, D) binary encoding. The answer is B."</span>
+
+<span class="json-key"># Parsing nightmare - inconsistent format, extra text, no structure</span>
+<span class="json-string">"Q2 - RAG systems help by... answer: option b"</span>
+
+<span class="json-key"># Difficult to extract individual fields reliably</span></pre>
+                <div class="info-box" style="margin-top: 1rem; border-left-color: #f87171; background: rgba(248, 113, 113, 0.1);">
+                    <strong style="color: #fca5a5;">Problems:</strong> Inconsistent formatting, hard to parse, error-prone extraction, requires regex/NLP to parse correctly, easy for model to deviate from format.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleComparison() {
+            const unstructured = document.getElementById('unstructured');
+            unstructured.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

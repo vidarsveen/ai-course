@@ -51,7 +51,8 @@ VISUALIZATIONS = {
     "Streamlit for Python UI": {"path": "visuals/streamlit-example.html", "icon": None},
     "HTML/CSS/JS File Organization": {"path": "visuals/html-file-organization.html", "icon": None},
     "Gemini Canvas & Preview for HTML Prototyping": {"path": "visuals/gemini-canvas-html.html", "icon": None},
-    "Publishing to Google Sites (Single-File Consolidation)": {"path": "visuals/html-consolidation.html", "icon": None}
+    "Publishing to Google Sites (Single-File Consolidation)": {"path": "visuals/html-consolidation.html", "icon": None},
+    "Structured Output": {"path": "visuals/structured-output.html", "icon": None}
 }
 
 def create_term_id(title):
