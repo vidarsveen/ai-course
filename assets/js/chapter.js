@@ -5,6 +5,11 @@ let currentTermIndex = 0;
 let chapterNum = 1;
 let focusTimer = null;  // Timer for 10-second focus requirement
 
+// ===== MOBILE SWIPE STATE =====
+let touchStartX = 0;
+let touchEndX = 0;
+let isMobileSwipeActive = false;  // Track if visualization is currently swiped in
+
 // ===== DOM ELEMENTS =====
 const termsContainer = document.getElementById('terms-container');
 const termsPanel = document.getElementById('terms-panel');
@@ -131,6 +136,10 @@ function activateTerm(index) {
 
     currentTermIndex = index;
 
+    // Reset mobile swipe state when navigating to new term
+    isMobileSwipeActive = false;
+    hideMobileVisualization();
+
     // Clear any existing focus timer
     if (focusTimer) {
         clearTimeout(focusTimer);
@@ -242,6 +251,16 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Mobile swipe handlers (only on mobile)
+    if (window.innerWidth < 768) {
+        const mainFlexContainer = document.querySelector('.flex[style*="h-\\[calc"]') || document.querySelector('.flex');
+
+        if (mainFlexContainer) {
+            mainFlexContainer.addEventListener('touchstart', handleTouchStart, false);
+            mainFlexContainer.addEventListener('touchend', handleTouchEnd, false);
+        }
+    }
 }
 
 // ===== VISUALIZATION =====
@@ -255,6 +274,80 @@ function showPlaceholder() {
     vizFrame.classList.add('hidden');
     vizPlaceholder.classList.remove('hidden');
     vizFrame.src = '';
+}
+
+// ===== MOBILE SWIPE HANDLERS =====
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50;  // Minimum swipe distance
+    const difference = touchStartX - touchEndX;
+    const currentTerm = allTerms[currentTermIndex];
+
+    // Only handle swipe if current term has visualization
+    if (!currentTerm || currentTerm.type === 'section' || !currentTerm.hasViz) {
+        return;
+    }
+
+    // Swipe left (show visualization)
+    if (difference > swipeThreshold && !isMobileSwipeActive) {
+        isMobileSwipeActive = true;
+        showMobileVisualization();
+    }
+    // Swipe right (hide visualization)
+    else if (difference < -swipeThreshold && isMobileSwipeActive) {
+        isMobileSwipeActive = false;
+        hideMobileVisualization();
+    }
+}
+
+function showMobileVisualization() {
+    const vizPanel = document.getElementById('viz-panel');
+    const termsPanel = document.getElementById('terms-panel');
+
+    if (vizPanel && termsPanel) {
+        vizPanel.classList.add('mobile-swipe-active');
+        termsPanel.classList.add('mobile-swipe-hidden');
+        updateSwipeIndicator(true);
+    }
+}
+
+function hideMobileVisualization() {
+    const vizPanel = document.getElementById('viz-panel');
+    const termsPanel = document.getElementById('terms-panel');
+
+    if (vizPanel && termsPanel) {
+        vizPanel.classList.remove('mobile-swipe-active');
+        termsPanel.classList.remove('mobile-swipe-hidden');
+        updateSwipeIndicator(false);
+    }
+}
+
+function updateSwipeIndicator(isVizShowing) {
+    let indicator = document.getElementById('swipe-indicator');
+
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'swipe-indicator';
+        indicator.className = 'mobile-swipe-indicator';
+        const termsPanel = document.getElementById('terms-panel');
+        if (termsPanel) {
+            termsPanel.appendChild(indicator);
+        }
+    }
+
+    if (isVizShowing) {
+        indicator.textContent = '← Swipe back to content';
+    } else {
+        indicator.textContent = '← Swipe for visualization';
+    }
 }
 
 // ===== PROGRESS TRACKING WITH MASTERY =====

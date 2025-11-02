@@ -1,6 +1,6 @@
-# Interactive AI Course 🤖
+# LLM Terminology & Learning to Code with AI 🤖
 
-A modern, interactive web-based course on AI, Large Language Models (LLMs), and practical hands-on coding with Gemini. Split-screen interface with interactive visualizations and progress tracking.
+Master Large Language Model concepts and practical hands-on coding with Gemini. An interactive web-based course with split-screen interface, visualizations, and progress tracking. Learn LLM terminology from fundamentals through building real applications.
 
 ## 🎯 Features
 
