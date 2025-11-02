@@ -52,7 +52,7 @@
         .prompt-box {
             background: rgba(15, 23, 42, 0.8);
             border-left: 3px solid #8b5cf6;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 0.5rem;
             line-height: 1.6;
             margin-bottom: 1rem;
@@ -60,54 +60,14 @@
 
         .prompt-text {
             color: #e0e7ff;
-            margin-bottom: 0.5rem;
-        }
-
-        /* JSON Schema */
-        .schema-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
             margin-bottom: 1rem;
+            font-weight: bold;
         }
 
-        .schema-box {
-            background: rgba(20, 25, 35, 0.9);
-            border: 1px solid #4b5563;
-            border-radius: 0.5rem;
-            padding: 1rem;
-        }
-
-        .schema-box h3 {
-            color: #34d399;
+        .prompt-instruction {
+            color: #bfdbfe;
             font-size: 0.9rem;
             margin-bottom: 0.75rem;
-            font-weight: bold;
-        }
-
-        .key-value {
-            margin-bottom: 0.6rem;
-            padding: 0.5rem;
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 0.25rem;
-            font-size: 0.85rem;
-        }
-
-        .key {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-
-        .type {
-            color: #60a5fa;
-            margin-left: 0.5rem;
-        }
-
-        .description {
-            color: #9ca3af;
-            font-size: 0.8rem;
-            margin-left: 1rem;
-            margin-top: 0.25rem;
         }
 
         /* Output Example */
@@ -221,115 +181,100 @@
 </head>
 <body>
     <div class="container">
-        <h1>Structured Output Example: MCQ Generation</h1>
+        <h1>Structured Output: 1-Shot Example</h1>
 
-        <!-- Prompt Section -->
+        <!-- Prompt Section with 1-Shot Example -->
         <div class="section">
-            <div class="section-title">📝 User Prompt</div>
+            <div class="section-title">📝 User Prompt (1-Shot)</div>
             <div class="prompt-box">
-                <div class="prompt-text">
-                    "Generate 3 multiple choice questions about AI concepts in valid JSON format. Each question should have: a stem (the question), four options (a, b, c, d), and indicate which one is the correct answer."
+                <div class="prompt-text">Generate 2 more multiple choice questions about AI concepts in the same JSON format:</div>
+                <div class="prompt-instruction">
+                    <strong>Example (1-shot):</strong>
                 </div>
-            </div>
-        </div>
-
-        <!-- Expected Structure -->
-        <div class="section">
-            <div class="section-title">🏗️ Expected JSON Structure</div>
-            <div class="schema-container">
-                <div class="schema-box">
-                    <h3>Top-Level Keys</h3>
-                    <div class="key-value">
-                        <span class="key">questions</span>
-                        <span class="type">Array</span>
-                    </div>
-                </div>
-                <div class="schema-box">
-                    <h3>Per Question Object</h3>
-                    <div class="key-value">
-                        <span class="key">stem</span>
-                        <span class="type">String</span>
-                        <div class="description">The question text</div>
-                    </div>
-                    <div class="key-value">
-                        <span class="key">a, b, c, d</span>
-                        <span class="type">String</span>
-                        <div class="description">Answer options</div>
-                    </div>
-                    <div class="key-value">
-                        <span class="key">correct_answer</span>
-                        <span class="type">String</span>
-                        <div class="description">One of: "a", "b", "c", or "d"</div>
-                    </div>
+                <pre class="json-output" style="margin: 0.75rem 0;"><span class="json-bracket">{</span>
+  <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What does an embedding represent in machine learning?"</span><span class="json-bracket">,</span>
+  <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"A hand-crafted feature vector"</span><span class="json-bracket">,</span>
+  <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"A learned numeric representation capturing semantic meaning"</span><span class="json-bracket">,</span>
+  <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Random numbers between 0 and 1"</span><span class="json-bracket">,</span>
+  <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"A binary encoding of the input"</span><span class="json-bracket">,</span>
+  <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
+<span class="json-bracket">}</span></pre>
+                <div class="prompt-instruction" style="margin-top: 0.75rem;">
+                    Follow this exact structure for the new questions.
                 </div>
             </div>
         </div>
 
         <!-- Output Example -->
         <div class="section">
-            <div class="section-title">✅ Model Output (Valid JSON)</div>
+            <div class="section-title">✅ Model Output (Following the 1-Shot Format)</div>
             <div class="output-section">
-                <pre class="json-output"><span class="json-bracket">{</span>
-  <span class="json-key">"questions"</span><span class="json-bracket">:</span> <span class="json-bracket">[</span>
-    <span class="json-bracket">{</span>
-      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What does an embedding represent in machine learning?"</span><span class="json-bracket">,</span>
-      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"A hand-crafted feature vector"</span><span class="json-bracket">,</span>
-      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"A learned numeric representation capturing semantic meaning"</span><span class="json-bracket">,</span>
-      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Random numbers between 0 and 1"</span><span class="json-bracket">,</span>
-      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"A binary encoding of the input"</span><span class="json-bracket">,</span>
-      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
-    <span class="json-bracket">},</span>
-    <span class="json-bracket">{</span>
-      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What is the primary benefit of using RAG (Retrieval-Augmented Generation)?"</span><span class="json-bracket">,</span>
-      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"Reduces model size by 50%"</span><span class="json-bracket">,</span>
-      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"Grounds answers in external knowledge sources"</span><span class="json-bracket">,</span>
-      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Eliminates the need for model training"</span><span class="json-bracket">,</span>
-      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"Increases inference speed by 10x"</span><span class="json-bracket">,</span>
-      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
-    <span class="json-bracket">},</span>
-    <span class="json-bracket">{</span>
-      <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"Which of the following is a hallucination in LLM responses?"</span><span class="json-bracket">,</span>
-      <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"The model generating plausible but false information"</span><span class="json-bracket">,</span>
-      <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"The model refusing to answer a question"</span><span class="json-bracket">,</span>
-      <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Excessive memory usage during inference"</span><span class="json-bracket">,</span>
-      <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"The model taking too long to respond"</span><span class="json-bracket">,</span>
-      <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"a"</span>
-    <span class="json-bracket">}</span>
-  <span class="json-bracket">]</span>
-<span class="json-bracket">}</span></pre>
+                <pre class="json-output"><span class="json-bracket">[</span>
+  <span class="json-bracket">{</span>
+    <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"What is the primary benefit of using RAG (Retrieval-Augmented Generation)?"</span><span class="json-bracket">,</span>
+    <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"Reduces model size by 50%"</span><span class="json-bracket">,</span>
+    <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"Grounds answers in external knowledge sources"</span><span class="json-bracket">,</span>
+    <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Eliminates the need for model training"</span><span class="json-bracket">,</span>
+    <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"Increases inference speed by 10x"</span><span class="json-bracket">,</span>
+    <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"b"</span>
+  <span class="json-bracket">},</span>
+  <span class="json-bracket">{</span>
+    <span class="json-key">"stem"</span><span class="json-bracket">:</span> <span class="json-string">"Which of the following is a hallucination in LLM responses?"</span><span class="json-bracket">,</span>
+    <span class="json-key">"a"</span><span class="json-bracket">:</span> <span class="json-string">"The model generating plausible but false information"</span><span class="json-bracket">,</span>
+    <span class="json-key">"b"</span><span class="json-bracket">:</span> <span class="json-string">"The model refusing to answer a question"</span><span class="json-bracket">,</span>
+    <span class="json-key">"c"</span><span class="json-bracket">:</span> <span class="json-string">"Excessive memory usage during inference"</span><span class="json-bracket">,</span>
+    <span class="json-key">"d"</span><span class="json-bracket">:</span> <span class="json-string">"The model taking too long to respond"</span><span class="json-bracket">,</span>
+    <span class="json-key">"correct_answer"</span><span class="json-bracket">:</span> <span class="json-string">"a"</span>
+  <span class="json-bracket">}</span>
+<span class="json-bracket">]</span></pre>
+            </div>
+        </div>
+
+        <!-- Key Insight -->
+        <div class="section">
+            <div class="section-title">🎯 The Power of 1-Shot with Structured Output</div>
+            <div class="info-box">
+                <strong>Why This Works:</strong><br>
+                By including an example IN the prompt (1-shot learning), the model learns exactly what you want:<br><br>
+                1️⃣ <strong>Visual Template:</strong> Model sees exact JSON structure needed<br>
+                2️⃣ <strong>Field Names:</strong> Learns that keys are `stem`, `a`, `b`, `c`, `d`, `correct_answer`<br>
+                3️⃣ <strong>Data Types:</strong> Understands all fields are strings<br>
+                4️⃣ <strong>Consistency:</strong> Next outputs follow the exact same pattern<br><br>
+                This combination eliminates guesswork—the model mimics the pattern shown in the example.
             </div>
         </div>
 
         <!-- Benefits Box -->
         <div class="section">
-            <div class="section-title">💡 Why Structured Output Matters</div>
+            <div class="section-title">💡 Advantages of Structured Output</div>
             <div class="info-box">
-                <strong>Reliability:</strong> JSON structure ensures consistent parsing. No guessing about format.<br><br>
-                <strong>Automation:</strong> Code can directly load and process the response without text parsing.<br><br>
+                <strong>Reliability:</strong> JSON structure ensures consistent, parseable output.<br><br>
+                <strong>Automation:</strong> Code directly loads and processes the response without text parsing.<br><br>
                 <strong>Validation:</strong> Can verify data against a schema before using it.<br><br>
-                <strong>Integration:</strong> JSON works seamlessly with APIs, databases, and applications.<br><br>
-                <strong>Reduced Hallucination:</strong> Explicit structure constraints guide the model toward accurate outputs.
+                <strong>Integration:</strong> JSON integrates seamlessly with APIs, databases, and applications.<br><br>
+                <strong>Reduced Hallucination:</strong> Constraints guide the model toward accurate outputs.
             </div>
         </div>
 
-        <!-- Unstructured Comparison -->
+        <!-- Comparison Toggle -->
         <div class="section">
-            <div class="section-title">⚠️ Without Structured Output (Unstructured)</div>
+            <div class="section-title">⚠️ Compare: Without 1-Shot + Structured Output</div>
             <div class="toggle-container">
                 <button class="toggle-btn" onclick="toggleComparison()">Show Unstructured Example</button>
             </div>
             <div id="unstructured" class="hidden output-section">
-                <pre class="json-output" style="color: #f87171;"><span class="json-key"># Unpredictable format</span>
-<span class="json-string">"Question 1: What does an embedding represent?
-Possible answers: A) hand-crafted features, B) learned numeric representation,
-C) random numbers, D) binary encoding. The answer is B."</span>
+                <pre class="json-output" style="color: #f87171;"><span class="json-key"># Without 1-shot example—model guesses the format</span>
+<span class="json-string">"Question 1: What is RAG?
+Options: a) Reduces size, b) Grounds answers, c) No training, d) Faster speed
+Correct: option b"</span>
 
-<span class="json-key"># Parsing nightmare - inconsistent format, extra text, no structure</span>
-<span class="json-string">"Q2 - RAG systems help by... answer: option b"</span>
+<span class="json-key"># Inconsistent format on question 2</span>
+<span class="json-string">"Q2 - Hallucination means: A) false info, B) no answer, C) memory, D) slow
+Answer: A"</span>
 
-<span class="json-key"># Difficult to extract individual fields reliably</span></pre>
+<span class="json-key"># Hard to parse programmatically - requires complex regex</span></pre>
                 <div class="info-box" style="margin-top: 1rem; border-left-color: #f87171; background: rgba(248, 113, 113, 0.1);">
-                    <strong style="color: #fca5a5;">Problems:</strong> Inconsistent formatting, hard to parse, error-prone extraction, requires regex/NLP to parse correctly, easy for model to deviate from format.
+                    <strong style="color: #fca5a5;">Problems Without Structure:</strong> Inconsistent formatting, variable field names, mixed text and structure, requires brittle parsing logic, easy for model to deviate from intent.
                 </div>
             </div>
         </div>
