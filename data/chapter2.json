@@ -208,8 +208,8 @@
             "Pydantic",
             "downstream apps"
           ],
-          "hasViz": false,
-          "vizPath": null,
+          "hasViz": true,
+          "vizPath": "visuals/structured-output.html",
           "vizIcon": null,
           "mastery": 0,
           "visited": false,
