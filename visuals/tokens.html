@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Tokenization Explorer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Simple visualization styles */
+        .token-box {
+            background-color: #374151; /* gray-700 */
+            border: 1px solid #4f46e5; /* indigo-600 */
+            color: #e0e7ff; /* indigo-100 */
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'monospace';
+            font-weight: 500;
+            margin: 2px;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .token-box.subword {
+            background-color: #4b5563; /* gray-600 */
+            border-color: #6366f1; /* indigo-500 */
+        }
+        .token-box.punct {
+            background-color: #374151; /* gray-700 */
+            border-color: #6b7280; /* gray-500 */
+            color: #9ca3af; /* gray-400 */
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-inter p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-3xl mx-auto"> <!-- Centered single column -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Interactive LLM Concepts</h1>
+            <p class="text-lg text-gray-400 mt-2">Tokenization Explorer</p>
+        </header>
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- === TOKEN CARD === -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700 flex flex-col">
+                <h2 class="text-2xl font-bold text-white mb-4">Tokenization Examples</h2>
+
+                <p class="text-gray-300 leading-relaxed mb-4">
+                    Tokenization breaks text into processable units. Below are 5 hard-coded examples showing how a real tokenizer handles common words, punctuation, and subwords (marked with <code class="text-indigo-300 bg-gray-700 px-1 py-0.5 rounded">##</code>).
+                </p>
+
+                <!-- Hard-coded Examples -->
+                <div class="mt-4 mb-6 space-y-6">
+
+                    <!-- Example 1: Common Words & Punctuation -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Example 1: Common Words & Punctuation</label>
+                        <p class="font-mono text-gray-300 my-2">Input: <code class="text-white">"Hello, world!"</code></p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="token-box">Hello</span>
+                            <span class="token-box punct">,</span>
+                            <span class="token-box">world</span>
+                            <span class="token-box punct">!</span>
+                        </div>
+                    </div>
+
+                    <!-- Example 2: Subword Splitting (Suffix) -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Example 2: Subword Splitting (Suffix)</label>
+                        <p class="font-mono text-gray-300 my-2">Input: <code class="text-white">"Tokenization is useful."</code></p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="token-box">Token</span>
+                            <span class="token-box subword">##ization</span>
+                            <span class="token-box">is</span>
+                            <span class="token-box">useful</span>
+                            <span class="token-box punct">.</span>
+                        </div>
+                    </div>
+
+                    <!-- Example 3: Subword Splitting (Prefix & Suffix) -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Example 3: Subword Splitting (Prefix & Suffix)</label>
+                        <p class="font-mono text-gray-300 my-2">Input: <code class="text-white">"That's unbelievable."</code></p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="token-box">That</span>
+                            <span class="token-box subword">'s</span>
+                            <span class="token-box subword">un</span>
+                            <span class="token-box subword">##believe</span>
+                            <span class="token-box subword">##able</span>
+                            <span class="token-box punct">.</span>
+                        </div>
+                    </div>
+
+                    <!-- Example 4: Compound Words -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Example 4: Compound & Hyphenated Words</label>
+                        <p class="font-mono text-gray-300 my-2">Input: <code class="text-white">"Self-driving cars are evolving."</code></p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="token-box">Self</span>
+                            <span class="token-box punct">-</span>
+                            <span class="token-box">driving</span>
+                            <span class="token-box">cars</span>
+                            <span class="token-box">are</span>
+                            <span class="token-box subword">evolv</span>
+                            <span class="token-box subword">##ing</span>
+                            <span class="token-box punct">.</span>
+                        </div>
+                    </div>
+
+                    <!-- Example 5: Numbers and Symbols -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Example 5: Numbers and Code</label>
+                        <p class="font-mono text-gray-300 my-2">Input: <code class="text-white">"The 2025 model costs $999."</code></p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="token-box">The</span>
+                            <span class="token-box">2025</span>
+                            <span class="token-box">model</span>
+                            <span class="token-box">costs</span>
+                            <span class="token-box punct">$</span>
+                            <span class="token-box">999</span>
+                            <span class="token-box punct">.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Keywords -->
+                <div class="mt-auto pt-4 border-t border-gray-700">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Keywords</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">tokenization</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">byte-pair encoding</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">subwords</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">token costs</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- No script tag is needed as this is a static info page -->
+
+</body>
+</html>

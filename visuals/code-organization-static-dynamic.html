@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static vs Dynamic Code Organization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .approach {
+            background: #1a1a1a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .approach-header {
+            padding: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            border-bottom: 2px solid;
+        }
+
+        .approach.monolithic .approach-header {
+            background: #3a1a1a;
+            border-bottom-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .approach.modular .approach-header {
+            background: #1a3a1a;
+            border-bottom-color: #10b981;
+            color: #10b981;
+        }
+
+        .code-structure {
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .file-box {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .monolithic .file-box {
+            color: #ef4444;
+            border-left: 3px solid #ef4444;
+        }
+
+        .modular .file-box {
+            margin-bottom: 8px;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .file-content {
+            font-size: 11px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .static-file {
+            border-left: 3px solid #10b981;
+            background: linear-gradient(90deg, #0f2a1a 0%, #0f0f0f 90%);
+        }
+
+        .static-file .file-name {
+            color: #10b981;
+        }
+
+        .dynamic-file {
+            border-left: 3px solid #f59e0b;
+            background: linear-gradient(90deg, #2a2a1a 0%, #0f0f0f 90%);
+        }
+
+        .dynamic-file .file-name {
+            color: #f59e0b;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .benefit-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+
+        .benefit-card.tokens {
+            border-left-color: #4285f4;
+        }
+
+        .benefit-card.regression {
+            border-left-color: #10b981;
+        }
+
+        .benefit-card.focus {
+            border-left-color: #f59e0b;
+        }
+
+        .benefit-card.debug {
+            border-left-color: #8b5cf6;
+        }
+
+        .benefit-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .benefit-card.tokens .benefit-title {
+            color: #4285f4;
+        }
+
+        .benefit-card.regression .benefit-title {
+            color: #10b981;
+        }
+
+        .benefit-card.focus .benefit-title {
+            color: #f59e0b;
+        }
+
+        .benefit-card.debug .benefit-title {
+            color: #8b5cf6;
+        }
+
+        .benefit-content {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        .example {
+            background: linear-gradient(135deg, #1a3a1a 0%, #1a2a1a 100%);
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            padding: 30px;
+        }
+
+        .example-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        .example-scenario {
+            background: #0f0f0f;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .scenario-title {
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        .scenario-content {
+            color: #b0b0b0;
+        }
+
+        .example-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .example-item {
+            display: flex;
+            gap: 10px;
+            font-size: 13px;
+            color: #c0c0c0;
+        }
+
+        .example-item::before {
+            content: "→";
+            color: #10b981;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Static vs Dynamic Code Organization</h1>
+        <div class="subtitle">Reduce Tokens & Regression Risk with Modular Structure</div>
+
+        <div class="comparison">
+            <div class="approach monolithic">
+                <div class="approach-header">❌ Monolithic (All In One File)</div>
+                <div class="code-structure">
+                    <div class="file-box">
+                        <div class="file-name">main.py (2000 lines)</div>
+                        <div class="file-content">
+# Template structure
+template = { ... }
+
+# Utility functions
+def validate(...): ...
+def format(...): ...
+
+# Core logic
+def analyze(...): ...
+
+# UI/orchestration
+def run(): ...
+                        </div>
+                    </div>
+                    <div style="padding: 0 12px; color: #9e9e9e; font-size: 11px;">
+                        ⚠️ Every change = entire file to AI
+                    </div>
+                </div>
+            </div>
+
+            <div class="approach modular">
+                <div class="approach-header">✓ Modular (Separated Concerns)</div>
+                <div class="code-structure">
+                    <div class="file-box static-file">
+                        <div class="file-name">📌 templates.json (STATIC)</div>
+                        <div class="file-content">{ "sections": [...] }</div>
+                    </div>
+                    <div class="file-box static-file">
+                        <div class="file-name">📌 utils.py (STATIC)</div>
+                        <div class="file-content">def validate(...): ...
+def format(...): ...</div>
+                    </div>
+                    <div class="file-box dynamic-file">
+                        <div class="file-name">🔄 review_logic.py (DYNAMIC)</div>
+                        <div class="file-content">def analyze(...): ...</div>
+                    </div>
+                    <div class="file-box dynamic-file">
+                        <div class="file-name">🔄 main.py (DYNAMIC)</div>
+                        <div class="file-content">def run(): ...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="benefits">
+            <div class="benefit-card tokens">
+                <div class="benefit-title">
+                    <span>📊</span>
+                    <span>Reduced Token Usage</span>
+                </div>
+                <div class="benefit-content">
+                    Only paste files you're actively changing. Static files (templates, utils) don't change, so you skip them in future iterations. Fewer tokens = more iterations per conversation.
+                </div>
+            </div>
+
+            <div class="benefit-card regression">
+                <div class="benefit-title">
+                    <span>🛡️</span>
+                    <span>Lower Regression Risk</span>
+                </div>
+                <div class="benefit-content">
+                    AI only modifies the specific file you're working on. Utilities, templates, and static functions stay untouched. Changes are predictable and isolated.
+                </div>
+            </div>
+
+            <div class="benefit-card focus">
+                <div class="benefit-title">
+                    <span>🎯</span>
+                    <span>Clearer AI Assistance</span>
+                </div>
+                <div class="benefit-content">
+                    AI focuses on ONE problem at a time instead of juggling massive file context. Suggestions are more targeted and easier to understand.
+                </div>
+            </div>
+
+            <div class="benefit-card debug">
+                <div class="benefit-title">
+                    <span>🐛</span>
+                    <span>Easier Debugging</span>
+                </div>
+                <div class="benefit-content">
+                    When errors occur, they're isolated to specific modules. Easier to identify root cause and fix without affecting other parts of the system.
+                </div>
+            </div>
+        </div>
+
+        <div class="example">
+            <div class="example-title">Real Workflow Example in PyCharm</div>
+
+            <div class="example-scenario">
+                <div class="scenario-title">Initial Development (Iteration 1)</div>
+                <div class="scenario-content">
+                    Paste: templates.json + utils.py + main.py + review_logic.py (all dynamic files)<br>
+                    Ask: "Build a basic review function"
+                </div>
+            </div>
+
+            <div class="example-scenario">
+                <div class="scenario-title">Bug Fix (Iteration 2)</div>
+                <div class="scenario-content">
+                    Paste: ONLY review_logic.py (the file with the bug)<br>
+                    Ask: "Fix this error in the analyze() function"<br>
+                    <span style="color: #10b981;">✓ Skip templates.json and utils.py (they didn't change)</span>
+                </div>
+            </div>
+
+            <div class="example-scenario">
+                <div class="scenario-title">New Feature (Iteration 3)</div>
+                <div class="scenario-content">
+                    Paste: main.py (adding new UI option)<br>
+                    Ask: "Add strict mode option to CLI"<br>
+                    <span style="color: #10b981;">✓ Review logic untouched, templates static</span>
+                </div>
+            </div>
+
+            <div class="example-list" style="margin-top: 20px;">
+                <div class="example-item">
+                    <span>Token savings: Only 20-30% of project pasted per iteration</span>
+                </div>
+                <div class="example-item">
+                    <span>Regression risk: Zero—untouched files guaranteed unchanged</span>
+                </div>
+                <div class="example-item">
+                    <span>AI focus: Crystal clear—work on review_logic, discuss review_logic</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

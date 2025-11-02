@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Effective Error Communication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .checklist {
+            background: linear-gradient(135deg, #1a3a1a 0%, #1a2a1a 100%);
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .checklist-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .checklist-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px;
+            background: #0f0f0f;
+            border-radius: 4px;
+        }
+
+        .checkbox {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .item-description {
+            font-size: 13px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .example {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .example-header {
+            background: #0f0f0f;
+            padding: 12px 16px;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 13px;
+            font-weight: 600;
+            color: #60a5fa;
+        }
+
+        .example-content {
+            padding: 16px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .example.bad {
+            border-top: 3px solid #ef4444;
+        }
+
+        .example.bad .example-header {
+            color: #ef4444;
+        }
+
+        .example.good {
+            border-top: 3px solid #10b981;
+        }
+
+        .example.good .example-header {
+            color: #10b981;
+        }
+
+        .tips {
+            background: linear-gradient(135deg, #3a1a1a 0%, #2a1a1a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .tips-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fbbf24;
+            margin-bottom: 16px;
+        }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tip {
+            display: flex;
+            gap: 10px;
+            font-size: 13px;
+            color: #c0c0c0;
+            line-height: 1.5;
+        }
+
+        .tip::before {
+            content: "💡";
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .examples {
+                grid-template-columns: 1fr;
+            }
+
+            .checklist {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Effective Error Communication</h1>
+        <div class="subtitle">Help Gemini Debug Your Code Better</div>
+
+        <div class="checklist">
+            <div class="checklist-title">✓ The Essential Checklist</div>
+            <div class="checklist-items">
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <div class="item-content">
+                        <div class="item-title">Full Error Message</div>
+                        <div class="item-description">Copy the entire stack trace, not just the last line. Include all context lines.</div>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <div class="item-content">
+                        <div class="item-title">Surrounding Code Context</div>
+                        <div class="item-description">Show the code block that produced the error, with 2-3 lines before and after.</div>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <div class="item-content">
+                        <div class="item-title">Screenshot if Applicable</div>
+                        <div class="item-description">For UI/formatting issues, terminal output, or complex error messages with visuals.</div>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <div class="item-content">
+                        <div class="item-title">Expected vs Actual</div>
+                        <div class="item-description">Explain what you expected to happen and what actually happened instead.</div>
+                    </div>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="checkbox">✓</div>
+                    <div class="item-content">
+                        <div class="item-title">Steps to Reproduce</div>
+                        <div class="item-description">If relevant: "Run with this input" or "Click this button then..." so AI can replicate it.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples">
+            <div class="example bad">
+                <div class="example-header">❌ VAGUE (Don't Do This)</div>
+                <div class="example-content">Error in my code. Can you help fix it?
+
+It's not working when I run it.
+
+Can you debug this?</div>
+            </div>
+
+            <div class="example good">
+                <div class="example-header">✓ HELPFUL (Do This)</div>
+                <div class="example-content">TypeError: 'NoneType' object is not subscriptable
+  File "review.py", line 45, in process
+    section = sections[key]
+KeyError: 'requirements'
+
+Expected: Load all sections from template
+Actual: Crashes on missing 'requirements' key
+
+Input used: empty_template.json</div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <div class="tips-title">Pro Tips for Better Debugging</div>
+            <div class="tips-list">
+                <div class="tip">Include file names and line numbers (copy directly from error message)</div>
+                <div class="tip">Show what data caused the error (sample input, variable values)</div>
+                <div class="tip">Use code blocks in Gemini (triple backticks) for readability</div>
+                <div class="tip">If error is complex, paste the entire traceback, not summaries</div>
+                <div class="tip">Screenshot Colab cells showing error + your code together</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

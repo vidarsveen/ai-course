@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-shot, 1-shot, and Few-shot Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .shot-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .shot-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        .shot-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .prompt-section {
+            background: #111827;
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .prompt-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .example {
+            background: #374151;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            border-left: 3px solid #34d399;
+            font-size: 0.8rem;
+        }
+
+        .example.input {
+            border-left-color: #60a5fa;
+        }
+
+        .example.output {
+            border-left-color: #f87171;
+        }
+
+        .instruction {
+            background: #3b82f6;
+            background-opacity: 0.1;
+            border-left: 3px solid #3b82f6;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.8rem;
+        }
+
+        .task-input {
+            background: #111827;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            border: 1px solid #60a5fa;
+            font-size: 0.8rem;
+            color: #60a5fa;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #6366f1;
+            margin: 0.5rem 0;
+        }
+
+        .highlight {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 1024px) {
+            .shot-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-white mb-2">Shot Learning: From Zero to Few</h1>
+            <p class="text-gray-400">How examples in prompts improve LLM task performance</p>
+        </header>
+
+        <!-- Three Shot Cards -->
+        <div class="shot-container">
+            <!-- Zero-shot -->
+            <div class="shot-card">
+                <div class="shot-title">Zero-shot</div>
+
+                <div class="prompt-section">
+                    <div class="prompt-label">Your Prompt</div>
+                    <div class="instruction">Classify the sentiment of the following text as positive, negative, or neutral.</div>
+
+                    <div class="prompt-label" style="margin-top: 1rem;">Input Text</div>
+                    <div class="task-input">"I love this product, it's amazing!"</div>
+
+                    <div class="arrow">↓</div>
+
+                    <div class="prompt-label">LLM Output</div>
+                    <div class="example output">Sentiment: Positive</div>
+                </div>
+
+                <div class="p-3 bg-gray-800 rounded text-xs text-gray-300">
+                    <strong>No examples</strong> provided. The model relies entirely on its instruction-tuning to understand the task from the description alone.
+                </div>
+            </div>
+
+            <!-- 1-shot -->
+            <div class="shot-card">
+                <div class="shot-title">1-shot</div>
+
+                <div class="prompt-section">
+                    <div class="prompt-label">Your Prompt</div>
+                    <div class="instruction">Classify the sentiment as positive, negative, or neutral.</div>
+
+                    <div class="prompt-label" style="margin-top: 1rem;">Example</div>
+                    <div class="example input">Text: "I love this!"</div>
+                    <div class="example output">Sentiment: Positive</div>
+
+                    <div class="prompt-label" style="margin-top: 0.75rem;">Input Text</div>
+                    <div class="task-input">"I love this product, it's amazing!"</div>
+
+                    <div class="arrow">↓</div>
+
+                    <div class="prompt-label">LLM Output</div>
+                    <div class="example output">Sentiment: Positive</div>
+                </div>
+
+                <div class="p-3 bg-gray-800 rounded text-xs text-gray-300">
+                    <strong>One example</strong> shows the desired input-output format. The model learns the pattern and applies it to your task.
+                </div>
+            </div>
+
+            <!-- Few-shot -->
+            <div class="shot-card">
+                <div class="shot-title">Few-shot</div>
+
+                <div class="prompt-section">
+                    <div class="prompt-label">Your Prompt</div>
+                    <div class="instruction">Classify the sentiment as positive, negative, or neutral.</div>
+
+                    <div class="prompt-label" style="margin-top: 1rem;">Examples</div>
+                    <div class="example input">Text: "I love this!"</div>
+                    <div class="example output">Sentiment: Positive</div>
+
+                    <div class="example input" style="margin-top: 0.75rem;">Text: "This is terrible."</div>
+                    <div class="example output">Sentiment: Negative</div>
+
+                    <div class="example input" style="margin-top: 0.75rem;">Text: "It's okay, nothing special."</div>
+                    <div class="example output">Sentiment: Neutral</div>
+
+                    <div class="prompt-label" style="margin-top: 0.75rem;">Input Text</div>
+                    <div class="task-input">"I love this product, it's amazing!"</div>
+
+                    <div class="arrow">↓</div>
+
+                    <div class="prompt-label">LLM Output</div>
+                    <div class="example output">Sentiment: Positive</div>
+                </div>
+
+                <div class="p-3 bg-gray-800 rounded text-xs text-gray-300">
+                    <strong>Multiple examples</strong> (typically 2-5) demonstrate patterns and edge cases. The model generalizes from these exemplars.
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="mt-12 bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+            <div class="grid grid-cols-4 gap-4 p-6">
+                <div></div>
+                <div class="font-semibold text-indigo-300">Zero-shot</div>
+                <div class="font-semibold text-indigo-300">1-shot</div>
+                <div class="font-semibold text-indigo-300">Few-shot</div>
+            </div>
+
+            <div class="border-t border-gray-700 grid grid-cols-4 gap-4 p-6">
+                <div class="font-semibold text-gray-300">Examples Provided</div>
+                <div class="text-gray-400">0</div>
+                <div class="text-gray-400">1</div>
+                <div class="text-gray-400">2-5+</div>
+            </div>
+
+            <div class="border-t border-gray-700 grid grid-cols-4 gap-4 p-6">
+                <div class="font-semibold text-gray-300">Best For</div>
+                <div class="text-gray-400">General tasks, simple instructions</div>
+                <div class="text-gray-400">Showing format or style</div>
+                <div class="text-gray-400">Complex patterns, edge cases</div>
+            </div>
+
+            <div class="border-t border-gray-700 grid grid-cols-4 gap-4 p-6">
+                <div class="font-semibold text-gray-300">Accuracy</div>
+                <div class="text-gray-400">Good</div>
+                <div class="text-gray-400">Better</div>
+                <div class="text-gray-400">Best</div>
+            </div>
+
+            <div class="border-t border-gray-700 grid grid-cols-4 gap-4 p-6">
+                <div class="font-semibold text-gray-300">Prompt Length</div>
+                <div class="text-gray-400">Shortest</div>
+                <div class="text-gray-400">Medium</div>
+                <div class="text-gray-400">Longer</div>
+            </div>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="space-y-4 mt-12 max-w-2xl mx-auto">
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">In-Context Learning</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    All three approaches rely on <span class="highlight">in-context learning</span>—the model learns from examples within the same prompt, without retraining. This is incredibly powerful: the same model can adapt to countless tasks just by changing the examples provided.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Scaling Up Performance</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Generally, more examples lead to better performance. However, there's a trade-off: each example increases prompt length (tokens), which raises costs and latency. The goal is to find the <span class="highlight">sweet spot</span> where you get good accuracy without unnecessary verbosity.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Example Quality Matters</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    The quality and representativeness of examples is more important than quantity. A few well-chosen examples that cover different cases (positive, negative, neutral sentiment) are far more valuable than many similar examples.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Practical Strategies</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Start with zero-shot for simplicity. If results aren't good enough, try adding 1-2 strategic examples. Only scale to full few-shot if needed. This iterative approach balances accuracy, cost, and speed.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

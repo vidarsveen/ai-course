@@ -1,0 +1,221 @@
+{
+  "chapter": 2,
+  "title": "Module 2: Practical Prompting",
+  "description": "Master the fundamentals of communicating with AI effectively",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Core Prompting Skills",
+      "terms": [
+        {
+          "id": "prompt-engineering",
+          "title": "Prompt Engineering",
+          "definition": "Prompt engineering is the iterative craft of designing, refining, and testing prompts to get the most accurate, reliable, and high-quality outputs from an LLM for a specific task. It is a mix of art and science, involving techniques like adding clear instructions, providing few-shot examples (\"scaffolding\"), and rigorously \"testing\" different phrasings. Good prompt engineering is essential for building production-ready LLM applications.",
+          "keywords": [
+            "iterative prompts",
+            "scaffolding",
+            "tests"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "message-roles-system-user-assistant-tool",
+          "title": "Message Roles (System/User/Assistant/Tool)",
+          "definition": "Message roles are labels used in conversational APIs to structure the dialog and provide clear instructions to the LLM. The System role sets the high-level persona and rules (e.g., \"You are a helpful assistant\"). The User role contains the human's input or prompt. The Assistant role contains the model's previous responses, which are fed back as memory. Finally, the Tool role is used to provide the results of an external tool call (like a search result) back to the model so it can formulate a natural language response. This structure creates a clear hierarchy of instructions for the model to follow.",
+          "keywords": [
+            "instruction hierarchy",
+            "guardrails"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/prompt-completion.html",
+          "vizIcon": "💬",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "prompt-template",
+          "title": "Prompt Template",
+          "definition": "A prompt template is a reusable, predefined structure for a prompt that includes placeholders for dynamic content. For example, a template for a summarization task might look like: Summarize the following text in 3 bullet points: {text_to_summarize}. These templates are essential for building reliable applications because they standardize the instruction format, making the model's behavior more predictable. They are the foundation of \"few-shot\" prompting, where the template includes slots for examples, and are widely used in frameworks like LangChain to build complex, multi-step chains.",
+          "keywords": [
+            "variables/placeholders",
+            "few-shot slots"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "persona--role-prompting",
+          "title": "Persona / Role Prompting",
+          "definition": "This is a specific prompting technique, often used within the system prompt or a user prompt, that instructs the LLM to adopt a particular role, \"persona,\" or point of view. For example, \"You are a skeptical pirate,\" \"You are a 5th-grade science teacher,\" or \"Explain this to me like I'm 10 years old.\" This is a powerful way to control the \"tone,\" \"audience,\" and style of the model's response, tailoring it to a specific use case.",
+          "keywords": [
+            "audience",
+            "tone",
+            "constraints"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "zero-shot-learning",
+          "title": "Zero-shot Learning",
+          "definition": "Zero-shot learning refers to the ability of an instruction-tuned LLM to perform a task without having seen any specific examples of that task in the prompt. This relies entirely on the model's ability to understand the \"zero-shot\" instruction given to it. For example, simply prompting Classify the sentiment of \"This movie was great!\" as positive, negative, or neutral. is a zero-shot request. The success of zero-shot learning is a direct result of the extensive instruction tuning the model has already undergone.",
+          "keywords": [
+            "style guidance",
+            "constraints only"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/shot-learning.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "one-shot-learning",
+          "title": "1-shot Learning",
+          "definition": "1-shot learning is a prompting technique where the model is given exactly one example of the desired task within the prompt. This single example demonstrates the expected input-output format and helps the model understand the specific pattern or style you're looking for. For instance, to classify sentiment with a specific format, you might provide one example like Text: \"I love this!\" -> Sentiment: Positive, then ask it to classify your target text. The single example is often enough to align the model's output format and approach.",
+          "keywords": [
+            "single exemplar",
+            "format demonstration",
+            "in-context learning"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/shot-learning.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "few-shot-learning",
+          "title": "Few-shot Learning",
+          "definition": "Few-shot learning is a powerful prompting technique where the model is given a small number of examples (\"shots\") of the desired task directly within the prompt. For instance, to get a model to classify sentiment, you might provide 2-3 examples: Text: \"I love this!\" -> Positive, Text: \"This is bad.\" -> Negative. By seeing these exemplars, the model learns the desired pattern and output format \"in-context\" without any need for re-training. This allows a single, general-purpose model to be adapted to many specific tasks just by changing the prompt.",
+          "keywords": [
+            "exemplars",
+            "prompting patterns"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/shot-learning.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Controlling Outputs",
+      "terms": [
+        {
+          "id": "temperature",
+          "title": "Temperature",
+          "definition": "Temperature is a parameter that controls the perceived \"creativity\" or randomness of an LLM's output. A low temperature (e.g., 0.1) makes the model more deterministic and predictable, causing it to pick the most probable next token; this is ideal for factual tasks like extraction or summarization. A high temperature (e.g., 0.9) increases randomness, allowing the model to explore less likely token choices, which is better for creative tasks like writing poetry or brainstorming ideas. Setting it too high can lead to incoherent or nonsensical text.",
+          "keywords": [
+            "creativity vs. accuracy",
+            "stochasticity",
+            "typical ranges"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/temperature.html",
+          "vizIcon": "🌡️",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "top-p--nucleus-sampling",
+          "title": "Top-p / Nucleus Sampling",
+          "definition": "Top-p, also known as nucleus sampling, is a technique for controlling the randomness of an LLM's output by selecting from a dynamic range of tokens. Instead of considering all possible tokens, it considers only the smallest set of tokens whose cumulative probability exceeds a certain threshold 'p' (e.g., 0.9). This means if the model is very confident, it might only consider a few tokens, while if it's uncertain, it will consider a wider array. This method is often preferred over Top-k as it adapts to the model's confidence level, providing a good balance between creativity and coherence.",
+          "keywords": [
+            "sampling mass",
+            "diversity control"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/temperature.html",
+          "vizIcon": "🌡️",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "top-k",
+          "title": "Top-k",
+          "definition": "Top-k is a sampling method that restricts the LLM's token choice to only the 'k' most probable next tokens at each step of generation. For example, if k=50, the model will only choose from the top 50 most likely tokens, ignoring all others, no matter how creative. A low 'k' value (e.g., k=1) makes the model highly deterministic (known as greedy decoding), while a higher 'k' value allows for more diversity. This method can be combined with Temperature and Top-p, but Top-p is often considered more flexible.",
+          "keywords": [
+            "cap candidate tokens",
+            "determinism interplay"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/temperature.html",
+          "vizIcon": "🌡️",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "max-tokens-output-limit",
+          "title": "Max Tokens (Output Limit)",
+          "definition": "Max tokens is a parameter that sets the hard upper limit on the number of tokens an LLM is allowed to generate in a single completion. This is a crucial control for managing both API costs (since providers charge per token) and application latency (longer responses take more time). If a model's intended response is longer than the max token limit, its output will be abruptly truncated, often cutting off mid-sentence. This setting must be balanced against the needs of the task, ensuring it's large enough for a complete answer but small enough to be efficient.",
+          "keywords": [
+            "budget",
+            "truncation",
+            "latency/cost trade-offs"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "determinism--seed",
+          "title": "Determinism / Seed",
+          "definition": "Determinism refers to the ability to get the exact same LLM output every time for a given prompt and set of parameters. LLM generation is inherently stochastic (random), but this can be controlled by setting a specific \"seed\" value (a number that initializes the random number generator). If you use the same model, prompt, parameters (like temperature), and seed, you will get an identical completion. This reproducibility is vital for tasks like running evaluations, debugging prompts, or conducting A/B tests, as it ensures you are comparing results fairly.",
+          "keywords": [
+            "reproducibility",
+            "evaluations"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "structured-output-e.g.,-json",
+          "title": "Structured Output (e.g., JSON)",
+          "definition": "Structured output refers to configuring an LLM to generate its response in a predictable, machine-readable format like JSON, rather than just free-form text. This is essential for \"downstream applications\" that need to programmatically parse the model's output. For example, you could ask the model to extract a person's name and email from a text and provide the output as {\"name\": \"...\", \"email\": \"...\"}. Modern APIs often support this by allowing the developer to specify a \"JSON schema\" that the model's output must conform to.",
+          "keywords": [
+            "JSON schema",
+            "validators",
+            "Pydantic",
+            "downstream apps"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

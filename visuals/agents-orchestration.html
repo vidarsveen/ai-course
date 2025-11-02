@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents & Orchestration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .agent-architecture {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .component {
+            background: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .component.core {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #4c1d95 0%, #1f2937 100%);
+        }
+
+        .component.tools {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #78350f 0%, #1f2937 100%);
+        }
+
+        .component.execution {
+            border-color: #34d399;
+            background: linear-gradient(135deg, #064e3b 0%, #1f2937 100%);
+        }
+
+        .component-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .component-content {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        .step-walkthrough {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            background: #1f2937;
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background: #111827;
+            border: 2px solid #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #6366f1;
+        }
+
+        .step.goal {
+            border-left-color: #60a5fa;
+        }
+
+        .step.goal .step-number {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .step.plan {
+            border-left-color: #f59e0b;
+        }
+
+        .step.plan .step-number {
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .step.action {
+            border-left-color: #34d399;
+        }
+
+        .step.action .step-number {
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .step.result {
+            border-left-color: #a78bfa;
+        }
+
+        .step.result .step-number {
+            border-color: #a78bfa;
+            color: #a78bfa;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #9ca3af;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-example {
+            background: #111827;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #a1a1a1;
+            overflow-x: auto;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-card {
+            background: #1f2937;
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .concept-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+        }
+
+        .concept-content {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        .loop-indicator {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px dashed #6366f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            color: #a1d8ff;
+            font-weight: 500;
+        }
+
+        .loop-arrow {
+            color: #6366f1;
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .agent-architecture {
+                grid-template-columns: 1fr;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-white mb-2">Agents & Orchestration</h1>
+            <p class="text-gray-400">How LLMs autonomously plan, call tools, and achieve goals</p>
+        </header>
+
+        <!-- Agent Architecture -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Agent Architecture</h2>
+
+            <div class="agent-architecture">
+                <!-- Core Brain -->
+                <div class="component core">
+                    <div class="component-title">LLM Brain</div>
+                    <div class="component-content">
+                        <p class="mb-2">The model that:</p>
+                        <div class="text-sm">• Understands the goal</div>
+                        <div class="text-sm">• Creates a plan</div>
+                        <div class="text-sm">• Decides which tools to use</div>
+                        <div class="text-sm">• Reasons about observations</div>
+                    </div>
+                </div>
+
+                <!-- Tools & Capabilities -->
+                <div class="component tools">
+                    <div class="component-title">Tools & Capabilities</div>
+                    <div class="component-content">
+                        <p class="mb-2">Available external systems:</p>
+                        <div class="text-sm">• Web search</div>
+                        <div class="text-sm">• Code execution</div>
+                        <div class="text-sm">• Database queries</div>
+                        <div class="text-sm">• APIs & plugins</div>
+                    </div>
+                </div>
+
+                <!-- Orchestration Engine -->
+                <div class="component execution">
+                    <div class="component-title">Orchestration Engine</div>
+                    <div class="component-content">
+                        <p class="mb-2">Manages execution:</p>
+                        <div class="text-sm">• Handles tool calls</div>
+                        <div class="text-sm">• Manages state</div>
+                        <div class="text-sm">• Implements retry logic</div>
+                        <div class="text-sm">• Feeds back results</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    An agent combines these three elements in a loop: the LLM decides what to do, the orchestration engine executes it, and the results feed back to the LLM for the next step.
+                </p>
+            </div>
+        </section>
+
+        <!-- Real-World Walkthrough -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Real-World Example: Research Task</h2>
+            <p class="text-gray-300 text-sm mb-6">Follow along as an agent autonomously researches a topic and writes a summary.</p>
+
+            <div class="step-walkthrough">
+                <!-- Step 1: Goal -->
+                <div class="step goal">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Human Sets Goal</div>
+                    <div class="step-title">Goal Received</div>
+                    <div class="step-content">
+                        <p>"Research the latest breakthroughs in quantum computing and write a 500-word summary."</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Planning -->
+                <div class="step plan">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Agent Planning Phase</div>
+                    <div class="step-title">Break Goal Into Steps</div>
+                    <div class="step-content">
+                        <p>The LLM reasons about the goal and creates a plan:</p>
+                        <div class="code-example">
+Plan:<br/>
+1. Search for "quantum computing breakthroughs 2024"<br/>
+2. Read the top 3 results<br/>
+3. Extract key findings<br/>
+4. Write a coherent 500-word summary<br/>
+5. Done!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: First Action -->
+                <div class="step action">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Tool Invocation</div>
+                    <div class="step-title">Call Web Search Tool</div>
+                    <div class="step-content">
+                        <p>The LLM decides to search and invokes the tool:</p>
+                        <div class="code-example">
+{<br/>
+&nbsp;&nbsp;"tool": "web_search",<br/>
+&nbsp;&nbsp;"query": "quantum computing breakthroughs 2024"<br/>
+}
+                        </div>
+                        <p class="mt-2"><strong>Observation:</strong> Found 1,200 results. Top hits include:</p>
+                        <div class="code-example" style="margin-top: 0.5rem;">
+- "New quantum chip achieves 1000 qubits" (MIT)<br/>
+- "Google's quantum error correction breakthrough" (Nature)<br/>
+- "IBM announces fault-tolerant quantum computing" (IBM)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Process Results -->
+                <div class="step action">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Reading & Analysis</div>
+                    <div class="step-title">Fetch and Summarize Key Articles</div>
+                    <div class="step-content">
+                        <p>Agent decides to read the full articles (tool: read_article):</p>
+                        <div class="code-example">
+{<br/>
+&nbsp;&nbsp;"tool": "read_article",<br/>
+&nbsp;&nbsp;"url": "nature.com/quantum-error-correction"<br/>
+}
+                        </div>
+                        <p class="mt-2"><strong>Observation:</strong> Google demonstrated quantum error correction, reducing errors as qubits scale up...</p>
+                    </div>
+                </div>
+
+                <!-- Loop Indicator -->
+                <div class="loop-indicator">
+                    <div>🔄 The agent repeats steps 3-4, reading multiple sources and extracting key information</div>
+                    <div class="loop-arrow">↓</div>
+                </div>
+
+                <!-- Step 5: Final Output -->
+                <div class="step result">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Generation Phase</div>
+                    <div class="step-title">Write Summary</div>
+                    <div class="step-content">
+                        <p>After reading all sources, the agent generates the final output:</p>
+                        <div class="code-example">
+"Quantum computing achieved three major breakthroughs in 2024.
+First, MIT's new quantum chip reached 1000 qubits, doubling
+the previous record. Second, Google demonstrated quantum error
+correction, a critical milestone for scaling quantum computers
+reliably. Third, IBM announced progress toward fault-tolerant
+quantum computers, moving closer to practical applications..."
+                        </div>
+                        <p class="mt-2"><strong>Status:</strong> ✓ Goal achieved. 520 words written. Task complete.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Concepts -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Key Agent Concepts</h2>
+
+            <div class="concept-grid">
+                <!-- Planning -->
+                <div class="concept-card">
+                    <div class="concept-title">Planning (Decomposition)</div>
+                    <div class="concept-content">
+                        Breaking a large goal into smaller, actionable steps. Good planning is critical—it's often the biggest determinant of agent success. The agent might create an explicit task list or plan one step at a time using ReAct loops.
+                    </div>
+                </div>
+
+                <!-- Tool Invocation -->
+                <div class="concept-card">
+                    <div class="concept-title">Tool Invocation & Function Calling</div>
+                    <div class="concept-content">
+                        The agent decides when to use a tool and formats the request correctly. Function calling (in APIs like OpenAI) provides strict validation of tool calls, making agents more robust than relying on JSON parsing.
+                    </div>
+                </div>
+
+                <!-- Tool Orchestration -->
+                <div class="concept-card">
+                    <div class="concept-title">Tool Orchestration</div>
+                    <div class="concept-content">
+                        Managing complex, multi-step tool execution. This includes handling retries, managing state, and sequencing tool calls. It's what allows agents to be resilient to failures in the real world.
+                    </div>
+                </div>
+
+                <!-- Autonomy & Safety -->
+                <div class="concept-card">
+                    <div class="concept-title">Autonomy & Human-in-the-Loop</div>
+                    <div class="concept-content">
+                        Autonomous agents can operate over long planning horizons with minimal intervention. However, critical decisions often require a "human-in-the-loop" checkpoint to prevent agents from going off-track.
+                    </div>
+                </div>
+
+                <!-- Plugins & APIs -->
+                <div class="concept-card">
+                    <div class="concept-title">Plugins / Tools API</div>
+                    <div class="concept-content">
+                        A standardized interface for agents to discover and use external tools. This allows a single agent to access capabilities from many third-party services (flight booking, restaurant ordering, APIs, etc.) without being retrained.
+                    </div>
+                </div>
+
+                <!-- MCP Standard -->
+                <div class="concept-card">
+                    <div class="concept-title">MCP (Model Context Protocol)</div>
+                    <div class="concept-content">
+                        An emerging standard for how LLMs communicate with tools and hosts. Goal: create interoperability so any model can use any tool, moving away from proprietary implementations.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agent vs Manual Approach -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Why Use Agents?</h2>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-gray-800 border-l-4 border-red-400 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-red-300 mb-3">Without Agent (Manual)</h3>
+                    <div class="text-sm text-gray-300 space-y-2">
+                        <p>• You run each tool manually</p>
+                        <p>• You read and interpret results</p>
+                        <p>• You decide next steps</p>
+                        <p>• You handle errors and retries</p>
+                        <p>• Very time-consuming</p>
+                        <p>• Error-prone</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 border-l-4 border-green-400 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-300 mb-3">With Agent (Autonomous)</h3>
+                    <div class="text-sm text-gray-300 space-y-2">
+                        <p>• Agent plans automatically</p>
+                        <p>• Agent calls tools as needed</p>
+                        <p>• Agent reasons about results</p>
+                        <p>• Agent retries on failure</p>
+                        <p>• Completes in seconds</p>
+                        <p>• Handles edge cases</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Types of Agents -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6">Types of Agents</h2>
+
+            <div class="concept-grid">
+                <div class="concept-card" style="border-left-color: #60a5fa;">
+                    <div class="concept-title" style="color: #60a5fa;">Simple Agent</div>
+                    <div class="concept-content">
+                        Handles a single task with one or two tools. Straightforward, low-risk, easy to debug. Example: Answering questions by searching the web.
+                    </div>
+                </div>
+
+                <div class="concept-card" style="border-left-color: #f59e0b;">
+                    <div class="concept-title" style="color: #f59e0b;">Autonomous Agent</div>
+                    <div class="concept-content">
+                        Operates independently for extended periods. Multiple tools, complex reasoning, long planning horizons. Requires robust guardrails and human checkpoints.
+                    </div>
+                </div>
+
+                <div class="concept-card" style="border-left-color: #34d399;">
+                    <div class="concept-title" style="color: #34d399;">Coding Agent</div>
+                    <div class="concept-content">
+                        Specialized for writing and debugging code. Tools include code execution, file access, version control. Examples: GitHub Copilot, Claude Code.
+                    </div>
+                </div>
+
+                <div class="concept-card" style="border-left-color: #a78bfa;">
+                    <div class="concept-title" style="color: #a78bfa;">Multi-Agent System</div>
+                    <div class="concept-content">
+                        Multiple specialized agents working together on complex problems. One agent might research, another analyzes, a third writes. Requires coordination.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

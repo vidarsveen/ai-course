@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML/CSS/JS File Organization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .intro {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c0c0c0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .approach {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .approach.inline {
+            border-color: #f59e0b;
+        }
+
+        .approach.separated {
+            border-color: #10b981;
+        }
+
+        .approach-header {
+            padding: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .approach.inline .approach-header {
+            background: linear-gradient(135deg, #7a2c0c 0%, #5a1f08 100%);
+            color: #fbbf24;
+        }
+
+        .approach.separated .approach-header {
+            background: linear-gradient(135deg, #0b4d2c 0%, #082a1a 100%);
+            color: #10b981;
+        }
+
+        .approach-content {
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #c0c0c0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            border-left: 3px solid;
+        }
+
+        .inline .code-block {
+            border-left-color: #f59e0b;
+        }
+
+        .separated .code-block {
+            border-left-color: #10b981;
+        }
+
+        .file-name {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-content {
+            color: #d1d5db;
+            font-size: 11px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .pros, .cons {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .pros {
+            border-left: 4px solid #10b981;
+        }
+
+        .cons {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pros .section-title {
+            color: #10b981;
+        }
+
+        .cons .section-title {
+            color: #f59e0b;
+        }
+
+        .item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .best-practice {
+            background: linear-gradient(135deg, #1a3a1a 0%, #1a2a1a 100%);
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .best-practice-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .best-practice-content {
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison, .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HTML/CSS/JS File Organization</h1>
+        <div class="subtitle">Separation of Concerns: Structure, Style, and Behavior</div>
+
+        <div class="intro">
+            Web projects follow a fundamental principle: <strong>separation of concerns</strong>. HTML handles <span style="color: #60a5fa;">structure</span> (what content exists), CSS handles <span style="color: #f59e0b;">styling</span> (how it looks), and JavaScript handles <span style="color: #10b981;">behavior</span> (how it interacts). You can write everything inline (all in one file), but as projects grow, separate files become essential for maintainability and teamwork.
+        </div>
+
+        <div class="comparison">
+            <!-- INLINE APPROACH -->
+            <div class="approach inline">
+                <div class="approach-header">
+                    <span>📄</span>
+                    <span>Inline Approach (Single File)</span>
+                </div>
+                <div class="approach-content">
+                    <div class="code-block">
+                        <div class="file-name">index.html</div>
+                        <div class="code-content">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        button {
+            background: blue;
+            color: white;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button&gt;Click me&lt;/button&gt;
+
+    &lt;script&gt;
+        const btn = document.querySelector(
+            'button'
+        );
+        btn.onclick = () =&gt; {
+            alert('Clicked!');
+        };
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEPARATED APPROACH -->
+            <div class="approach separated">
+                <div class="approach-header">
+                    <span>📁</span>
+                    <span>Separated Approach (Multiple Files)</span>
+                </div>
+                <div class="approach-content">
+                    <div class="code-block">
+                        <div class="file-name">index.html</div>
+                        <div class="code-content">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet"
+          href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button&gt;Click me&lt;/button&gt;
+    &lt;script src="script.js"&gt;
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="file-name">styles.css</div>
+                        <div class="code-content">button {
+    background: blue;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}</div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="file-name">script.js</div>
+                        <div class="code-content">const btn = document.querySelector(
+    'button'
+);
+btn.onclick = () =&gt; {
+    alert('Clicked!');
+};</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pros-cons">
+            <div class="pros">
+                <div class="section-title">
+                    <span>✓</span>
+                    <span>Benefits of Separated Files</span>
+                </div>
+                <div class="item"><strong>Maintainability:</strong> Easy to find and update styles or behavior</div>
+                <div class="item"><strong>Reusability:</strong> Reuse same styles.css across multiple pages</div>
+                <div class="item"><strong>Collaboration:</strong> Different team members work on different files</div>
+                <div class="item"><strong>Gemini-friendly:</strong> Easier for AI to understand and modify</div>
+                <div class="item"><strong>Caching:</strong> Browsers cache CSS/JS separately for faster loads</div>
+                <div class="item"><strong>Scalability:</strong> Easy to add more files as project grows</div>
+            </div>
+
+            <div class="cons">
+                <div class="section-title">
+                    <span>⚠️</span>
+                    <span>When Inline is Acceptable</span>
+                </div>
+                <div class="item"><strong>Quick prototypes:</strong> Landing pages, forms, mockups</div>
+                <div class="item"><strong>Google Sites:</strong> MUST be single file, so use inline</div>
+                <div class="item"><strong>Small projects:</strong> Less than 50 lines of CSS/JS</div>
+                <div class="item"><strong>No setup needed:</strong> Works immediately in Gemini Canvas</div>
+                <div class="item"><strong>Email HTML:</strong> Email clients don't support external files</div>
+                <div class="item"><strong>Learning:</strong> Start inline, refactor to separated later</div>
+            </div>
+        </div>
+
+        <div class="best-practice">
+            <div class="best-practice-title">
+                <span>💡</span>
+                <span>When to Transition from Inline to Separated Files</span>
+            </div>
+            <div class="best-practice-content">
+                <div><strong>Inline works great for:</strong> Simple forms, mockups, Gemini Canvas experiments, Google Sites publishing</div>
+                <div><strong>Use separated files when:</strong> Project has 100+ lines of code, multiple pages, need for version control, team collaboration</div>
+                <div><strong>Transition path:</strong> Start inline in Gemini Canvas → Move to Gemini file chat with separate HTML/CSS/JS → When complex, migrate to PyCharm</div>
+                <div><strong>Remember:</strong> For Google Sites, you'll need to consolidate back to single file before publishing</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

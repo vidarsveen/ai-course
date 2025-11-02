@@ -1,0 +1,296 @@
+LLM Terminology and Concepts
+1) Fundamentals
+LLM (Large Language Model)
+Definition: A Large Language Model (LLM) is a type of artificial intelligence model specifically designed to understand, generate, and interact with human-like text. These models are "large" because they are trained on massive datasets of text and code, containing billions or even trillions of- parameters. This extensive pretraining allows them to learn complex patterns, grammar, and even reasoning abilities, making them general-purpose tools that can be adapted to a wide range of tasks like translation, summarization, and question answering. Many modern LLMs are also multimodal, meaning they can process and integrate information from other modalities like images or audio.
+Keywords: pretraining, next-token prediction, general-purpose, multimodal
+Foundation Model
+Definition: A Foundation Model is a large-scale AI model trained on a massive, broad dataset, so named because it serves as a broad foundation for more specialized tasks. This pretraining captures a general "understanding" of the data (like grammar, facts, or visual patterns), which can then be adapted (e.g., through fine-tuning) to a wide variety of "downstream" tasks like sentiment analysis or medical image diagnosis. LLMs are the most prominent example of foundation models, but this concept also applies to models trained on images, audio, and other modalities.
+Keywords: general-purpose, pretraining, fine-tuning, adaptability, transfer learning
+Transformer
+Definition: The Transformer is a neural network architecture that serves as the foundational technology for most modern LLMs, including models like GPT and Claude. Introduced in the 2017 paper "Attention Is All You Need," its key innovation is the "attention mechanism," which allows the model to weigh the importance of different words (tokens) in a sequence, regardless of their distance from each other. This was a major breakthrough, as previous methods (like n-grams) struggled to capture long-range context, often limiting their understanding to the statistical probability of just a few words in a row. The Transformer's design, typically involving encoder and decoder stacks, is also highly parallelizable, which enabled the "scaling laws" that allow models to improve predictably as their size and training data increase.
+Keywords: attention, encoder/decoder, scaling laws, context length
+Token
+Definition: A token is the fundamental unit of text that an LLM processes. Instead of processing text letter by letter or word by word, LLMs use a "tokenizer" to break down text into these pieces, which can be whole words (e.g., "hello"), subwords (e.g., "run" and "ning" for "running"), or even individual characters. This method, often using techniques like Byte-Pair Encoding (BPE), efficiently handles a large vocabulary, including punctuation, spaces, and unknown words. The "token" serves as the fundamental unit of measurement for both billing and the model's context window; the number of tokens in an input or output is a critical factor in determining cost, speed, and whether the text fits.
+Keywords: tokenization, byte-pair encoding, subwords, token costs
+Embedding
+Definition: An embedding is a numerical, multi-dimensional vector representation of a piece of data, such as a token or word. This vector is not just a random ID; it's learned during training to capture the semantic meaning and context of the data. Words with similar meanings or that are used in similar contexts will have embeddings that are "close" to each other in this high-dimensional vector space. This space can capture complex semantic relationships, famously illustrated by the vector equation King - Man + Woman ≈ Queen. This concept is what allows LLMs to understand nuanced relationships between words, and it's the core technology behind semantic search, where you can search by meaning (e.g., "fruits that are yellow") rather than just keywords.
+Keywords: vector space, cosine similarity, semantic search
+Semantic Similarity
+Definition: Semantic similarity is the measure of how closely related two pieces of text are in meaning. This is calculated using their embeddings. The most common metric for this is "cosine similarity," which measures the cosine of the angle between two vectors in that high-dimensional space. This metric effectively measures their direction, not their magnitude. A cosine similarity score of 1 means the vectors (and thus the text) point in the exact same direction (semantically identical). A score of 0 means they are orthogonal or "unrelated," and a score of -1 means they are diametrically opposed (semantically opposite).
+Keywords: cosine similarity, vector angle, semantic search, RAG
+Context Window
+Definition: The context window represents the maximum amount of information (measured in tokens) that an LLM can "see" at one time. This includes both the input prompt from the user and the output completion generated by the model. For example, a model with an 8,000-token context window can process a combination of input and output up to that limit. If a conversation or document exceeds this limit, older information is "forgotten" or truncated, which can break conversational memory. The size of the context window is a key architectural feature, and larger windows (e.g., 100K+ tokens) allow models to analyze entire documents or maintain very long conversations. Managing this window is a critical part of "context engineering," as high-quality answers depend on providing the right context. However, context is also computationally expensive, creating a key trade-off between quality and cost.
+Keywords: input vs output tokens, truncation, compression strategies
+RAG (Retrieval-Augmented Generation)
+Definition: Retrieval-Augmented Generation (RAG) is a powerful technique that connects a static, pre-trained LLM to an external, dynamic knowledge base. This knowledge base is first prepared by "chunking" large documents into smaller, manageable pieces, which are then converted into embeddings and stored in a vector store. The process then involves taking a user's query, converting it into an embedding, and using "semantic search" to "retrieve" the most relevant document chunks from the vector store. This retrieved information is then "augmented" by adding it as context to the original prompt. The LLM then "generates" an answer based on both the original query and the fresh, retrieved information, allowing it to answer questions about recent events, access private data, and provide citations, which significantly reduces hallucinations.
+Keywords: embed $\rightarrow$ index $\rightarrow$ retrieve $\rightarrow$ generate, citations, chunking, semantic search
+Knowledge Cutoff
+Definition: The knowledge cutoff is the specific date that marks the end of an LLM's static training data. The model has no internal knowledge of any events, facts, or developments that occurred after this date. For example, the GPT-4o model has a knowledge cutoff of October 2023. Another example is the anticipated GPT-5, which has a stated knowledge cutoff of October 1, 2024. This is a fundamental limitation of static pretraining. To provide more current information, LLMs must be augmented with external tools like web browsing (via RAG) to retrieve and incorporate up-to-date facts into their answers.
+Keywords: training data freeze date, browsing/RAG to refresh
+Prompt
+Definition: A prompt is the input text, instructions, or queries provided to an LLM to guide it toward a specific response or "completion." In many conversational APIs, this is split into two parts: a high-level "System Prompt" that defines the AI's persona and rules (e.g., "You are an expert copywriter") and a "User Prompt" that contains the specific, in-the-moment question (e.g., "Write a headline for this product"). A well-designed prompt is critical for getting a high-quality, relevant output, and the art of crafting them is known as prompt engineering.
+Keywords: instruction style, examples, constraints, roles
+Completion
+Definition: The completion is the output text generated by an LLM after it processes a prompt. This is the model's "answer" or "response," and it is measured in "output tokens." In many applications, this text is "streamed" back to the user token by token, creating the effect of the model "typing" its response in real-time. This streaming performance is often measured in tokens per second (TPS); for example, a fast model like Claude Haiku might stream at 100+ TPS, while a more complex model might be slower. API providers typically charge more for output tokens than for input tokens. This cost difference is because the "test-time compute" (or inference) for generating tokens is sequential and more demanding, as each new token must be predicted one after another, whereas input tokens can be processed in parallel.
+Keywords: streaming, stop tokens, determinism, output tokens, tokens per second (TPS)
+Live / Stream Principle
+Definition: This principle refers to the continuous, real-time flow of data (tokens) both to and from an LLM, which is essential for "live" interactions like natural-sounding conversations. Unlike a standard "completion" where you send one prompt and wait for one full response, streaming involves a persistent connection. This is most common in "Voice Interaction," where the user's speech is transcribed and sent to the model in real-time, and the model's generated text is streamed back and converted to speech (TTS) token by token. This "duplex" flow is critical for minimizing "latency" and allowing for interruptions, making the conversation feel fluid and responsive.
+Keywords: real-time, streaming, conversational AI, speech, latency, duplex, tokens per second (TPS)
+2) Generation Controls ("Knobs")
+Temperature
+Definition: Temperature is a parameter that controls the perceived "creativity" or randomness of an LLM's output. A low temperature (e.g., 0.1) makes the model more deterministic and predictable, causing it to pick the most probable next token; this is ideal for factual tasks like extraction or summarization. A high temperature (e.g., 0.9) increases randomness, allowing the model to explore less likely token choices, which is better for creative tasks like writing poetry or brainstorming ideas. Setting it too high can lead to incoherent or nonsensical text.
+Keywords: creativity vs. accuracy, stochasticity, typical ranges
+Top-p / Nucleus Sampling
+Definition: Top-p, also known as nucleus sampling, is a technique for controlling the randomness of an LLM's output by selecting from a dynamic range of tokens. Instead of considering all possible tokens, it considers only the smallest set of tokens whose cumulative probability exceeds a certain threshold 'p' (e.g., 0.9). This means if the model is very confident, it might only consider a few tokens, while if it's uncertain, it will consider a wider array. This method is often preferred over Top-k as it adapts to the model's confidence level, providing a good balance between creativity and coherence.
+Keywords: sampling mass, diversity control
+Top-k
+Definition: Top-k is a sampling method that restricts the LLM's token choice to only the 'k' most probable next tokens at each step of generation. For example, if k=50, the model will only choose from the top 50 most likely tokens, ignoring all others, no matter how creative. A low 'k' value (e.g., k=1) makes the model highly deterministic (known as greedy decoding), while a higher 'k' value allows for more diversity. This method can be combined with Temperature and Top-p, but Top-p is often considered more flexible.
+Keywords: cap candidate tokens, determinism interplay
+Max Tokens (Output Limit)
+Definition: Max tokens is a parameter that sets the hard upper limit on the number of tokens an LLM is allowed to generate in a single completion. This is a crucial control for managing both API costs (since providers charge per token) and application latency (longer responses take more time). If a model's intended response is longer than the max token limit, its output will be abruptly truncated, often cutting off mid-sentence. This setting must be balanced against the needs of the task, ensuring it's large enough for a complete answer but small enough to be efficient.
+Keywords: budget, truncation, latency/cost trade-offs
+Determinism / Seed
+Definition: Determinism refers to the ability to get the exact same LLM output every time for a given prompt and set of parameters. LLM generation is inherently stochastic (random), but this can be controlled by setting a specific "seed" value (a number that initializes the random number generator). If you use the same model, prompt, parameters (like temperature), and seed, you will get an identical completion. This reproducibility is vital for tasks like running evaluations, debugging prompts, or conducting A/B tests, as it ensures you are comparing results fairly.
+Keywords: reproducibility, evaluations
+Message Roles (System/User/Assistant/Tool)
+Definition: Message roles are labels used in conversational APIs to structure the dialog and provide clear instructions to the LLM. The System role sets the high-level persona and rules (e.g., "You are a helpful assistant"). The User role contains the human's input or prompt. The Assistant role contains the model's previous responses, which are fed back as memory. Finally, the Tool role is used to provide the results of an external tool call (like a search result) back to the model so it can formulate a natural language response. This structure creates a clear hierarchy of instructions for the model to follow.
+Keywords: instruction hierarchy, guardrails
+Prompt Template
+Definition: A prompt template is a reusable, predefined structure for a prompt that includes placeholders for dynamic content. For example, a template for a summarization task might look like: Summarize the following text in 3 bullet points: {text_to_summarize}. These templates are essential for building reliable applications because they standardize the instruction format, making the model's behavior more predictable. They are the foundation of "few-shot" prompting, where the template includes slots for examples, and are widely used in frameworks like LangChain to build complex, multi-step chains.
+Keywords: variables/placeholders, few-shot slots
+Prompt Chaining
+Definition: Prompt chaining is a technique for breaking down a complex task into a series of simpler, sequential LLM calls. The output from the first prompt (e.To-dos-chain 1) is captured and used as part of the input for the second prompt (chain 2), and so on. This creates a multi-step workflow. For instance, a chain might first extract keywords from a document, then use those keywords to search the web, and finally use the search results to write a summary. This stepwise approach improves reliability and allows for more complex reasoning than a single, massive prompt.
+Keywords: stepwise workflows, intermediate summaries
+3) Reasoning & Retrieval
+CoT (Chain of Thought)
+Definition: Chain of Thought (CoT) is a prompting technique that significantly improves an LLM's reasoning ability on complex tasks by instructing it to "think step-by-step." Instead of just providing a final answer, the model is prompted to first generate the intermediate reasoning, logic, or calculations it used to arrive at the solution. This "scratchpad" of reasoning helps the model stay on track and avoid errors, especially in math, logic puzzles, and multi-step problems. The final, clean answer can then be extracted from this more detailed output.
+Keywords: step-by-step reasoning, scratchpad vs. concise answers
+Tool Use
+Definition: Tool use refers to the capability of an LLM to interact with external systems or APIs to perform actions or gather information it cannot manage on its own. For example, a model cannot perform accurate arithmetic, so it can be given a "calculator" tool. It also cannot access real-time data, so it can use a "web search" tool. The model is trained to recognize when a tool is needed, what inputs to provide (e.g., the search query), and how to interpret the tool's output to formulate a final, helpful response to the user.
+Keywords: calculators, web, code execution, constraints
+ReAct (Reason + Act)
+Definition: ReAct is an "agentic" pattern that combines reasoning with action in an iterative loop. When given a complex goal, a ReAct agent first "Reasons" (using Chain of Thought) to form a plan and identify the next "Act" (a tool call). After executing the tool, it receives an "Observation" (the tool's output). The agent then loops, feeding this observation back into its reasoning step to assess progress, update its plan, and decide on the next action. This "think-act loop" continues until the final goal is achieved, allowing the agent to dynamically react to new information.
+Keywords: think-act loops, observations, tool feedback
+Grounding
+Definition: Grounding is the process of ensuring an LLM's generated output is factually accurate and directly based on a set of provided, verifiable sources. This is a key component of RAG systems. A grounded response will often include citations or direct quotes from the source documents, allowing the user to verify the information. This practice is the primary strategy for mitigating "hallucinations," as it constrains the model to use the provided context rather than relying solely on its (potentially incorrect or outdated) internal knowledge.
+Keywords: cite sources, quote vs. summarize
+Hallucination
+Definition: A hallucination is the phenomenon where an LLM generates text that is factually incorrect, nonsensical, or "made up," but presents it with high confidence. This occurs because the model is a next-token predictor, not a fact database; it prioritizes generating a plausible-sounding sequence of text over factual accuracy. Hallucinations are a major challenge in LLM reliability. They can be mitigated (though not entirely eliminated) by techniques like RAG, which "grounds" the model in specific source data, and by prompting the model to admit when it doesn't know an answer.
+Keywords: detection, mitigation (RAG, constraints)
+Retrieval
+Definition: Retrieval is the "R" in RAG; it's the process of finding and fetching the most relevant pieces of information from a knowledge base (like a vector store) in response to a query. This process starts by formulating a good query (often by transforming the user's question into an embedding), then searching the database to find the top 'k' most similar documents. Advanced retrieval strategies, like Maximal Marginal Relevance (MMR), can be used to ensure the retrieved documents are not only relevant but also diverse, avoiding redundant information.
+Keywords: query formulation, k, MMR, filters
+Context Compression
+Definition: Context compression refers to any technique used to reduce the number of tokens in a prompt while preserving the most essential information. This is critical when dealing with very long documents or conversational histories that would otherwise exceed the model's context window. "Extractive" methods might pull out key sentences, while "abstractive" methods (like map-reduce) involve using an LLM to summarize individual chunks of a document and then summarizing those summaries. This ensures the most relevant data is available to the model for its final task.
+Keywords: map-reduce, relevance, abstractive vs. extractive
+Summarization
+Definition: Summarization is a common LLM task that involves condensing a long piece of text into a shorter, coherent form while retaining the main ideas. This can range from a high-level "executive" summary for a quick overview to a more "detailed" in-depth summary that captures key findings. Prompts can be used to control the format of the summary, such as asking for a single paragraph or a list of bullet points, making it a flexible tool for information digestion.
+Keywords: executive vs. detailed, bulleting
+Vector Store
+Definition: A vector store, or vector database, is a specialized database designed to efficiently store, manage, and query high-dimensional vector embeddings. In a RAG system, documents are first "chunked" into smaller pieces, then converted into embeddings, and finally stored in the vector store. When a user asks a question, their query is also converted into an embedding, and the database performs a "similarity search" (like a K-Nearest Neighbor search) to find the document chunks with the closest vectors. Popular examples include FAISS, pgvector, and Chroma.
+Keywords: FAISS/pgvector/Chroma, chunking, metadata
+Embeddings Database
+Definition: This term is largely synonymous with "Vector Store." It refers to the complete system responsible for managing the lifecycle of text embeddings. This includes the- initial creation and "upsert" (update/insert) of embeddings into the database, defining the schema for associated metadata (like document source or chapter), and providing an API for efficient querying. Managing these embeddings effectively is crucial for maintaining a fresh and accurate knowledge base for a RAG system.
+Keywords: schema, upserts, versioning
+Context Management
+Definition: Context management encompasses the strategies an application uses to decide what information to include in the model's limited context window during a conversation. A naive approach simply appends every message, quickly leading to overflow. More sophisticated "memory policies" might summarize older parts of the conversation, retain the first (system) message and the last 'N' user/assistant turns, or create a separate "memory surface" that is updated with key facts from the dialog. Effective context management is the key to creating applications that have a useful, long-term "memory."
+Keywords: session carryover, memory policies
+Instruction Tuning
+Definition: Instruction tuning is a form of Supervised Fine-Tuning (SFT) that trains a pre-trained LLM to become a better "assistant." After pretraining, the model is further trained on a curated dataset of instructions (prompts) and their corresponding high-quality, desired outputs. This process teaches the model how to follow commands, answer questions, and adhere to specific formats (e.g., "Summarize this..."). This "alignment" step is what transforms a base model (which just predicts the next token) into a helpful and usable product like ChatGPT or Claude.
+Keywords: alignment, supervised fine-Tuning
+Few-shot Learning
+Definition: Few-shot learning is a powerful prompting technique where the model is given a small number of examples ("shots") of the desired task directly within the prompt. For instance, to get a model to classify sentiment, you might provide 2-3 examples: Text: "I love this!" -> Positive, Text: "This is bad." -> Negative. By seeing these exemplars, the model learns the desired pattern and output format "in-context" without any need for re-training. This allows a single, general-purpose model to be adapted to many specific tasks just by changing the prompt.
+Keywords: exemplars, prompting patterns
+Zero-shot Learning
+Definition: Zero-shot learning refers to the ability of an instruction-tuned LLM to perform a task without having seen any specific examples of that task in the prompt. This relies entirely on the model's ability to understand the "zero-shot" instruction given to it. For example, simply prompting Classify the sentiment of "This movie was great!" as positive, negative, or neutral. is a zero-shot request. The success of zero-shot learning is a direct result of the extensive instruction tuning the model has already undergone.
+Keywords: style guidance, constraints only
+4) Agents & Orchestration
+Agent
+Definition: An LLM-powered agent is a system that uses an LLM as its "brain" to achieve a specific goal. Unlike a simple prompt-and-response, an agent can make a plan, decide which tools to use (like web search or code execution), and run in a "loop control" to observe the results and adapt its plan. Agents maintain a "memory" of their actions and observations, allowing them to tackle complex, multi-step tasks that require interacting with the outside world.
+Keywords: goal, tools, memory, loop control
+Autonomous Agent
+Definition: An autonomous agent is an advanced agent designed to operate over a long "planning horizon" with minimal or no human intervention. After receiving a high-level goal (e.g., "Research the best laptops and write a report"), it can independently plan and execute all the necessary sub-tasks (searching, reading reviews, summarizing, writing) to achieve it. Building safe autonomous agents requires robust guardrails and often a "human-in-the-loop" checkpoint for critical decisions to prevent the agent from going off-track.
+Keywords: planning horizon, guardrails, human-in-the-loop
+Tool Invocation
+Definition: Tool invocation is the process of the LLM deciding to call an external tool and formatting its request correctly. The developer provides the model with a "schema" (a description) of available tools, like get_weather(city: string). The model is trained to generate a special, structured output (like JSON) that specifies the- tool name and the arguments (e.g., {"tool": "get_weather", "arguments": {"city": "London"}}). The application code then intercepts this output, runs the actual get_weather function, and passes the result back to the model.
+Keywords: schemas, arguments, validation
+Function Calling
+Definition: Function calling is a specific, highly reliable capability built into some LLM APIs (like OpenAI's) for tool invocation. Instead of just hoping the model generates the right JSON, the developer can provide a list of available functions and their JSON schemas as a special parameter in the API call. The model's API response will then explicitly state if it wants to call a function and will return a strictly-validated JSON object containing the function name and arguments. This makes the "routing" logic in an agent much more robust and less error-prone.
+Keywords: JSON schema, strict outputs, routing
+Plugins / Tools API
+Definition: A Plugins or Tools API serves as a standardized interface or "capabilities registry" that an LLM can use to discover and interact with a wide array of external, third-party tools. This concept, popularized by ChatGPT Plugins, allows a model to dynamically access new capabilities (e.g., booking flights, ordering food, or querying a specific database) without being retrained. The system typically handles permissions and standardizes the way the LLM "talks" to these diverse external services.
+Keywords: capabilities registry, permissions
+MCP (Model Context Protocol)
+Definition: The Model Context Protocol (MCP) is a conceptual standard aiming to define a universal "language" for how LLMs, host applications, and external tools communicate. The goal is to create a standardized tool-host interface so that any model could, in theory, use any tool built for any host application. This would move the ecosystem away from proprietary, model-specific tool-use implementations and toward a more interoperable, "write-once, run-anywhere" standard.
+Keywords: standardized tool/host interface
+Tool Orchestration
+Definition: Tool orchestration is the logic that manages the complex, multi-step execution of tool calls within an agent. This logic, often embodied by a "planner" or "executor" pattern, handles more than just a single tool call. It manages the sequence of calls (e.g., "search first, then read"), handles retries if a tool fails, and maintains the "state" of the agent's progress toward its goal. This orchestration layer is what gives an agent its robustness and allows it to handle real-world, unpredictable tool failures.
+Keywords: planner/executor, retries, state
+Planning
+Definition: Planning is the cognitive process an agent uses to break down a large, ambiguous goal (e.g., "plan a vacation") into a smaller, concrete list of actionable steps. This "decomposition" is a critical reasoning task for the LLM. The agent might generate an explicit "task list" and then execute each item, or it might plan one step at a time using a ReAct-style loop. The quality of the agent's plan is often the single biggest determinant of its success.
+Keywords: decomposition, task lists, evaluation
+4b) Coding Agents & Developer Tools
+GitHub Copilot
+Definition: GitHub Copilot is an "AI pair programmer" tool, co-developed by GitHub and OpenAI, that integrates directly into a developer's IDE (like VS Code). It provides real-time, "inline" code completions, suggesting entire lines or blocks of code as the developer types. More recently, it has expanded to include a "chat" interface for asking coding questions, explaining code, and generating unit tests, all within the context of the user's open files and repository.
+Keywords: inline completion, chat, PRs, context windows
+OpenAI Codex
+Definition: OpenAI Codex was the foundational model that powered the first version of GitHub Copilot. It was a descendant of GPT-3 that was specifically fine-tuned on a massive corpus of public code from GitHub. While Codex itself has largely been succeeded by newer, more capable GPT models, its release marked the beginning of the "code-gen" lineage, proving that LLMs could be highly effective at understanding and writing software.
+Keywords: code-gen lineage, API usage, prompts
+Claude Code
+Definition: This refers to the family of Claude models from Anthropic, which have demonstrated particularly strong capabilities for code-related tasks. Developers often use Claude for complex tasks beyond simple completion, such as refactoring large blocks of code, generating comprehensive test suites, or even "repo-wide reasoning" where the model is given context from many different files to answer a question or implement a new feature.
+Keywords: repo-wide reasoning, refactoring, tests
+JetBrains AI Assistant (Juni)
+Definition: This is an AI-powered assistant integrated directly into the JetBrains family of IDEs, such as PyCharm and IntelliJ IDEA. Much like Copilot, it provides inline code suggestions and a "code chat" interface. Its key differentiator is its deep integration with the IDE's "inspections" and refactoring tools, allowing it to not only write code but also to leverage the IDE's understanding of the codebase to suggest improvements and fixes.
+Keywords: PyCharm integration, code chat, inspections
+5) Safety, Quality & Governance
+Guardrails
+Definition: Guardrails are a set of rules, mechanisms, or policies implemented by a developer to constrain an LLM's behavior and ensure its outputs are safe and compliant. This can include "allow lists" of permitted topics or "deny lists" of forbidden ones. For example, a banking assistant might have guardrails that prevent it from giving financial advice. These rules are often implemented as a separate layer that filters the model's inputs or outputs, acting as a critical safety check on the model's behavior.
+Keywords: allow/deny lists, regex, policies
+Safety Filters
+Definition: Safety filters are specific systems designed to detect and block harmful, inappropriate, or biased content. These filters are applied to both the user's "input" (to prevent malicious prompts) and the LLM's "output" (to catch any undesirable content the model generates). These systems are trained on large datasets of harmful content (a process called "red-teaming") to learn to categorize and filter text related to hate speech, violence, and other unsafe topics.
+Keywords: input/output filters, red-teaming
+Grounded Answering
+Definition: Grounded answering is an approach to LLM responses that prioritizes factual accuracy by tying every answer to specific, verifiable sources. In a RAG system, this means the model is instructed to generate its answer only from the retrieved documents. The final output will often include explicit "citations" or "provenance" information, allowing the user to trace the answer back to its source. This builds user trust and dramatically reduces the risk of hallucinations.
+Keywords: citations, confidence, provenance
+AI Alignment
+Definition: AI alignment is a broad and critical field of research focused on ensuring that advanced AI systems act in accordance with human values and intentions. The "alignment problem" is that a model's trained "objective" (e.g., "predict the next token") may not perfectly align with the human's desired "intent" (e.g., "be helpful, honest, and harmless"). Techniques like Reinforcement Learning from Human Feedback (RLHF) are used to "align" the model's behavior more closely with human preferences.
+Keywords: instructions vs. incentives, feedback
+Evaluation Metrics
+Definition: Evaluation metrics are the quantitative measures used to assess how well an LLM is performing. These can include traditional measures like "accuracy" on a set of questions. However, for generative models, new metrics are needed, such as "faithfulness" (does the summary match the source?), "latency" (how fast is the response?), and "cost" (how much did the API call cost?). Developers use these "evals" to test changes and ensure the model's quality, safety, and efficiency are improving.
+Keywords: accuracy, faithfulness, latency, cost
+A/B Prompt Testing
+Definition: A/B prompt testing is an experimental method for optimizing prompt performance. In this setup, an application will randomly serve two or more different "variants" of a prompt (Prompt A and Prompt B) to real users for the same task. The developer then measures which prompt performs better against key "metrics" (e.g., which prompt leads to a higher user rating or a lower error rate). This data-driven approach is far more reliable for "prompt engineering" than just guessing which prompt sounds better.
+Keywords: experiments, metrics, variants
+6) Interaction Modes & Product Basics
+Temporary Chat (No History)
+Definition: Temporary chat is a "stateless" conversational mode where the LLM application does not retain any "memory" or "history" of the conversation from one turn to the next. Each user message is treated as a brand-new interaction, and the model has no context of what was said before. This mode is often provided as a "privacy" feature for users who do not want their data stored. It can also be a "workspace default" for simple, one-off tasks where conversational memory is not needed.
+Keywords: privacy, workspace defaults, retention
+Voice Interaction (Speech-to-LLM)
+Definition: Voice interaction allows a user to speak directly to an LLM and receive a spoken response. This requires a pipeline of several technologies: a Speech-to-Text (STT) model to transcribe the user's voice into a text prompt, the LLM itself to generate a text completion, and a Text-to-Speech (TTS) model to convert that text completion back into audible speech. The primary challenge in these "real-time APIs" in minimizing "latency" so the conversation feels natural and responsive.
+Keywords: STT, TTS, real-time API, microphones, latency
+Structured Output (e.g., JSON)
+Definition: Structured output refers to configuring an LLM to generate its response in a predictable, machine-readable format like JSON, rather than just free-form text. This is essential for "downstream applications" that need to programmatically parse the model's output. For example, you could ask the model to extract a person's name and email from a text and provide the output as {"name": "...", "email": "..."}. Modern APIs often support this by allowing the developer to specify a "JSON schema" that the model's output must conform to.
+Keywords: JSON schema, validators, Pydantic, downstream apps
+Core Prompting Concepts
+System Prompt
+Definition: The system prompt is the initial, high-level instruction given to an LLM at the very beginning of a conversation. It sets the "assistant persona" (e.g., "You are a professional, friendly assistant"), establishes the "boundaries" and rules (e.g., "Do not answer questions about financial advice"), and can define the model's "capabilities" (e.g., "You can write and execute code"). This prompt has a strong influence on the model's tone and behavior throughout the entire interaction.
+Keywords: assistant persona, boundaries, capabilities
+Persona / Role Prompting
+Definition: This is a specific prompting technique, often used within the system prompt or a user prompt, that instructs the LLM to adopt a particular role, "persona," or point of view. For example, "You are a skeptical pirate," "You are a 5th-grade science teacher," or "Explain this to me like I'm 10 years old." This is a powerful way to control the "tone," "audience," and style of the model's response, tailoring it to a specific use case.
+Keywords: audience, tone, constraints
+Prompt Engineering
+Definition: Prompt engineering is the iterative craft of designing, refining, and testing prompts to get the most accurate, reliable, and high-quality outputs from an LLM for a specific task. It is a mix of art and science, involving techniques like adding clear instructions, providing few-shot examples ("scaffolding"), and rigorously "testing" different phrasings. Good prompt engineering is essential for building production-ready LLM applications.
+Keywords: iterative prompts, scaffolding, tests
+LLM-as-a-Service (LLMaaS)
+Definition: LLM-as-a-Service (LLMaaS) is the business model of providing access to powerful, "hosted" LLMs via a cloud API, rather than requiring users to download and run the massive models themselves. Companies like OpenAI, Anthropic, and Google are LLMaaS providers. They handle the "inference" (running the model), and customers pay for access, typically based on usage (per-token). This model democratizes access to state-of-the-art AI, allowing developers to build powerful apps without needing to manage complex infrastructure.
+Keywords: hosted inference, SLAs, quotas
+Vibe Coding
+Definition: "Vibe coding" is a slang term for a more informal, exploratory, and "natural-language" style of development, often used when building quick "prototypes" with LLMs. Instead of writing precise, formal logic, the developer might "vibe out" a prompt (e.g., "Just get the main ideas from this text and list them out, make it casual"). While this- approach is fast for experimentation, "vibe" prompts often lack the "guardrails" and robustness needed for a production system.
+Keywords: natural-language dev, prototypes, guardrails
+7) APIs, Playgrounds & Integration
+OpenAI API
+Definition: The OpenAI API is the primary service for programmatic access to OpenAI's family of models, including GPT-4o and GPT-4. Developers use this API, via "REST" calls or a "SDK" (Software Development Kit), to build applications on top of these models. Access is managed through API "keys" and "organizations," and usage is subject to "rate limits" and per-token pricing. The API supports various features, including "streaming" responses, function calling, and image generation.
+Keywords: REST/SDK, keys & orgs, rate limits, streaming
+Anthropic API
+Definition: The Anthropic API provides programmatic access to the Claude family of models (OpUS, Sonnet, and Haiku). A key difference in its design is the "Messages" API, which naturally handles the back-and-forth of a conversation. It also has strong support for "tool use" (its version of function calling) and features for forcing "JSON output." The API is known for its strong "safety settings" and its ability to handle very large context windows.
+Keywords: messages vs. tools, JSON output, safety settings
+Gemini API (Google AI Studio)
+Definition: The Gemini API is Google's service for accessing its powerful Gemini family of models. It is often managed through the "Google AI Studio," a web-based platform for managing "API keys" and prototyping prompts. The Gemini API is particularly well-known for its deep "multimodal" capabilities (processing text, images, and audio together) and built-in features like "URL fetch," which allows the model to directly ingest content from a webpage.
+Keywords: API keys, URL fetch, multimodal, structured output
+xAI API
+Definition: The xAI API provides programmatic access to the Grok family of models, developed by xAI. The Grok models are known for being integrated with "real-time" information from the X (formerly Twitter) platform, giving them a unique, up-to-the-minute perspective on current events. The API provides endpoints for these models, though access and "limits" in-depth typically more restricted compared to other major providers.
+Keywords: Grok endpoints, real-time, limits
+OpenAI Playground
+Definition: The OpenAI Playground is an official web-based interface that allows developers and researchers to experiment with OpenAI's models and parameters without writing any code. It provides a "system prompt" box and a chat interface, along with sliders and input fields to control "temperature/top-p," "stop sequences," and the "seed." It is an indispensable tool for "prompt engineering," as it allows for rapid prototyping and debugging of prompt variants before implementing them in an application.
+Keywords: temperature/top-p, system prompt, stop, seed
+Assistants API (OpenAI)
+Definition: The Assistants API is an advanced, "stateful" API from OpenAI designed to simplify the creation of complex AI agents. It abstracts away many of the hardest parts of agent development. It automatically manages "persistent threads" (conversational memory), provides built-in "tools" like Code Interpreter and a "vector store" for RAG, and handles the tool-use loop. Developers interact with this higher-level API by creating "Assistants," "Threads," and "Messages," rather than managing the chat context manually.
+Keywords: threads, messages, tools, files, vector stores
+Realtime / Voice APIs
+Definition: Realtime or Voice APIs are a specialized class of APIs designed specifically for "low-latency, duplex audio" interactions. "Duplex" means the system can both listen and speak at the same time, allowing for natural "turn-taking" and interruptions. These APIs (like the one that powers GPT-4o's voice mode) handle the entire STT -> LLM -> TTS pipeline and are optimized to respond in milliseconds, making fluid, human-like voice conversations possible.
+Keywords: low-latency duplex audio, turn-taking
+Python SDK (example)
+Definition: A Software Development Kit (SDK) is a library provided by an API vendor that makes it easier to use their API from a specific programming language, like Python. Instead of manually constructing HTTP requests, a developer can just import openai and use simple functions like client.chat.completions.create(...). These SDKs handle authentication (often via "env vars" or environment variables), request formatting, and response parsing, dramatically speeding up development.
+Keywords: openai/anthropic/google genai libs, env vars
+Notebooks (Colab/Jupyter)
+Definition: Interactive notebooks, like Google Colab or Jupyter, are web-based environments that allow developers to write and execute code, visualizations, and text in a single document. They are extremely popular for LLM experimentation because they allow for "quick experiments" and rapid prototyping. A developer can install an SDK, manage "secrets" (like API keys), test a prompt, and see the output all in one place, making them ideal for learning and research.
+Keywords: quick experiments, secrets management
+Model Providers & Notable Models
+OpenAI Models
+GPT-5
+Definition: (Hypothetical/Future) GPT-5 is the anticipated successor to OpenAI's GPT-4 series. While not officially announced, it is widely expected to feature significantly enhanced "reasoning" capabilities, improved "multimodal" understanding, and be available via the "API".
+Keywords: reasoning, multimodal, API
+GPT-4.1
+Definition: (Hypothetical) This model name represents a potential incremental update to GPT-4. Such a model would likely aim to find a new "balanced" point between the high "quality" of GPT-4 and the "speed" and cost-efficiency of smaller models.
+Keywords: balanced quality/speed
+GPT-4o
+Definition: GPT-4o ("omni") is OpenAI's flagship "omni" model, released in 2024. It was designed from the ground up to natively handle a combination of "voice, vision," and text inputs and outputs. Its primary feature is its "realtime" conversational ability, enabling fluid, human-like voice interactions.
+Keywords: omni (voice/vision), realtime
+o3
+Definition: (Likely an internal codename or typo for gpt-3.5-turbo or a similar variant). This generally refers to an OpenAI model that has a strong "reasoning focus" and is well-integrated with "tools" and function calling.
+Keywords: reasoning focus, tools
+o4-mini
+Definition: (Likely an internal codename or typo, perhaps for a future GPT-4 variant). This name implies a "cost-efficient," "high-throughput" model variant from the GPT-4 family, optimized for speed and affordability at scale.
+Keywords: cost-efficient, high throughput
+Anthropic Models
+Claude Sonnet 4.5
+Definition: This refers to a hypothetical future iteration of Anthropic's "Sonnet" model. Sonnet models are known as the workhorse of the Claude family, balancing strong "reliability" and performance with a "long context" window, making them ideal for many enterprise tasks.
+Keywords: reliability, long context
+Claude Haiku
+Definition: Claude Haiku is Anthropic's fastest and most "cost-effective" model. It is designed for high-throughput tasks like simple chat interactions, content moderation, or RAG retrieval where "speed" is the top priority.
+Keywords: speed, cost
+Claude Opus
+Definition: Claude Opus is Anthropic's most powerful and "capable" model. It is designed for "advanced reasoning," complex analysis, and handling highly difficult tasks. It is analogous to OpenAI's GPT-4, representing the "state-of-the-art" for the Claude family.
+Keywords: advanced reasoning
+Meta – Llama (open source)
+Llama 3
+Definition: Llama 3 is the third generation of Meta's powerful "open-weights" LLMs. While not strictly "open source" in the traditional sense, its "licenses" are very permissive, allowing for broad use by researchers and a wide range of commercial applications.
+Keywords: open weights, licenses
+Llama 3.1
+Definition: Llama 3.1 is an iteration on Llama 3, released in 2024. Its key improvements include a significantly expanded "context length" (up to 128K tokens) and stronger capabilities for "fine-tuning," making it a popular choice for building custom models.
+Keywords: context length, fine-tunes
+Llama 3.2
+Definition: (Hypothetical/Future) A Llama 3.2 would represent a "further iteration" of the Llama 3 family. It would likely focus on enhancing reasoning capabilities or, importantly, releasing "smaller variants" optimized to run efficiently on "edge devices" like smartphones.
+Keywords: small/edge variants
+xAI Models
+Grok-2
+Definition: Grok-2 is the second-generation model from xAI. It is known for its access to "up-to-date info" via the X platform and its impressive "long context" capabilities, which were demonstrated processing hundreds of pages of documents.
+Keywords: up-to-date info, long context
+Grok-3
+Definition: (Hypothetical/Future) Grok-3 would be the next iteration of xAI's model. It would be expected to build on Grok-2's strengths, with a focus on "enhanced reasoning" and deeper "tool integration" to compete with other frontier models.
+Keywords: reasoning, tools
+Google / Gemini Ecosystem
+NotebookLM
+Definition: NotebookLM is a Google AI tool designed as a research and writing assistant. Users can upload their own "sources" (like PDFs, Google Docs, or text files), and the tool "grounds" a Gemini model in that information. This allows the user to ask questions, "synthesize" ideas, and generate new content based only on the provided documents.
+Keywords: sources, grounding, synthesis
+AI Studio (Gemini API / tools)
+Definition: Google AI Studio is the web-based developer platform for working with the Gemini API. It's where developers get their "API keys," prototype prompts, and experiment with the model's capabilities. It has strong support for "multimodal" inputs, "structured output" (JSON), and "tool" integration, including the ability to "fetch" data from "URLs."
+Keywords: keys, URL fetch, structured output
+URL Context (fetching data from URLs)
+Definition: This is a specific capability within the Google/Gemini ecosystem (and some RAG systems) that allows the model or application to retrieve and use content directly from "web URLs" as input. This requires "connectors" or "loaders" that can fetch and parse the content from a given URL. This process often has to deal with "authentication" for private pages and "limits" on file size.
+Keywords: connectors, auth, limits
+Image Generation (Gemmi)
+Definition: This refers to the ability of Google's models (like Gemini) to generate images from text "prompts." This capability is integrated into their APIs and products, allowing users to create visuals based on natural language descriptions. This feature is also subject to "safety" filters and has "resolution" limits.
+Keywords: prompts, safety, resolution
+Nano Banana (image editing)
+Definition: "Nano Banana" (gemini-2.5-flash-image-preview) is the internal codename for a Gemini model focused on "image editing" and image-to-image generation. This capability allows a user to provide an image and use text prompts to perform "editing operations," such as removing objects, changing styles, or applying "masks" to specific regions.
+Keywords: editing ops, layers, masks
+Video Generation (Gemini)
+Definition: This refers to Google's advanced AI capability for generating short "videos" from text prompts or other inputs (like a starting image). Models like Veo allow for creating a "storyboard" or sequence of shots. This technology is still emerging and often has "length" limitations and relies on a library of "assets" or generative techniques.
+Keywords: storyboard, length, assets
+Google Colab (Gemini in Colab)
+Definition: Google Colab is an interactive "notebook" environment (similar to Jupyter) that runs in the cloud, and it is tightly integrated with Google's ecosystem. Developers use Colab to run "Python libraries" (like the Google GenAI SDK) to create "demos" and experiments with the Gemini API. Colab provides an easy way to handle "notebook authentication" to securely access Google's AI services.
+Keywords: python libs, demos, notebook auth
+Dev Workflow Targets (Course Endpoint)
+GitHub (Platform & Repos)
+Definition: GitHub is the most popular web-based "platform" for "version control" and collaborative software development, built on top of the Git system. It allows developers to host their code in "repositories" (repos), track changes using "branches," and collaborate on code changes through "Pull Requests" (PRs). It has become the central hub for open-source and private software projects.
+Keywords: repos, branches, PRs, reviews
+GitHub – Issues/PRs/Projects
+Definition: These are the core project management "features" within GitHub used to organize and track work. "Issues" are used to track bugs, feature requests, and tasks. "Pull Requests" (PRs) are where code changes are proposed, reviewed, and merged. "Projects" provides a higher-level view, often as a "Kanban" board or "roadmap," to organize and prioritize Issues and PRs into a coherent development plan.
+Keywords: Kanban, roadmaps, automations
+PyCharm (IDE)
+Definition: PyCharm is a powerful and popular "Integrated Development Environment" (IDE) from JetBrains, built specifically for the Python programming language. It provides advanced features beyond a simple text editor, such as intelligent code completion, "linters" (for code quality), debugging tools, and built-in support for managing "virtual environments" (venv) and "run configurations" for executing code.
+Keywords: run configs, venv, linters
+PyCharm ↔ GitHub Workflow
+Definition: This describes the "integrated process" of using the PyCharm IDE to interact directly with a GitHub repository, which is a common and efficient workflow for developers. PyCharm has a built-in Git client that allows a developer to "clone" a repo, "commit" their changes, "push" those changes to GitHub, and even create and manage "PRs," all from within the "IDE" interface, without having to switch to a command line.
+Keywords: clone, commit, push, PR from IDE

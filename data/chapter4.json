@@ -1,0 +1,179 @@
+{
+  "chapter": 4,
+  "title": "Module 4: Tools, Agents & Automation",
+  "description": "Leverage AI to access data and automate workflows",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Tool Integration Concepts",
+      "terms": [
+        {
+          "id": "tool-use",
+          "title": "Tool Use",
+          "definition": "Tool use refers to the capability of an LLM to interact with external systems or APIs to perform actions or gather information it cannot manage on its own. For example, a model cannot perform accurate arithmetic, so it can be given a \"calculator\" tool. It also cannot access real-time data, so it can use a \"web search\" tool. The model is trained to recognize when a tool is needed, what inputs to provide (e.g., the search query), and how to interpret the tool's output to formulate a final, helpful response to the user.",
+          "keywords": [
+            "calculators",
+            "web",
+            "code execution",
+            "constraints"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "function-calling",
+          "title": "Function Calling",
+          "definition": "Function calling is a specific, highly reliable capability built into some LLM APIs (like OpenAI's) for tool invocation. Instead of just hoping the model generates the right JSON, the developer can provide a list of available functions and their JSON schemas as a special parameter in the API call. The model's API response will then explicitly state if it wants to call a function and will return a strictly-validated JSON object containing the function name and arguments. This makes the \"routing\" logic in an agent much more robust and less error-prone.",
+          "keywords": [
+            "JSON schema",
+            "strict outputs",
+            "routing"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "tool-invocation",
+          "title": "Tool Invocation",
+          "definition": "Tool invocation is the process of the LLM deciding to call an external tool and formatting its request correctly. The developer provides the model with a \"schema\" (a description) of available tools, like get_weather(city: string). The model is trained to generate a special, structured output (like JSON) that specifies the tool name and the arguments (e.g., {\"tool\": \"get_weather\", \"arguments\": {\"city\": \"London\"}}). The application code then intercepts this output, runs the actual get_weather function, and passes the result back to the model.",
+          "keywords": [
+            "schemas",
+            "arguments",
+            "validation"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "grounding",
+          "title": "Grounding",
+          "definition": "Grounding is the process of ensuring an LLM's generated output is factually accurate and directly based on a set of provided, verifiable sources. This is a key component of RAG systems. A grounded response will often include citations or direct quotes from the source documents, allowing the user to verify the information. This practice is the primary strategy for mitigating \"hallucinations,\" as it constrains the model to use the provided context rather than relying solely on its (potentially incorrect or outdated) internal knowledge.",
+          "keywords": [
+            "cite sources",
+            "quote vs. summarize"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "rag-retrieval-augmented-generation",
+          "title": "RAG (Retrieval-Augmented Generation)",
+          "definition": "Retrieval-Augmented Generation (RAG) is a powerful technique that connects a static, pre-trained LLM to an external, dynamic knowledge base. This knowledge base is first prepared by \"chunking\" large documents into smaller, manageable pieces, which are then converted into embeddings and stored in a vector store. The process then involves taking a user's query, converting it into an embedding, and using \"semantic search\" to \"retrieve\" the most relevant document chunks from the vector store. This retrieved information is then \"augmented\" by adding it as context to the original prompt. The LLM then \"generates\" an answer based on both the original query and the fresh, retrieved information, allowing it to answer questions about recent events, access private data, and provide citations, which significantly reduces hallucinations.",
+          "keywords": [
+            "embed → index → retrieve → generate",
+            "citations",
+            "chunking",
+            "semantic search"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/rag.html",
+          "vizIcon": "📚",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "url-context-fetching-data-from-urls",
+          "title": "URL Context (fetching data from URLs)",
+          "definition": "This is a specific capability within the Google/Gemini ecosystem (and some RAG systems) that allows the model or application to retrieve and use content directly from \"web URLs\" as input. This requires \"connectors\" or \"loaders\" that can fetch and parse the content from a given URL. This process often has to deal with \"authentication\" for private pages and \"limits\" on file size.",
+          "keywords": [
+            "connectors",
+            "auth",
+            "limits"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Agent Concepts",
+      "terms": [
+        {
+          "id": "agent",
+          "title": "Agent",
+          "definition": "An LLM-powered agent is a system that uses an LLM as its \"brain\" to achieve a specific goal. Unlike a simple prompt-and-response, an agent can make a plan, decide which tools to use (like web search or code execution), and run in a \"loop control\" to observe the results and adapt its plan. Agents maintain a \"memory\" of their actions and observations, allowing them to tackle complex, multi-step tasks that require interacting with the outside world.",
+          "keywords": [
+            "goal",
+            "tools",
+            "memory",
+            "loop control"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "autonomous-agent",
+          "title": "Autonomous Agent",
+          "definition": "An autonomous agent is an advanced agent designed to operate over a long \"planning horizon\" with minimal or no human intervention. After receiving a high-level goal (e.g., \"Research the best laptops and write a report\"), it can independently plan and execute all the necessary sub-tasks (searching, reading reviews, summarizing, writing) to achieve it. Building safe autonomous agents requires robust guardrails and often a \"human-in-the-loop\" checkpoint for critical decisions to prevent the agent from going off-track.",
+          "keywords": [
+            "planning horizon",
+            "guardrails",
+            "human-in-the-loop"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "tool-orchestration",
+          "title": "Tool Orchestration",
+          "definition": "Tool orchestration is the logic that manages the complex, multi-step execution of tool calls within an agent. This logic, often embodied by a \"planner\" or \"executor\" pattern, handles more than just a single tool call. It manages the sequence of calls (e.g., \"search first, then read\"), handles retries if a tool fails, and maintains the \"state\" of the agent's progress toward its goal. This orchestration layer is what gives an agent its robustness and allows it to handle real-world, unpredictable tool failures.",
+          "keywords": [
+            "planner/executor",
+            "retries",
+            "state"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "mcp-model-context-protocol",
+          "title": "MCP (Model Context Protocol)",
+          "definition": "The Model Context Protocol (MCP) is a conceptual standard aiming to define a universal \"language\" for how LLMs, host applications, and external tools communicate. The goal is to create a standardized tool-host interface so that any model could, in theory, use any tool built for any host application. This would move the ecosystem away from proprietary, model-specific tool-use implementations and toward a more interoperable, \"write-once, run-anywhere\" standard.",
+          "keywords": [
+            "standardized tool/host interface"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

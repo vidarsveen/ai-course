@@ -1,0 +1,381 @@
+{
+  "chapter": 6,
+  "title": "Module 6: Hands-On Coding with Gemini",
+  "description": "Practical strategies for building applications with Gemini in Colab",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Context Management for AI Coding",
+      "terms": [
+        {
+          "id": "project-dump-strategy",
+          "title": "Project Dump Strategy",
+          "definition": "A technique for consolidating your PyCharm project's code into a shareable context (dump.txt or copy-paste) that you can send to Claude/Gemini. This includes your project structure, Python files, configuration, and templates. By giving Gemini your full project at once, it understands architecture, relationships between files, and can give much better suggestions than if you just describe the problem. In PyCharm: Select src/ folder → Copy all files → Paste into Gemini chat.",
+          "keywords": [
+            "project export",
+            "context consolidation",
+            "full project visibility",
+            "file hierarchy",
+            "PyCharm integration"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/dump-strategy.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "token-budget-awareness",
+          "title": "Token Budget Awareness",
+          "definition": "Understanding that every piece of text you send to AI models counts as 'tokens' (roughly 4 characters = 1 token), and models have context window limits. Modern models are generous: Gemini 2.5 (1M tokens), Claude 4.5 (200k), GPT-5 (400k). With such large windows, token limits are rarely a concern. Still, being aware helps you decide when to send full PyCharm projects vs specific files, and when to start fresh conversations for better focus.",
+          "keywords": [
+            "context window",
+            "Gemini 2.5",
+            "Claude 4.5",
+            "token efficiency",
+            "conversation management"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/token-budget.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "context-refresh-pattern",
+          "title": "Context Refresh Pattern",
+          "definition": "Recognizing when Gemini seems confused about your project (giving outdated suggestions, forgetting previous decisions) and knowing when to reset by starting a fresh conversation with an updated dump.txt. Even with large token budgets, sometimes a fresh start helps Gemini focus better. This pattern includes: recognizing confusion signs, creating fresh context, and maintaining continuity across conversations.",
+          "keywords": [
+            "conversation resets",
+            "context confusion",
+            "fresh starts",
+            "maintaining continuity"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "multi-file-project-organization",
+          "title": "Multi-File Project Organization",
+          "definition": "Structuring your Python project across multiple .py files (main.py, logic.py, utils.py) rather than keeping everything in one massive file. This reduces token usage in future AI iterations, makes code easier to reason about, and gives Gemini cleaner modules to work with. Key practice: split code into STATIC (templates, utilities) and DYNAMIC (actively developing) modules. Only paste dynamic files to AI, keeping static files stable and reducing regression risk.",
+          "keywords": [
+            "modularity",
+            "static vs dynamic",
+            "separation of concerns",
+            "regression prevention",
+            "token efficiency"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/code-organization-static-dynamic.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "PyCharm Development Workflow",
+      "terms": [
+        {
+          "id": "pycharm-project-setup",
+          "title": "PyCharm Project Setup",
+          "definition": "Setting up a professional Python project in PyCharm IDE. This includes creating project structure (src/, tests/, .venv/), initializing Git for version control, installing dependencies via requirements.txt, and configuring the Python interpreter. PyCharm's integrated Git tools make committing and pushing to GitHub seamless. For rapid prototyping with data visualization, Google Colab remains useful, but PyCharm is your primary development environment for production code.",
+          "keywords": [
+            "PyCharm IDE",
+            "virtual environments",
+            "project structure",
+            "Git integration",
+            "version control"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/pycharm-project-setup.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "requirements-dependencies",
+          "title": "Requirements & Dependencies Management",
+          "definition": "Creating and managing a requirements.txt file that lists all Python packages your project needs. You can ask Gemini to generate this from your code. In PyCharm, install dependencies with: Terminal → pip install -r requirements.txt. This makes your project reproducible: teammates, CI/CD systems, and your future self can easily recreate the exact same environment. Best practice: freeze exact versions to prevent unexpected breaking changes.",
+          "keywords": [
+            "requirements.txt",
+            "pip install",
+            "package versions",
+            "virtual environments",
+            "reproducibility"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "readme-driven-development",
+          "title": "README-Driven Development",
+          "definition": "Writing a clear README.md file for your project that explains its purpose, how to set it up, and how to use it. This serves dual purposes: it helps humans (and your future self) understand the project, AND it gives Gemini crucial context about what your code is supposed to do. Include purpose, setup steps, project structure, key functions, and usage examples.",
+          "keywords": [
+            "documentation",
+            "project context",
+            "setup instructions",
+            "API documentation",
+            "AI context"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/readme-example.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "incremental-development-pattern",
+          "title": "Incremental Development Pattern",
+          "definition": "Breaking complex coding tasks into small, sequential steps: (1) Structure - set up files and architecture in PyCharm, (2) One Example - build and perfect a single working example (test it locally), (3) Iterate - refine until excellent (commit to Git), (4) Extend - scale to handle all cases. This pattern prevents getting stuck in confusing error loops and makes AI assistance (JetBrains AI, Claude, Gemini) much more effective than asking for entire solutions at once.",
+          "keywords": [
+            "breaking down tasks",
+            "one example first",
+            "test locally",
+            "commit frequently",
+            "staged development"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/incremental-development.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "finding-libraries-packages",
+          "title": "Finding Libraries & Packages",
+          "definition": "Learning to discover and evaluate the right libraries for your projects across both Python and HTML/JS ecosystems. For Python: search PyPI (pip install [package]), read documentation, check version stability, ask Gemini 'What's the best library for [task]?' For HTML/JS: explore npm packages, use CDN links (cdnjs, unpkg, jsDelivr), verify library size and browser compatibility. Universal skill: search → evaluate features/dependencies → test → integrate. Asking Gemini to recommend and show usage examples for any library saves hours of research.",
+          "keywords": [
+            "PyPI",
+            "pip packages",
+            "npm packages",
+            "CDN links",
+            "library evaluation",
+            "dependency management",
+            "Gemini recommendations"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/library-finding.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "streamlit-python-ui",
+          "title": "Streamlit for Python UI",
+          "definition": "Building interactive web-based user interfaces with pure Python (no HTML/CSS required). Streamlit lets you create data dashboards, forms, file uploads, and interactive visualizations in minutes. Run locally: streamlit run app.py. Deploy: Streamlit Cloud (free hosting). Perfect for: Internal tools, data analysis dashboards, rapid prototypes, ML model demos. When NOT to use: Complex custom UI designs, production e-commerce sites, projects requiring full backend control. Streamlit simplifies the workflow: write Python → Gemini helps with interactivity → instant web app.",
+          "keywords": [
+            "web UI with Python",
+            "data dashboards",
+            "interactive forms",
+            "Streamlit Cloud",
+            "rapid prototyping",
+            "no HTML needed"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/streamlit-example.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Web Development with HTML",
+      "terms": [
+        {
+          "id": "html-css-js-file-organization",
+          "title": "HTML/CSS/JS File Organization",
+          "definition": "Organizing web projects by separating concerns: HTML files handle structure (content), CSS files handle styling (appearance), and JS files handle behavior (interactivity). Standard practice: index.html, styles.css, script.js in the same folder. Inline code (CSS in <style> tags or JS in <script> tags) works for small projects but becomes messy at scale. Separation keeps code maintainable and easier for Gemini to work with. For simple sites: inline is fine. For anything complex: use separate files. Understanding this pattern is crucial before publishing to Google Sites or migrating to PyCharm.",
+          "keywords": [
+            "HTML structure",
+            "CSS styling",
+            "JavaScript behavior",
+            "separation of concerns",
+            "inline vs external",
+            "code organization",
+            "file dependencies"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/html-file-organization.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "gemini-canvas-html-prototyping",
+          "title": "Gemini Canvas & Preview for HTML Prototyping",
+          "definition": "Using Gemini's canvas feature for rapid HTML prototyping with instant visual feedback. Process: (1) Ask Gemini to create HTML in canvas, (2) See live preview immediately, (3) Request changes (e.g., 'Change button to blue'), (4) Iterate until perfect, (5) Copy finished code. Perfect for: Landing pages, forms, mockups, simple interactive sites. Canvas advantages: no setup, instant feedback, fast iteration. Limitations: no backend, no database, no file system access. Canvas is ideal for learning and quick prototypes. When your project needs files or complexity, move code to Gemini's file chat or PyCharm.",
+          "keywords": [
+            "Gemini Canvas",
+            "live preview",
+            "rapid iteration",
+            "HTML mockups",
+            "instant feedback",
+            "learning tool",
+            "no setup required"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/gemini-canvas-html.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "gemini-multi-file-html-projects",
+          "title": "Working with Multi-File HTML Projects in Gemini",
+          "definition": "Using Gemini's file upload feature to work with projects containing separate HTML, CSS, and JS files. Process: (1) Prepare your project folder (index.html, styles.css, script.js), (2) Upload folder to Gemini file chat, (3) Ask Gemini to modify specific files (e.g., 'Update the button styling in styles.css'), (4) Maintain relative path references (href='styles.css'), (5) Download updated files. Advantages over canvas: Maintains file separation, Gemini can see full project context, supports complex interactions. Critical skill: Managing file dependencies and ensuring paths work after edits. Use this when canvas isn't enough but you're not ready for PyCharm.",
+          "keywords": [
+            "Gemini file upload",
+            "multi-file projects",
+            "file dependencies",
+            "relative paths",
+            "project structure",
+            "context awareness",
+            "download updated files"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "google-sites-single-file-consolidation",
+          "title": "Publishing to Google Sites (Single-File Consolidation)",
+          "definition": "Google Sites requires HTML projects to be contained in a SINGLE .html file (no separate CSS/JS files). Process: Start with multi-file project (index.html, styles.css, script.js) → Ask Gemini 'Consolidate this into single HTML file' → Gemini inlines CSS into <style> tags and JS into <script> tags → Test consolidated file → Copy to Google Sites embed. Why consolidation matters: Google Sites serves files with certain restrictions, and single-file HTML simplifies deployment and sharing. Before consolidation, ensure your CSS/JS are working (test in Gemini file chat first). After consolidation, thoroughly test all features. This is the final step before publishing.",
+          "keywords": [
+            "Google Sites",
+            "single HTML file",
+            "consolidation",
+            "CSS inlining",
+            "JS inlining",
+            "deployment",
+            "embedding HTML"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/html-consolidation.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "migrating-html-projects-to-pycharm",
+          "title": "Migrating Complex HTML Projects to PyCharm",
+          "definition": "When HTML projects grow beyond simple sites—multiple pages, complex JS, need for version control—migrate to PyCharm for professional development. Setup: Create project structure (src/ folder, add index.html/styles.css/script.js), initialize Git (VCS → Create Git Repository), use PyCharm's built-in web server (right-click → Open in Browser). Benefits: Full IDE features (code completion, refactoring), Git integration for version control, testing complex interactions locally, better organization for large projects. When to migrate: 100+ lines of code, multiple pages, team collaboration, need for version history. PyCharm workflow for HTML is similar to Python: edit → test locally → commit → push to GitHub.",
+          "keywords": [
+            "PyCharm for HTML",
+            "project structure",
+            "Git integration",
+            "local web server",
+            "complex projects",
+            "version control",
+            "team collaboration"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Debugging & Iteration Tactics",
+      "terms": [
+        {
+          "id": "effective-error-communication",
+          "title": "Effective Error Communication",
+          "definition": "Providing complete, useful information when asking Gemini to debug errors. This includes: the full error message and stack trace (not just the last line), the code that caused it with surrounding context, screenshots for UI/formatting issues, and what you expected vs what actually happened. Poor error communication leads to vague fixes. Good communication leads to solutions.",
+          "keywords": [
+            "full stack traces",
+            "code context",
+            "screenshots",
+            "expected vs actual"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/error-communication.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "breaking-loops",
+          "title": "Breaking Out of AI Loops",
+          "definition": "Recognizing when you're stuck in an unproductive iteration cycle (same error after 3+ attempts) and knowing four tactics to escape: (1) Add debug logging to understand what's happening, (2) Ask for completely different approaches instead of variations, (3) Simplify the problem to just the basic case, (4) Start a fresh conversation with better context. Knowing when to try each tactic is crucial.",
+          "keywords": [
+            "debugging loops",
+            "alternative approaches",
+            "problem simplification",
+            "fresh starts"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/breaking-loops.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "prompt-patterns",
+          "title": "Prompt Patterns for Code Improvement",
+          "definition": "Specific, proven prompts that get better code suggestions from Gemini. Instead of generic \"fix this\", use patterns like: 'Review this approach before implementing', 'Give me 3 ways to solve this with pros/cons', 'Identify potential issues with this code', 'Refactor this following our project structure'. These patterns focus the AI's thinking and get more useful responses.",
+          "keywords": [
+            "effective prompts",
+            "code review",
+            "alternative solutions",
+            "refactoring requests"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "code-refactoring-with-ai",
+          "title": "Code Refactoring with AI",
+          "definition": "Using Gemini to reorganize and improve code that already works. The pattern is: (1) Get your code working, (2) Ask Gemini 'Refactor this following our structure/best practices', (3) Test the refactored version to ensure it still works, (4) Keep the improved version. This 'working well? split it out' approach reduces future token usage and improves maintainability.",
+          "keywords": [
+            "code organization",
+            "modularity",
+            "best practices",
+            "maintainability"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

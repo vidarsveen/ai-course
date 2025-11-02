@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Embeddings in Vector Space</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        canvas {
+            border: 1px solid #374151;
+            border-radius: 8px;
+            background: #111827;
+        }
+
+        .plot-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .word-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .word-label:hover {
+            background-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #111827;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .equation {
+            background: #1f2937;
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .info-box {
+            background: #1f2937;
+            border: 1px solid #4b5563;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+
+        .cosine-display {
+            background: #1f2937;
+            border-left: 4px solid #fbbf24;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .cosine-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin: 0.5rem 0;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Word Embeddings in Vector Space</h1>
+            <p class="text-gray-400">Words with similar meanings cluster together</p>
+        </header>
+
+        <!-- Interactive Plot -->
+        <div class="plot-container">
+            <canvas id="embeddings-canvas" width="500" height="500"></canvas>
+        </div>
+
+        <div class="info-box text-center">
+            <strong>Hover over "dog" and "puppy"</strong> to see the angle between their vectors and calculate cosine similarity
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #60a5fa;"></div>
+                <span>Royalty</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #34d399;"></div>
+                <span>Gender</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #f87171;"></div>
+                <span>Animals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #fbbf24;"></div>
+                <span>Actions</span>
+            </div>
+        </div>
+
+        <!-- Cosine Similarity Display -->
+        <div id="cosine-section" style="display: none;">
+            <div class="cosine-display">
+                <div>Cosine Similarity between "dog" and "puppy":</div>
+                <div class="cosine-value" id="cosine-value">0.92</div>
+                <div style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.5rem;">
+                    Angle: <span id="angle-value">23°</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation -->
+        <div class="space-y-4 max-w-2xl mx-auto">
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Semantic Similarity</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Each point represents a word, positioned in a 2D vector space. Words that are semantically similar (have related meanings) are positioned close together. For example, "king" and "queen" are nearby because they share similar characteristics, just as "dog" and "puppy" are close because they have related meanings.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Vector Math</h3>
+                <p class="text-gray-300 text-sm leading-relaxed mb-3">
+                    Embeddings support arithmetic operations. The most famous example shows how the semantic relationships can be captured mathematically:
+                </p>
+                <div class="equation">
+                    King - Man + Woman ≈ Queen
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    By removing the "male" concept from "king" and adding the "female" concept, we arrive at "queen". This demonstrates that embeddings capture meaningful relationships between words.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Distance Measures: Cosine Similarity</h3>
+                <p class="text-gray-300 text-sm leading-relaxed mb-3">
+                    The similarity between two words is measured using <strong>cosine similarity</strong>, which calculates the angle between their vectors. The smaller the angle, the more similar the words.
+                </p>
+                <p class="text-gray-300 text-sm leading-relaxed mb-2">
+                    For example, "dog" and "puppy" have a small angle between them, resulting in a high cosine similarity (close to 1), indicating they are semantically similar. The formula is:
+                </p>
+                <div class="equation">
+                    cosine_similarity = cos(θ)<br/>
+                    where θ is the angle between vectors
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    A cosine similarity of <strong>1</strong> means identical direction (perfect match), <strong>0</strong> means perpendicular (unrelated), and <strong>-1</strong> means opposite meaning.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">A Simplification</h3>
+                <p class="text-gray-300 text-sm leading-relaxed mb-2">
+                    What you see here is a 2D visualization for simplicity. In reality, modern LLM embeddings use many more dimensions:
+                </p>
+                <div class="equation">
+                    OpenAI GPT models: 1536 dimensions<br/>
+                    This visualization: 2 dimensions
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    With 1536 dimensions, LLMs can capture far more nuanced semantic relationships than our 2D plot shows. The same principles apply—words with similar meanings are "close" in this high-dimensional space, but with much greater expressiveness. The cosine similarity calculation remains the same regardless of dimensionality.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                <h3 class="text-base font-semibold text-indigo-300 mb-2">Real-World Use</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Embeddings enable semantic search (search by meaning rather than keywords), recommendation systems, and language understanding. When you ask an LLM a question, it first converts your text into embeddings, then uses these vectors to understand relationships and generate appropriate responses.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('embeddings-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Sample word embeddings (pre-computed 2D positions for visualization)
+        const words = [
+            // Royalty
+            { word: 'king', x: 420, y: 150, category: 'royalty', color: '#60a5fa' },
+            { word: 'queen', x: 380, y: 180, category: 'royalty', color: '#60a5fa' },
+            { word: 'prince', x: 400, y: 120, category: 'royalty', color: '#60a5fa' },
+            { word: 'princess', x: 350, y: 140, category: 'royalty', color: '#60a5fa' },
+
+            // Gender
+            { word: 'man', x: 320, y: 280, category: 'gender', color: '#34d399' },
+            { word: 'woman', x: 280, y: 320, category: 'gender', color: '#34d399' },
+            { word: 'boy', x: 340, y: 340, category: 'gender', color: '#34d399' },
+            { word: 'girl', x: 300, y: 360, category: 'gender', color: '#34d399' },
+
+            // Animals
+            { word: 'cat', x: 150, y: 200, category: 'animals', color: '#f87171' },
+            { word: 'dog', x: 180, y: 230, category: 'animals', color: '#f87171' },
+            { word: 'kitten', x: 120, y: 170, category: 'animals', color: '#f87171' },
+            { word: 'puppy', x: 200, y: 260, category: 'animals', color: '#f87171' },
+
+            // Actions/Verbs
+            { word: 'run', x: 450, y: 380, category: 'actions', color: '#fbbf24' },
+            { word: 'walk', x: 420, y: 350, category: 'actions', color: '#fbbf24' },
+            { word: 'jump', x: 480, y: 320, category: 'actions', color: '#fbbf24' },
+            { word: 'move', x: 440, y: 300, category: 'actions', color: '#fbbf24' }
+        ];
+
+        let hoveredWord = null;
+
+        function calculateCosineSimilarity(x1, y1, x2, y2) {
+            // Vectors from origin (50, 450 is the origin on our canvas)
+            const originX = 50;
+            const originY = 450;
+
+            const v1x = x1 - originX;
+            const v1y = y1 - originY;
+            const v2x = x2 - originX;
+            const v2y = y2 - originY;
+
+            // Dot product
+            const dotProduct = v1x * v2x + v1y * v2y;
+
+            // Magnitudes
+            const mag1 = Math.sqrt(v1x * v1x + v1y * v1y);
+            const mag2 = Math.sqrt(v2x * v2x + v2y * v2y);
+
+            // Cosine similarity
+            const cosineSimilarity = dotProduct / (mag1 * mag2);
+
+            // Angle in radians
+            const angleRad = Math.acos(Math.max(-1, Math.min(1, cosineSimilarity)));
+            const angleDeg = (angleRad * 180 / Math.PI).toFixed(1);
+
+            return {
+                similarity: cosineSimilarity.toFixed(3),
+                angle: angleDeg
+            };
+        }
+
+        function drawPlot() {
+            // Clear canvas
+            ctx.fillStyle = '#111827';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid
+            ctx.strokeStyle = '#1f2937';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= canvas.width; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= canvas.height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#4b5563';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height - 50);
+            ctx.lineTo(canvas.width - 50, canvas.height - 50);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50, canvas.height - 50);
+            ctx.stroke();
+
+            // Draw axis labels
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Dimension 1', canvas.width / 2, canvas.height - 10);
+            ctx.save();
+            ctx.translate(15, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Dimension 2', 0, 0);
+            ctx.restore();
+
+            // Draw vectors for dog and puppy if hovered
+            const dogWord = words.find(w => w.word === 'dog');
+            const puppyWord = words.find(w => w.word === 'puppy');
+            const originX = 50;
+            const originY = 450;
+
+            if (hoveredWord === 'dog' || hoveredWord === 'puppy') {
+                // Draw vector for dog
+                ctx.strokeStyle = 'rgba(248, 113, 113, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(dogWord.x, dogWord.y);
+                ctx.stroke();
+
+                // Draw vector for puppy
+                ctx.strokeStyle = 'rgba(248, 113, 113, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(puppyWord.x, puppyWord.y);
+                ctx.stroke();
+
+                // Draw angle arc
+                const v1x = dogWord.x - originX;
+                const v1y = dogWord.y - originY;
+                const v2x = puppyWord.x - originX;
+                const v2y = puppyWord.y - originY;
+
+                const angle1 = Math.atan2(v1y, v1x);
+                const angle2 = Math.atan2(v2y, v2x);
+
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(originX, originY, 40, angle1, angle2, angle1 > angle2);
+                ctx.stroke();
+
+                // Calculate and display cosine similarity
+                const cosData = calculateCosineSimilarity(dogWord.x, dogWord.y, puppyWord.x, puppyWord.y);
+                document.getElementById('cosine-section').style.display = 'block';
+                document.getElementById('cosine-value').textContent = cosData.similarity;
+                document.getElementById('angle-value').textContent = cosData.angle + '°';
+            } else {
+                document.getElementById('cosine-section').style.display = 'none';
+            }
+
+            // Draw words
+            words.forEach(w => {
+                const isHovered = w.word === hoveredWord;
+
+                // Draw point
+                ctx.fillStyle = w.color;
+                ctx.beginPath();
+                ctx.arc(w.x, w.y, isHovered ? 8 : 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Draw label
+                ctx.fillStyle = isHovered ? '#fff' : w.color;
+                ctx.font = isHovered ? 'bold 13px Inter' : '12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(w.word, w.x, w.y - 15);
+            });
+
+            // Draw "King - Man + Woman ≈ Queen" visualization if hovered
+            const kingWord = words.find(w => w.word === 'king');
+            const manWord = words.find(w => w.word === 'man');
+            const womanWord = words.find(w => w.word === 'woman');
+            const queenWord = words.find(w => w.word === 'queen');
+
+            if (hoveredWord === 'king' || hoveredWord === 'man' || hoveredWord === 'woman' || hoveredWord === 'queen') {
+                ctx.strokeStyle = 'rgba(99, 102, 241, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+
+                if (hoveredWord === 'king') {
+                    drawArrow(kingWord.x, kingWord.y, manWord.x, manWord.y);
+                    drawArrow(manWord.x, manWord.y, womanWord.x, womanWord.y);
+                    drawArrow(womanWord.x, womanWord.y, queenWord.x, queenWord.y);
+
+                    ctx.fillStyle = 'rgba(99, 102, 241, 0.3)';
+                    ctx.fillRect(kingWord.x - 15, kingWord.y - 30, 30, 30);
+                }
+
+                ctx.setLineDash([]);
+            }
+        }
+
+        function drawArrow(fromX, fromY, toX, toY) {
+            const headlen = 10;
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            hoveredWord = null;
+            words.forEach(w => {
+                const distance = Math.sqrt((x - w.x) ** 2 + (y - w.y) ** 2);
+                if (distance < 20) {
+                    hoveredWord = w.word;
+                    canvas.style.cursor = 'pointer';
+                }
+            });
+
+            if (!hoveredWord) {
+                canvas.style.cursor = 'default';
+            }
+
+            drawPlot();
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            hoveredWord = null;
+            document.getElementById('cosine-section').style.display = 'none';
+            drawPlot();
+        });
+
+        // Initial draw
+        drawPlot();
+    </script>
+
+</body>
+</html>

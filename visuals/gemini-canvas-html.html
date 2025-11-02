@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Canvas & Preview for HTML Prototyping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .intro {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c0c0c0;
+        }
+
+        .workflow {
+            background: #1a1a1a;
+            border: 2px solid #4285f4;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .workflow-header {
+            background: linear-gradient(135deg, #0f3a6e 0%, #0a2a5e 100%);
+            padding: 16px;
+            border-bottom: 2px solid #4285f4;
+            font-weight: 600;
+            color: #60a5fa;
+            font-size: 14px;
+        }
+
+        .steps {
+            padding: 30px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            background: #4285f4;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 13px;
+            color: #c0c0c0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .example {
+            background: #0f0f0f;
+            padding: 12px;
+            border-left: 3px solid #4285f4;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #60a5fa;
+            margin-top: 10px;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+
+        .card.pros {
+            border-left-color: #10b981;
+        }
+
+        .card.cons {
+            border-left-color: #f59e0b;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card.pros .card-title {
+            color: #10b981;
+        }
+
+        .card.cons .card-title {
+            color: #f59e0b;
+        }
+
+        .item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .use-cases {
+            background: linear-gradient(135deg, #1a2a1a 0%, #0f1a0f 100%);
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .use-cases-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 16px;
+        }
+
+        .use-case-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .use-case {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #c0c0c0;
+        }
+
+        .use-case::before {
+            content: "→";
+            color: #10b981;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .step-number {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Canvas & Preview for HTML Prototyping</h1>
+        <div class="subtitle">Instant Visual Feedback for Web Development</div>
+
+        <div class="intro">
+            Gemini Canvas is your fastest path to creating and iterating on HTML projects. Unlike traditional development where you edit, save, and refresh—Canvas shows changes instantly. This is perfect for learning HTML, building mockups, and rapid prototyping without setup or configuration.
+        </div>
+
+        <div class="workflow">
+            <div class="workflow-header">The Canvas Workflow: 5 Steps</div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Ask Gemini to Create HTML in Canvas</div>
+                        <div class="step-description">Start a new Gemini conversation and request HTML code in the canvas feature.</div>
+                        <div class="example">You: "Create a form with name and email inputs in Gemini Canvas"</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">See Live Preview Immediately</div>
+                        <div class="step-description">Canvas generates the HTML and shows a live preview on the right side of the screen. No refresh needed—you see exactly what the HTML renders to.</div>
+                        <div class="example">Canvas preview updates instantly with your form</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Request Changes (Iterate Rapidly)</div>
+                        <div class="step-description">Ask Gemini to modify the design. Changes appear immediately in preview. This tight feedback loop enables rapid iteration.</div>
+                        <div class="example">You: "Change the button color to blue and add padding"</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Refine Until Perfect</div>
+                        <div class="step-description">Keep iterating: adjust colors, spacing, layout, add interactivity. Each request shows results instantly. No guessing or waiting.</div>
+                        <div class="example">You: "Add hover effects to buttons"</div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">Copy Finished Code</div>
+                        <div class="step-description">Once you're happy with the result, copy the code from Canvas and save it as index.html. Use for Google Sites, or move to PyCharm if you need file organization.</div>
+                        <div class="example">Copy → Save as index.html → Deploy or iterate further</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pros-cons">
+            <div class="card pros">
+                <div class="card-title">
+                    <span>✓</span>
+                    <span>Canvas Advantages</span>
+                </div>
+                <div class="item"><strong>No setup:</strong> No IDE, no file system, no configuration</div>
+                <div class="item"><strong>Instant feedback:</strong> See changes immediately</div>
+                <div class="item"><strong>Fast iteration:</strong> Describe what you want, not how to code it</div>
+                <div class="item"><strong>Learning friendly:</strong> Perfect for learning HTML/CSS/JS</div>
+                <div class="item"><strong>Mobile friendly:</strong> Works on any device with a browser</div>
+                <div class="item"><strong>No local server:</strong> Don't need to run anything locally</div>
+            </div>
+
+            <div class="card cons">
+                <div class="card-title">
+                    <span>⚠️</span>
+                    <span>Canvas Limitations</span>
+                </div>
+                <div class="item"><strong>No backend:</strong> Can't connect to databases or APIs</div>
+                <div class="item"><strong>No file system:</strong> Can't read/write files on your computer</div>
+                <div class="item"><strong>Single file:</strong> Everything must be in one HTML file</div>
+                <div class="item"><strong>No version control:</strong> No Git integration</div>
+                <div class="item"><strong>Limited complexity:</strong> Not for large, multi-page apps</div>
+                <div class="item"><strong>Session-based:</strong> Code exists in the conversation, not saved locally</div>
+            </div>
+        </div>
+
+        <div class="use-cases">
+            <div class="use-cases-title">Perfect Use Cases for Canvas</div>
+            <div class="use-case-list">
+                <div class="use-case">Landing pages (single page, no backend needed)</div>
+                <div class="use-case">Form designs (collect data, email with form submission service)</div>
+                <div class="use-case">UI mockups (show clients what design looks like)</div>
+                <div class="use-case">Interactive demos (showcase interactive ideas)</div>
+                <div class="use-case">Learning HTML/CSS/JS (practice and experiment safely)</div>
+                <div class="use-case">Prototypes for Google Sites (create then publish)</div>
+                <div class="use-case">Simple games or interactive experiences</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

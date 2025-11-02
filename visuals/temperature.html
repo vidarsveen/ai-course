@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Sampling Parameter Explorer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom slider track styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #4a5568; /* gray-700 */
+            border-radius: 9999px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        /* Custom slider thumb styles */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4299e1; /* blue-500 */
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #edf2f7; /* gray-200 */
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #4299e1; /* blue-500 */
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #edf2f7; /* gray-200 */
+        }
+
+        /* Bar chart styles */
+        .bar-group {
+            height: 300px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            transition: all 0.3s ease-in-out;
+            min-width: 40px;
+        }
+        .bar-base {
+            position: absolute;
+            bottom: 0;
+            background-color: #4a5568; /* gray-700 */
+            width: 70%;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease-in-out;
+            opacity: 0.5;
+        }
+        .bar-final {
+            position: relative;
+            background-color: #4299e1; /* blue-500 */
+            width: 70%;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .bar-final.filtered {
+            background-color: #718096; /* gray-600 */
+            opacity: 0.6;
+        }
+        .bar-label {
+            margin-top: 8px;
+            word-break: keep-all;
+        }
+        .bar-percentage {
+            position: absolute;
+            top: -24px;
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #c7d2fe; /* indigo-200 */
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .bar-group:hover .bar-percentage {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-inter p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Interactive LLM Sampling Explorer</h1>
+            <p class="text-lg text-gray-400 mt-2">See how Temperature, Top-k, and Top-p really work.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- === CONTROLS PANEL === -->
+            <div class="lg:col-span-1 bg-gray-800 p-6 rounded-lg shadow-2xl space-y-6 border border-gray-700">
+
+                <!-- Temperature -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="temp-slider" class="font-semibold text-white">Temperature</label>
+                        <span id="temp-value" class="text-sm font-mono bg-gray-700 text-blue-300 px-2 py-0.5 rounded">1.00</span>
+                    </div>
+                    <input type="range" id="temp-slider" min="0.01" max="2.0" step="0.01" value="1.0" class="w-full">
+                </div>
+
+                <!-- Sampling Method -->
+                <div>
+                    <label class="font-semibold text-white mb-2 block">Sampling Method</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="sampling-method" value="none" checked class="form-radio text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                            <span>None</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="sampling-method" value="top-k" class="form-radio text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                            <span>Top-k</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="sampling-method" value="top-p" class="form-radio text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-500">
+                            <span>Top-p</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Top-k -->
+                <div id="k-controls" class="opacity-50 transition-opacity">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="k-slider" class="font-semibold text-white">Top-k</label>
+                        <span id="k-value" class="text-sm font-mono bg-gray-700 text-blue-300 px-2 py-0.5 rounded">10</span>
+                    </div>
+                    <input type="range" id="k-slider" min="1" max="10" step="1" value="10" class="w-full" disabled>
+                </div>
+
+                <!-- Top-p -->
+                <div id="p-controls" class="opacity-50 transition-opacity">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="p-slider" class="font-semibold text-white">Top-p (Nucleus)</label>
+                        <span id="p-value" class="text-sm font-mono bg-gray-700 text-blue-300 px-2 py-0.5 rounded">0.90</span>
+                    </div>
+                    <input type="range" id="p-slider" min="0.01" max="1.0" step="0.01" value="0.9" class="w-full" disabled>
+                </div>
+            </div>
+
+            <!-- === VISUALIZATION PANEL === -->
+            <div class="lg:col-span-2 bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">Probability Distribution</h2>
+
+                <!-- Chart Legend -->
+                <div class="flex justify-center space-x-6 mb-4 text-xs text-gray-400">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 rounded" style="background-color: #4a5568; opacity: 0.5;"></div>
+                        <span>Base Probability (after Temp)</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 rounded bg-blue-500"></div>
+                        <span>Final Renormalized Probability</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 rounded" style="background-color: #718096; opacity: 0.6;"></div>
+                        <span>Filtered Out (Pruned)</span>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div id="chart-container" class="w-full flex justify-around items-end border-b border-gray-700 pb-4">
+                    <!-- Bars will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- === EXPLANATION PANEL === -->
+            <div class="lg:col-span-3 bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700">
+                 <h2 class="text-2xl font-bold text-white mb-4">What's Happening?</h2>
+                 <div id="explanation-text" class="text-gray-300 space-y-3 leading-relaxed">
+                    <!-- Explanation will be generated by JavaScript -->
+                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // === DATA & CONSTANTS ===
+        // A mock vocabulary and their raw "logit" scores from a model
+        const TOKENS = ["the", "a", "it", "on", "was", "dog", "sky", "poem", "for", "why"];
+        const BASE_LOGITS = [4.1, 3.9, 2.5, 2.2, 2.0, 1.1, 0.5, 0.1, -0.5, -1.0];
+
+        // === DOM ELEMENTS ===
+        const tempSlider = document.getElementById('temp-slider');
+        const tempValue = document.getElementById('temp-value');
+        const kSlider = document.getElementById('k-slider');
+        const kValue = document.getElementById('k-value');
+        const pSlider = document.getElementById('p-slider');
+        const pValue = document.getElementById('p-value');
+        const kControls = document.getElementById('k-controls');
+        const pControls = document.getElementById('p-controls');
+        const samplingRadios = document.querySelectorAll('input[name="sampling-method"]');
+        const chartContainer = document.getElementById('chart-container');
+        const explanationText = document.getElementById('explanation-text');
+
+        // === CORE LOGIC ===
+
+        /**
+         * Numerically stable softmax function.
+         * @param {number[]} logits - Array of raw logit scores.
+         * @returns {number[]} Array of probabilities (summing to 1).
+         */
+        function softmax(logits) {
+            // Subtract max logit for numerical stability (prevents overflow)
+            const maxLogit = Math.max(...logits);
+            const exps = logits.map(l => Math.exp(l - maxLogit));
+            const sumExps = exps.reduce((a, b) => a + b, 0);
+            return exps.map(e => e / sumExps);
+        }
+
+        /**
+         * Calculates the base probabilities after applying temperature.
+         * @param {number} temp - The temperature value (must be > 0).
+         * @returns {Object[]} Array of token data objects.
+         */
+        function calculateBaseProbs(temp) {
+            // Ensure temperature is not zero to avoid division by zero
+            const safeTemp = Math.max(temp, 1e-6);
+            const scaledLogits = BASE_LOGITS.map(l => l / safeTemp);
+            const probabilities = softmax(scaledLogits);
+
+            return probabilities.map((p, i) => ({
+                token: TOKENS[i],
+                prob: p,
+                originalIndex: i,
+                logit: BASE_LOGITS[i]
+            }));
+        }
+
+        /**
+         * The main function to update the entire visualization.
+         */
+        function updateVisualization() {
+            // 1. Get current values from controls
+            const temp = parseFloat(tempSlider.value);
+            let k = parseInt(kSlider.value);
+            const p = parseFloat(pSlider.value);
+            const method = document.querySelector('input[name="sampling-method"]:checked').value;
+
+            // Update UI displays
+            tempValue.textContent = temp.toFixed(2);
+            kValue.textContent = k;
+            pValue.textContent = p.toFixed(2);
+
+            // Enable/disable sliders based on method
+            kControls.style.opacity = (method === 'top-k') ? '1' : '0.5';
+            kSlider.disabled = (method !== 'top-k');
+            pControls.style.opacity = (method === 'top-p') ? '1' : '0.5';
+            pSlider.disabled = (method !== 'top-p');
+
+            // Fix k slider max value (it's set in HTML, but good practice)
+            kSlider.max = TOKENS.length;
+            if (k > TOKENS.length) k = TOKENS.length;
+
+
+            // 2. Calculate Base Probabilities (after temperature)
+            const baseTokenData = calculateBaseProbs(temp);
+
+            // 3. Sort by probability (descending) to find the nucleus
+            const sortedTokenData = [...baseTokenData].sort((a, b) => b.prob - a.prob);
+
+            // 4. Determine the "nucleus" (tokens to keep) based on sampling method
+            const nucleusIndices = new Set();
+            let nucleusProbMass = 0;
+            let explanation = '';
+
+            switch (method) {
+                case 'top-k':
+                    const nucleusK = sortedTokenData.slice(0, k);
+                    nucleusK.forEach(item => nucleusIndices.add(item.originalIndex));
+                    nucleusProbMass = nucleusK.reduce((sum, item) => sum + item.prob, 0);
+                    explanation = `
+                        <p><strong>Temperature (${temp.toFixed(2)}):</strong> The original logits [${BASE_LOGITS.join(', ')}] are divided by ${temp.toFixed(2)}, which ${temp < 1.0 ? '<strong>sharpens</strong>' : '<strong>flattens</strong>'} the distribution. The model becomes ${temp < 1.0 ? 'more deterministic' : 'more random'}.</p>
+                        <p><strong>Top-k (${k}):</strong> We find the ${k} tokens with the highest base probability. Only these tokens are considered.</p>
+                        <p><strong>Renormalization:</strong> The probabilities of these ${k} tokens (which originally summed to ${nucleusProbMass.toFixed(3)}) are "scaled up" so they now sum to 1.0. All other tokens have their probability set to 0.</p>
+                    `;
+                    break;
+
+                case 'top-p':
+                    let cumulativeProb = 0;
+                    for (const item of sortedTokenData) {
+                        cumulativeProb += item.prob;
+                        nucleusIndices.add(item.originalIndex);
+                        nucleusProbMass += item.prob;
+                        if (cumulativeProb >= p) {
+                            break; // Stop once we've exceeded the threshold
+                        }
+                    }
+                    explanation = `
+                        <p><strong>Temperature (${temp.toFixed(2)}):</strong> The original logits [${BASE_LOGITS.join(', ')}] are divided by ${temp.toFixed(2)}, which ${temp < 1.0 ? '<strong>sharpens</strong>' : '<strong>flattens</strong>'} the distribution. The model becomes ${temp < 1.0 ? 'more deterministic' : 'more random'}.</p>
+                        <p><strong>Top-p (${p.toFixed(2)}):</strong> We sort the tokens by probability and add them to a "nucleus" one by one until their cumulative probability sum reaches ${p.toFixed(2)}. This resulted in keeping <strong>${nucleusIndices.size}</strong> token(s).</p>
+                        <p><strong>Renormalization:</strong> The probabilities of these ${nucleusIndices.size} tokens (which originally summed to ${nucleusProbMass.toFixed(3)}) are "scaled up" so they now sum to 1.0. All others are set to 0.</p>
+                    `;
+                    break;
+
+                default: // "none"
+                    baseTokenData.forEach(item => nucleusIndices.add(item.originalIndex));
+                    nucleusProbMass = 1.0; // All tokens are kept, sum is 1.0
+                    explanation = `
+                        <p><strong>Temperature (${temp.toFixed(2)}):</strong> The original logits [${BASE_LOGITS.join(', ')}] are divided by ${temp.toFixed(2)}. A low temperature (like 0.1) makes the model very confident and "greedy", picking the top choice. A high temperature (like 2.0) makes the distribution flatter, increasing randomness.</p>
+                        <p><strong>No Sampling Method:</strong> With no sampling method, the model would sample from this entire distribution. The 'Final Probability' and 'Base Probability' are identical.</p>
+                    `;
+                    break;
+            }
+
+            // 5. Calculate Final Probabilities (with filtering and renormalization)
+            const finalTokenData = baseTokenData.map(item => {
+                const isFiltered = !nucleusIndices.has(item.originalIndex);
+                let finalProb = 0;
+                if (!isFiltered && nucleusProbMass > 0) {
+                    finalProb = item.prob / nucleusProbMass;
+                }
+
+                return {
+                    ...item,
+                    finalProb: finalProb,
+                    isFiltered: isFiltered
+                };
+            });
+
+            // 6. Render the chart and explanation
+            renderChart(finalTokenData);
+            explanationText.innerHTML = explanation;
+        }
+
+        /**
+         * Renders the bar chart in the DOM.
+         * @param {Object[]} finalTokenData - The fully processed token data.
+         */
+        function renderChart(finalTokenData) {
+            chartContainer.innerHTML = ''; // Clear previous chart
+
+            finalTokenData.forEach(item => {
+                const group = document.createElement('div');
+                group.className = 'bar-group flex-1';
+
+                const percentage = document.createElement('div');
+                percentage.className = 'bar-percentage';
+                percentage.textContent = (item.finalProb * 100).toFixed(1) + '%';
+
+                // Base probability (ghost bar)
+                const barBase = document.createElement('div');
+                barBase.className = 'bar-base';
+                barBase.style.height = `${item.prob * 100}%`;
+                barBase.title = `Base Prob: ${(item.prob * 100).toFixed(1)}%`;
+
+                // Final probability (main bar)
+                const barFinal = document.createElement('div');
+                barFinal.className = 'bar-final';
+                barFinal.style.height = `${item.finalProb * 100}%`;
+                barFinal.title = `Final Prob: ${(item.finalProb * 100).toFixed(1)}%`;
+
+                if (item.isFiltered) {
+                    barFinal.classList.add('filtered');
+                }
+
+                const label = document.createElement('span');
+                label.className = 'bar-label text-xs text-gray-400';
+                label.textContent = item.token;
+
+                group.appendChild(percentage);
+                group.appendChild(barBase);
+                group.appendChild(barFinal);
+                group.appendChild(label);
+                chartContainer.appendChild(group);
+            });
+        }
+
+        // === EVENT LISTENERS ===
+        tempSlider.addEventListener('input', updateVisualization);
+        kSlider.addEventListener('input', updateVisualization);
+        pSlider.addEventListener('input', updateVisualization);
+        samplingRadios.forEach(radio => {
+            radio.addEventListener('change', updateVisualization);
+        });
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', updateVisualization);
+
+    </script>
+</body>
+</html>

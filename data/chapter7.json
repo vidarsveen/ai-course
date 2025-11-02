@@ -1,0 +1,275 @@
+{
+  "chapter": 7,
+  "title": "Module 7: Choosing & Using AI Platforms",
+  "description": "Navigate the AI tool landscape and select the right tools",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Platform Overview",
+      "terms": [
+        {
+          "id": "llm-as-a-service-llmaas",
+          "title": "LLM-as-a-Service (LLMaaS)",
+          "definition": "LLM-as-a-Service (LLMaaS) is the business model of providing access to powerful, \"hosted\" LLMs via a cloud API, rather than requiring users to download and run the massive models themselves. Companies like OpenAI, Anthropic, and Google are LLMaaS providers. They handle the \"inference\" (running the model), and customers pay for access, typically based on usage (per-token). This model democratizes access to state-of-the-art AI, allowing developers to build powerful apps without needing to manage complex infrastructure.",
+          "keywords": [
+            "hosted inference",
+            "SLAs",
+            "quotas"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "temporary-chat-no-history",
+          "title": "Temporary Chat (No History)",
+          "definition": "Temporary chat is a \"stateless\" conversational mode where the LLM application does not retain any \"memory\" or \"history\" of the conversation from one turn to the next. Each user message is treated as a brand-new interaction, and the model has no context of what was said before. This mode is often provided as a \"privacy\" feature for users who do not want their data stored. It can also be a \"workspace default\" for simple, one-off tasks where conversational memory is not needed.",
+          "keywords": [
+            "privacy",
+            "workspace defaults",
+            "retention"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "openai-playground",
+          "title": "OpenAI Playground",
+          "definition": "The OpenAI Playground is a web-based interface for experimenting with OpenAI's API models without writing any code. It allows users to test prompts, adjust parameters (like temperature and max_tokens), and immediately see how the model responds. It's an excellent \"learning\" tool for understanding how prompts and parameters affect outputs, and serves as a \"gateway\" before moving to programmatic API usage.",
+          "keywords": [
+            "no-code experimentation",
+            "parameter tuning",
+            "learning tool"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "ai-studio-gemini-api-tools",
+          "title": "AI Studio (Gemini API / tools)",
+          "definition": "Google AI Studio is the web-based interface for experimenting with Google's Gemini models (their latest LLM). Similar to OpenAI Playground, it allows developers to test prompts and parameters without writing code. Additionally, Google AI Studio includes a \"built-in tooling\" interface for defining custom functions/tools that Gemini can call, making it useful for prototyping agent-like applications.",
+          "keywords": [
+            "Gemini models",
+            "tool definition",
+            "free tier"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "google-colab-gemini-in-colab",
+          "title": "Google Colab (Gemini in Colab)",
+          "definition": "Google Colab is Google's free, cloud-based Jupyter notebook environment. It has integrated support for Gemini models, allowing developers to \"mix\" notebook cells, \"Python code\", and Gemini API calls. This makes it an excellent rapid prototyping environment for testing Gemini-powered applications without worrying about local setup or costs.",
+          "keywords": [
+            "free tier",
+            "integrated Gemini API",
+            "notebooks"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "APIs for Integration",
+      "terms": [
+        {
+          "id": "openai-api",
+          "title": "OpenAI API",
+          "definition": "The OpenAI API provides programmatic access to OpenAI's models (GPT-4, GPT-4o, etc.) via HTTPS requests. Developers can make API calls using SDKs (like the Python openai library) to send prompts and receive completions. The API includes features like \"streaming\", \"function calling\", and \"structured outputs\" to support advanced use cases. Pricing is per-token, with separate rates for input and output tokens.",
+          "keywords": [
+            "streaming",
+            "function calling",
+            "structured outputs",
+            "per-token pricing"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "anthropic-api",
+          "title": "Anthropic API",
+          "definition": "The Anthropic API provides access to Claude models via REST API. It supports text and vision (image) inputs, \"streaming\" responses, and \"batch processing\" for efficient handling of large volumes of requests. Anthropic's API emphasizes safety and alignment, with features like \"extended thinking\" modes for complex reasoning tasks.",
+          "keywords": [
+            "Claude models",
+            "vision/images",
+            "batch processing",
+            "thinking modes"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "gemini-api-google-ai-studio",
+          "title": "Gemini API (Google AI Studio)",
+          "definition": "The Gemini API is Google's interface for accessing their latest Gemini models. It offers \"multimodal\" capabilities (text, images, audio, video), \"tool calling\", and \"semantic caching\" for efficient token usage. It supports both REST and gRPC protocols and includes generous \"free tier\" limits for experimentation.",
+          "keywords": [
+            "multimodal",
+            "tool calling",
+            "semantic caching",
+            "free tier"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "assistants-api-openai",
+          "title": "Assistants API (OpenAI)",
+          "definition": "The OpenAI Assistants API is a higher-level API built on top of the Chat Completions API. It provides ready-made infrastructure for building \"agent-like\" applications with persistent \"thread\" conversations, built-in \"function calling\" and \"tool execution\", and file handling (for \"retrieval\" and \"code execution\"). This abstracts away much of the \"orchestration\" logic developers would otherwise need to implement themselves.",
+          "keywords": [
+            "threads",
+            "retrieval",
+            "code execution",
+            "persistent state"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "realtime-voice-apis",
+          "title": "Realtime / Voice APIs",
+          "definition": "Realtime APIs allow for low-latency, \"bidirectional\" communication with LLMs, especially important for voice applications. OpenAI's Realtime API and similar offerings from other providers enable \"streaming\" speech input and output, allowing for natural, conversational interactions with minimal lag. These APIs often use WebSocket connections to maintain persistent, low-latency connections.",
+          "keywords": [
+            "WebSocket",
+            "low-latency",
+            "bidirectional",
+            "speech"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Model Families (Awareness Level)",
+      "terms": [
+        {
+          "id": "gpt-4o--gpt-4.1",
+          "title": "GPT-4o / GPT-4.1",
+          "definition": "GPT-4o (\"o\" for \"omni\") is OpenAI's latest flagship model, featuring \"multimodal\" capabilities (text, images, video, audio), superior reasoning, and improved performance. GPT-4 Turbo (and the older GPT-4.1) were earlier versions with strong performance but slower at the time. GPT-4o represents the current state-of-the-art for OpenAI and is widely used for production applications. Knowledge cutoff is in April 2024, and it can access the web via \"browsing\" in ChatGPT.",
+          "keywords": [
+            "multimodal",
+            "state-of-the-art",
+            "reasoning",
+            "function calling"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "o3--o4-mini",
+          "title": "o3 / o4-mini",
+          "definition": "o3 and o4-mini are OpenAI's newest \"reasoning\" models, part of the \"o\" series that emphasizes extended thinking and complex reasoning capabilities. These models can \"think\" through problems step-by-step, making them particularly strong at math, code, logic, and detailed analysis. They are more expensive and slower than GPT-4o but can significantly improve results on reasoning-heavy tasks. o4-mini is a smaller, faster, cost-effective variant.",
+          "keywords": [
+            "extended thinking",
+            "reasoning",
+            "math/code/logic",
+            "test-time compute"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "claude-opus--claude-haiku",
+          "title": "Claude Opus / Claude Haiku",
+          "definition": "Claude Opus is Anthropic's most capable model, designed for complex, nuanced tasks requiring strong reasoning and understanding of context. Claude Haiku is Anthropic's fastest and most compact model, optimized for speed and cost-efficiency, ideal for lightweight tasks or high-volume applications. Both support long context windows (200K tokens) and \"vision\" (image processing). Anthropic also offers Claude Sonnet as a middle ground.",
+          "keywords": [
+            "long context",
+            "vision",
+            "safety",
+            "reasoning"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "llama-3.1--3.2",
+          "title": "Llama 3.1 / 3.2",
+          "definition": "Llama 3.1 and 3.2 are Meta's open-source LLMs available in various sizes (7B, 8B, 70B, 405B parameters). Being open-source, they can be \"self-hosted\" or accessed through partnerships like AWS Bedrock, Azure AI, or via Hugging Face. They offer \"competitive performance\" at a lower cost compared to closed models, making them popular for cost-sensitive applications and research.",
+          "keywords": [
+            "open-source",
+            "self-hosted",
+            "cost-effective",
+            "partnerships"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "grok-3",
+          "title": "Grok-3",
+          "definition": "Grok is xAI's LLM, known for having a higher knowledge cutoff date and a tendency toward \"witty\" or \"unconventional\" responses. xAI positions Grok as a challenger to OpenAI and Anthropic, with varying capabilities depending on the version. Grok is integrated into the X (Twitter) platform and available via API. Performance and feature parity with other major models varies.",
+          "keywords": [
+            "xAI",
+            "X platform",
+            "API access",
+            "knowledge cutoff"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

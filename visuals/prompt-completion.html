@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Concepts Explorer - Prompt & Completion</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* === STYLES FOR PROMPT/COMPLETION FLOW === */
+
+        /* System prompt box */
+        .system-prompt-box {
+            background-color: #450a0a; /* red-950 */
+            border: 2px solid #dc2626; /* red-600 */
+            color: #fecaca; /* red-200 */
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'monospace';
+            font-size: 0.9rem;
+            line-height: 1.7;
+            position: relative;
+        }
+        .system-prompt-box .label {
+            position: absolute;
+            top: -12px;
+            left: 12px;
+            background-color: #7f1d1d; /* red-900 */
+            color: #fca5a5; /* red-300 */
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* User prompt box */
+        .user-prompt-box {
+            background-color: #064e3b; /* emerald-950 */
+            border: 2px solid #10b981; /* emerald-500 */
+            color: #d1fae5; /* emerald-100 */
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'monospace';
+            font-size: 0.9rem;
+            line-height: 1.7;
+            position: relative;
+        }
+        .user-prompt-box .label {
+            position: absolute;
+            top: -12px;
+            left: 12px;
+            background-color: #065f46; /* emerald-800 */
+            color: #6ee7b7; /* emerald-300 */
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Completion box */
+        .completion-box {
+            background-color: #172554; /* blue-950 */
+            border: 2px solid #3b82f6; /* blue-500 */
+            color: #dbeafe; /* blue-100 */
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'monospace';
+            font-size: 0.9rem;
+            line-height: 1.7;
+            position: relative;
+        }
+        .completion-box .label {
+            position: absolute;
+            top: -12px;
+            left: 12px;
+            background-color: #1e3a8a; /* blue-800 */
+            color: #93c5fd; /* blue-300 */
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Flow arrow */
+        .flow-arrow {
+            text-align: center;
+            color: #6b7280; /* gray-500 */
+            font-size: 1.5rem;
+            margin: 12px 0;
+        }
+
+        /* Annotation text */
+        .annotation {
+            color: #9ca3af; /* gray-400 */
+            font-size: 0.875rem;
+            font-style: italic;
+            margin-top: 8px;
+            padding-left: 4px;
+        }
+
+        /* Token counter badge */
+        .token-badge {
+            display: inline-block;
+            background-color: #4b5563; /* gray-600 */
+            color: #e5e7eb; /* gray-200 */
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-inter p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-3xl mx-auto"> <!-- Centered single column -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Interactive LLM Concepts</h1>
+            <p class="text-lg text-gray-400 mt-2">Prompt & Completion Flow</p>
+        </header>
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- === PROMPT & COMPLETION CARD === -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700 flex flex-col">
+                <h2 class="text-2xl font-bold text-white mb-4">The Message Hierarchy</h2>
+
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    When interacting with an LLM, there's a clear <strong>hierarchy of messages</strong>. The <span class="text-red-400 font-semibold">System Prompt</span> sets the rules and persona, the <span class="text-emerald-400 font-semibold">User Prompt</span> provides the specific question or instruction, and the <span class="text-blue-400 font-semibold">Completion</span> is the model's generated response.
+                </p>
+
+                <!-- The Flow Visualization -->
+                <div class="mt-4 mb-6 space-y-4">
+
+                    <!-- System Prompt -->
+                    <div>
+                        <div class="system-prompt-box">
+                            <span class="label">System Prompt</span>
+                            You are a helpful AI assistant specialized in explaining technical concepts clearly and concisely. Always provide examples and use simple language.
+                        </div>
+                        <div class="annotation">
+                            → Sets the <strong>persona</strong>, <strong>tone</strong>, and <strong>rules</strong> for the assistant
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flow-arrow">↓</div>
+
+                    <!-- User Prompt -->
+                    <div>
+                        <div class="user-prompt-box">
+                            <span class="label">User Prompt</span>
+                            Explain what a token is in the context of Large Language Models.
+                        </div>
+                        <div class="annotation">
+                            → Contains the <strong>specific question</strong> or <strong>task</strong> from the user
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flow-arrow">↓</div>
+
+                    <!-- Completion (Output) -->
+                    <div>
+                        <div class="completion-box">
+                            <span class="label">Completion (Output)</span>
+                            A token is the fundamental unit of text that an LLM processes. Instead of reading letter by letter, the model breaks text into "tokens" - which can be whole words like "hello", subwords like "run" + "ning", or even single characters. For example, the sentence "Tokenization is useful" might be split into: ["Token", "##ization", "is", "useful"]. This method efficiently handles large vocabularies and is key to how the model measures cost and context limits.
+                            <span class="token-badge">~75 output tokens</span>
+                        </div>
+                        <div class="annotation">
+                            → The model's <strong>generated response</strong>, streamed token by token
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Additional Info Box -->
+                <div class="mt-6 p-4 bg-gray-900 border border-gray-600 rounded-md">
+                    <h3 class="text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Key Points</h3>
+                    <ul class="text-gray-400 text-sm space-y-2 leading-relaxed">
+                        <li><strong class="text-white">System Prompt:</strong> Optional but powerful - defines the AI's behavior for the entire conversation</li>
+                        <li><strong class="text-white">User Prompt:</strong> Required - the actual input/question from the user</li>
+                        <li><strong class="text-white">Completion:</strong> The output - often streamed in real-time (measured in tokens per second)</li>
+                        <li><strong class="text-white">Token Costs:</strong> Providers typically charge more for output tokens than input tokens</li>
+                    </ul>
+                </div>
+
+                <!-- Example: Multiple Turns -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-bold text-white mb-4">Multi-Turn Conversations</h3>
+                    <p class="text-gray-300 mb-4">
+                        In a conversation, the assistant's previous <strong>Completion</strong> becomes part of the context for the next turn:
+                    </p>
+
+                    <div class="space-y-3">
+                        <!-- Turn 1 -->
+                        <div class="p-3 bg-gray-700 rounded-md border-l-4 border-emerald-500">
+                            <div class="text-xs text-emerald-300 font-semibold mb-1">USER (Turn 1):</div>
+                            <div class="text-gray-200">What is a token?</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-700 rounded-md border-l-4 border-blue-500">
+                            <div class="text-xs text-blue-300 font-semibold mb-1">ASSISTANT (Turn 1):</div>
+                            <div class="text-gray-200">A token is the fundamental unit of text...</div>
+                        </div>
+
+                        <!-- Turn 2 -->
+                        <div class="p-3 bg-gray-700 rounded-md border-l-4 border-emerald-500">
+                            <div class="text-xs text-emerald-300 font-semibold mb-1">USER (Turn 2):</div>
+                            <div class="text-gray-200">Can you give me an example?</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-700 rounded-md border-l-4 border-blue-500">
+                            <div class="text-xs text-blue-300 font-semibold mb-1">ASSISTANT (Turn 2):</div>
+                            <div class="text-gray-200">Sure! The word "running" might be split into ["run", "##ning"]...</div>
+                        </div>
+                    </div>
+
+                    <div class="annotation mt-3">
+                        → Each turn's completion is added to the context, building conversational memory
+                    </div>
+                </div>
+
+                <!-- Keywords -->
+                <div class="mt-auto pt-6 border-t border-gray-700 mt-8">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Keywords</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">system prompt</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">user prompt</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">completion</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">message roles</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">hierarchy</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">streaming</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">token costs</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- No script tag is needed as this is a static info page -->
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+{
+  "chapter": 8,
+  "title": "Module 8: Safety, Quality & Best Practices",
+  "description": "Use AI responsibly and ensure quality outputs",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Safety, Quality & Governance",
+      "terms": [
+        {
+          "id": "ai-alignment",
+          "title": "AI Alignment",
+          "definition": "AI alignment is a broad and critical field of research focused on ensuring that advanced AI systems act in accordance with human values and intentions. The \"alignment problem\" is that a model's trained \"objective\" (e.g., \"predict the next token\") may not perfectly align with the human's desired \"intent\" (e.g., \"be helpful, honest, and harmless\"). Techniques like Reinforcement Learning from Human Feedback (RLHF) are used to \"align\" the model's behavior more closely with human preferences.",
+          "keywords": [
+            "instructions vs. incentives",
+            "feedback"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/safety-quality-system.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "guardrails",
+          "title": "Guardrails",
+          "definition": "Guardrails are a set of rules, mechanisms, or policies implemented by a developer to constrain an LLM's behavior and ensure its outputs are safe and compliant. This can include \"allow lists\" of permitted topics or \"deny lists\" of forbidden ones. For example, a banking assistant might have guardrails that prevent it from giving financial advice. These rules are often implemented as a separate layer that filters the model's inputs or outputs, acting as a critical safety check on the model's behavior.",
+          "keywords": [
+            "allow/deny lists",
+            "regex",
+            "policies"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/safety-quality-system.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "safety-filters",
+          "title": "Safety Filters",
+          "definition": "Safety filters are specific systems designed to detect and block harmful, inappropriate, or biased content. These filters are applied to both the user's \"input\" (to prevent malicious prompts) and the LLM's \"output\" (to catch any undesirable content the model generates). These systems are trained on large datasets of harmful content (a process called \"red-teaming\") to learn to categorize and filter text related to hate speech, violence, and other unsafe topics.",
+          "keywords": [
+            "input/output filters",
+            "red-teaming"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/safety-quality-system.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "grounded-answering",
+          "title": "Grounded Answering",
+          "definition": "Grounded answering is an approach to LLM responses that prioritizes factual accuracy by tying every answer to specific, verifiable sources. In a RAG system, this means the model is instructed to generate its answer only from the retrieved documents. The final output will often include explicit \"citations\" or \"provenance\" information, allowing the user to trace the answer back to its source. This builds user trust and dramatically reduces the risk of hallucinations.",
+          "keywords": [
+            "citations",
+            "confidence",
+            "provenance"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/safety-quality-system.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "embedding",
+          "title": "Embedding",
+          "definition": "An embedding is a numerical, multi-dimensional vector representation of a piece of data, such as a token or word. This vector is not just a random ID; it's learned during training to capture the semantic meaning and context of the data. Words with similar meanings or that are used in similar contexts will have embeddings that are \"close\" to each other in this high-dimensional vector space. This space can capture complex semantic relationships, famously illustrated by the vector equation King - Man + Woman ≈ Queen. This concept is what allows LLMs to understand nuanced relationships between words, and it's the core technology behind semantic search, where you can search by meaning (e.g., \"fruits that are yellow\") rather than just keywords.",
+          "keywords": [
+            "vector space",
+            "cosine similarity",
+            "semantic search"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/embeddings.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "semantic-similarity",
+          "title": "Semantic Similarity",
+          "definition": "Semantic similarity is the measure of how closely related two pieces of text are in meaning. This is calculated using their embeddings. The most common metric for this is \"cosine similarity,\" which measures the cosine of the angle between two vectors in that high-dimensional space. This metric effectively measures their direction, not their magnitude. A cosine similarity score of 1 means the vectors (and thus the text) point in the exact same direction (semantically identical). A score of 0 means they are orthogonal or \"unrelated,\" and a score of -1 means they are diametrically opposed (semantically opposite).",
+          "keywords": [
+            "cosine similarity",
+            "vector angle",
+            "semantic search",
+            "RAG"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/embeddings.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "plugins--tools-api",
+          "title": "Plugins / Tools API",
+          "definition": "A Plugins or Tools API serves as a standardized interface or \"capabilities registry\" that an LLM can use to discover and interact with a wide array of external, third-party tools. This concept, popularized by ChatGPT Plugins, allows a model to dynamically access new capabilities (e.g., booking flights, ordering food, or querying a specific database) without being retrained. The system typically handles permissions and standardizes the way the LLM \"talks\" to these diverse external services.",
+          "keywords": [
+            "capabilities registry",
+            "permissions"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "image-generation-gemini",
+          "title": "Image Generation (Gemini)",
+          "definition": "Gemini's image generation capability allows users to create images from text descriptions. This \"text-to-image\" functionality is built into Gemini and can be accessed through the web interface or via API. Developers can use it to programmatically generate images, embeddings, and other visual content as part of their applications. This adds a \"multimodal\" dimension to LLM-powered systems.",
+          "keywords": [
+            "text-to-image",
+            "multimodal",
+            "Gemini models"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "video-generation-gemini",
+          "title": "Video Generation (Gemini)",
+          "definition": "Gemini's video generation capability is an emerging feature allowing the creation of short video clips from text descriptions or image sequences. This \"text-to-video\" or \"image-to-video\" functionality extends Gemini's multimodal capabilities into the temporal domain, opening up new possibilities for content creation and AI-driven applications.",
+          "keywords": [
+            "text-to-video",
+            "multimodal",
+            "emerging feature"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

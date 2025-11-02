@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Budget Awareness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .intro {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c0c0c0;
+        }
+
+        .intro strong {
+            color: #60a5fa;
+        }
+
+        .budget-box {
+            background: linear-gradient(135deg, #0f3a6e 0%, #0a2a5e 100%);
+            border: 2px solid #4285f4;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .budget-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 12px;
+        }
+
+        .budget-content {
+            font-size: 13px;
+            color: #c0c0c0;
+            line-height: 1.6;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .example-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .example-header {
+            background: #0f0f0f;
+            padding: 12px 16px;
+            border-bottom: 1px solid #2a2a2a;
+            font-weight: 600;
+            font-size: 13px;
+            color: #4285f4;
+        }
+
+        .example-content {
+            padding: 16px;
+        }
+
+        .example-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #c0c0c0;
+        }
+
+        .example-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-label {
+            color: #9e9e9e;
+            min-width: 60px;
+            font-weight: 500;
+        }
+
+        .item-value {
+            color: #60a5fa;
+            font-weight: 600;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .strategies {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .strategy {
+            background: linear-gradient(135deg, #1a3a1a 0%, #1a2a1a 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .strategy-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+
+        .strategy-content {
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 11px;
+            color: #60a5fa;
+            margin-top: 8px;
+            border-left: 3px solid #60a5fa;
+        }
+
+        .tips {
+            background: linear-gradient(135deg, #3a2a1a 0%, #2a2a1a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .tips-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fbbf24;
+            margin-bottom: 12px;
+        }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tip {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.5;
+        }
+
+        .tip::before {
+            content: "→";
+            color: #f59e0b;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .examples {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Token Budget Awareness</h1>
+        <div class="subtitle">Understand Limits When Giving Gemini Your Project Context</div>
+
+        <div class="intro">
+            Every piece of text you send to Gemini is converted into <strong>"tokens"</strong>. Think of a token as roughly 4 characters of text. Gemini has a maximum context window—a limit to how many tokens it can process in one conversation. When you hit this limit, you can't add more context, and you have to start a fresh conversation.
+        </div>
+
+        <div class="budget-box">
+            <div class="budget-header">📊 Current AI Model Context Windows</div>
+            <div class="budget-content">
+                <strong>Gemini 2.5:</strong> 1,000,000 tokens (extremely generous!)<br>
+                <strong>Claude Sonnet/Opus 4.5:</strong> 200,000 tokens<br>
+                <strong>GPT-5:</strong> 400,000 tokens context (272k input + up to 128k output)<br><br>
+                For PyCharm + Gemini/Claude development, you have plenty of room for a full project dump. Even with large projects, context window is rarely a constraint with modern models.
+            </div>
+        </div>
+
+        <div class="examples">
+            <div class="example-card">
+                <div class="example-header">Typical Token Counts</div>
+                <div class="example-content">
+                    <div class="example-item">
+                        <span class="item-label">Small .py file:</span>
+                        <span class="item-value">500-2K tokens</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Medium .py file:</span>
+                        <span class="item-value">2K-5K tokens</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Full project dump:</span>
+                        <span class="item-value">5K-50K tokens</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Large project dump:</span>
+                        <span class="item-value">50K+ tokens</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Error message:</span>
+                        <span class="item-value">100-500 tokens</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-card">
+                <div class="example-header">Rule of Thumb</div>
+                <div class="example-content">
+                    <div class="example-item">
+                        <span class="item-label">1 page text:</span>
+                        <span class="item-value">~300 tokens</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Average code file:</span>
+                        <span class="item-value">~1-2 tokens/line</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Full conversation:</span>
+                        <span class="item-value">Add all messages up</span>
+                    </div>
+                    <div class="example-item">
+                        <span class="item-label">Remaining budget:</span>
+                        <span class="item-value">Max - used so far</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="strategies">
+            <div class="strategy">
+                <div class="strategy-title">📁 Strategy 1: Full Dump for Architecture Questions (Early Conversation)</div>
+                <div class="strategy-content">
+                    Use early when discussing project structure, refactoring approaches, or understanding relationships between modules. You have plenty of budget with modern models.
+                    <div class="code-block">In PyCharm: Select all files → copy to Gemini/Claude<br>Ask: "How would you refactor this for better modularity?"</div>
+                </div>
+            </div>
+
+            <div class="strategy">
+                <div class="strategy-title">📌 Strategy 2: Selective Files for Targeted Changes</div>
+                <div class="strategy-content">
+                    For focused bug fixes, feature additions, or code review on specific modules. This keeps conversation focused and reduces noise.
+                    <div class="code-block">In PyCharm: Open review_logic.py → copy specific function<br>Ask: "Add error handling to the analyze() function"</div>
+                </div>
+            </div>
+
+            <div class="strategy">
+                <div class="strategy-title">🔄 Strategy 3: Start Fresh When Conversation Gets Long</div>
+                <div class="strategy-content">
+                    After 20+ messages in one conversation, sometimes starting fresh with an updated project dump helps AI refocus and avoid confusion.
+                    <div class="code-block">New Chat in Gemini/Claude:<br>Paste: Current project structure<br>Recap: "Continue work on [feature]. Here's current state."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <div class="tips-title">💡 Pro Tips for Token Management</div>
+            <div class="tips-list">
+                <div class="tip">Modern models (Gemini 2.5, Claude 4.5) have huge context windows. Token limits rarely matter anymore.</div>
+                <div class="tip">Focus on CODE QUALITY first: clean, well-organized files are more useful than token optimization.</div>
+                <div class="tip">PyCharm's built-in copy/paste makes sharing code easy—use that instead of manual dumps.</div>
+                <div class="tip">Long conversations may lose focus naturally—refresh with new chat for better AI assistance regardless of tokens.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

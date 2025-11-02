@@ -1,0 +1,195 @@
+{
+  "chapter": 5,
+  "title": "Module 5: Coding with AI Assistants",
+  "description": "Use AI to generate, debug, and improve code in your development workflow",
+  "sections": [
+    {
+      "type": "section",
+      "title": "AI Coding Tools & Assistants",
+      "terms": [
+        {
+          "id": "vibe-coding",
+          "title": "Vibe Coding",
+          "definition": "\"Vibe coding\" is a slang term for a more informal, exploratory, and \"natural-language\" style of development, often used when building quick \"prototypes\" with LLMs. Instead of writing precise, formal logic, the developer might \"vibe out\" a prompt (e.g., \"Just get the main ideas from this text and list them out, make it casual\"). While this approach is fast for experimentation, \"vibe\" prompts often lack the \"guardrails\" and robustness needed for a production system.",
+          "keywords": [
+            "natural-language dev",
+            "prototypes",
+            "guardrails"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "claude-code",
+          "title": "Claude Code",
+          "definition": "This refers to the family of Claude models from Anthropic, which have demonstrated particularly strong capabilities for code-related tasks. Developers often use Claude for complex tasks beyond simple completion, such as refactoring large blocks of code, generating comprehensive test suites, or even \"repo-wide reasoning\" where the model is given context from many different files to answer a question or implement a new feature.",
+          "keywords": [
+            "repo-wide reasoning",
+            "refactoring",
+            "tests"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "openai-codex",
+          "title": "OpenAI Codex",
+          "definition": "OpenAI Codex was the foundational model that powered the first version of GitHub Copilot. It was a descendant of GPT-3 that was specifically fine-tuned on a massive corpus of public code from GitHub. While Codex itself has largely been succeeded by newer, more capable GPT models, its release marked the beginning of the \"code-gen\" lineage, proving that LLMs could be highly effective at understanding and writing software.",
+          "keywords": [
+            "code-gen lineage",
+            "GitHub Copilot",
+            "code completion"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "jetbrains-ai-assistant-juni",
+          "title": "JetBrains AI Assistant (Juni)",
+          "definition": "This is an AI-powered assistant integrated directly into the JetBrains family of IDEs, such as PyCharm and IntelliJ IDEA. Much like Copilot, it provides inline code suggestions and a \"code chat\" interface. Its key differentiator is its deep integration with the IDE's \"inspections\" and refactoring tools, allowing it to not only write code but also to leverage the IDE's understanding of the codebase to suggest improvements and fixes.",
+          "keywords": [
+            "PyCharm integration",
+            "code chat",
+            "inspections"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Preparing for Coding with AI",
+      "terms": [
+        {
+          "id": "using-ai-for-coding-vs-within-coding",
+          "title": "Using AI for Coding vs Within Coding",
+          "definition": "There is an important distinction between two approaches: \"Using AI for coding\" means using AI tools as your primary development assistant (e.g., asking Claude or Copilot to write entire functions or classes for you). \"Using AI within coding\" means integrating AI capabilities as a feature within your application (e.g., building an app that uses Claude API to provide AI-powered features to your users). In this course, we focus on the first approach—leveraging AI assistants in your development workflow to write, debug, and improve your own code.",
+          "keywords": [
+            "AI as development tool",
+            "AI as feature",
+            "development workflow",
+            "application integration"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "voice-interaction-for-coding",
+          "title": "Voice Interaction (For Coding Instructions)",
+          "definition": "Voice interaction in the coding context refers to using voice commands and voice recording to communicate instructions to your AI coding assistant. Instead of typing prompts, you can speak your requirements naturally: \"Add error handling to this function\" or \"Refactor this code to be more efficient.\" You can also record yourself explaining what you want, and the voice-to-text capability converts your spoken words into text that the AI understands. This hands-free approach is especially useful when you're multitasking, sketching out ideas verbally, or prefer natural speech over typing.",
+          "keywords": [
+            "voice commands",
+            "voice recording",
+            "hands-free coding",
+            "natural language instructions",
+            "speech-to-text"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Development Environment & Tools",
+      "terms": [
+        {
+          "id": "pycharm-ide",
+          "title": "PyCharm (IDE)",
+          "definition": "PyCharm is JetBrains' powerful integrated development environment (IDE) specifically designed for Python development. It provides features like code completion, intelligent debugging, version control integration, and built-in support for various frameworks and libraries. PyCharm's deep code understanding and integrated AI assistant make it an excellent environment for developing Python applications with AI assistance.",
+          "keywords": [
+            "Python IDE",
+            "debugging",
+            "code completion",
+            "version control"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "github--version-control",
+          "title": "GitHub – Version Control",
+          "definition": "GitHub is a web-based platform for version control and collaboration using Git. It allows developers to manage code repositories, track changes, collaborate with team members, and maintain a complete history of project development. GitHub integrates with IDEs like PyCharm, allowing you to \"commit\" changes, \"push\" to remote repositories, create \"pull requests\" (PRs), and manage \"issues\" and \"projects\" all from within your development environment.",
+          "keywords": [
+            "Git repositories",
+            "version control",
+            "collaboration",
+            "pull requests",
+            "issues"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "google-colab",
+          "title": "Google Colab",
+          "definition": "Google Colab is a free, cloud-based notebook environment that runs in your browser. It allows you to write and execute Python code, create visualizations, and document your work all in one place. Colab is integrated with Google Drive for easy file management and has built-in support for machine learning libraries. It's an excellent environment for rapid experimentation, prototyping, and learning—especially when you want to leverage AI assistance for your coding tasks without worrying about local setup or computational resources.",
+          "keywords": [
+            "cloud notebooks",
+            "rapid prototyping",
+            "free GPU/TPU access",
+            "Google Drive integration",
+            "experimentation"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/google-colab.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "ai-studio-vs-gemini-enterprise",
+          "title": "AI Studio vs Gemini Enterprise",
+          "definition": "Google AI Studio and Gemini Enterprise are two distinct products serving different purposes. AI Studio is a free, web-based interface for experimenting with Gemini models without writing code—perfect for prototyping and learning. It lets you test prompts, adjust parameters in real-time, and define custom functions. Gemini Enterprise, by contrast, is designed for production use, providing advanced security, compliance, priority support, and integration capabilities for building AI-powered applications at scale. It's crucial to understand the distinction: use AI Studio for exploration and experimentation, but Gemini Enterprise for production workloads that require security, reliability, and team management.",
+          "keywords": [
+            "no-code prototyping",
+            "production-ready",
+            "Gemini models",
+            "enterprise integration",
+            "security & compliance"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/ai-studio-vs-enterprise.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

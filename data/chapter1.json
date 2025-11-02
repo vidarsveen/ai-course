@@ -1,0 +1,177 @@
+{
+  "chapter": 1,
+  "title": "Module 1: AI Foundations & Core Concepts",
+  "description": "Understand what LLMs are and how they work at a basic level",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Fundamentals",
+      "terms": [
+              {
+        "id": "ai-landscape-intro",
+        "title": "The AI Landscape: Understanding the Hierarchy",
+        "definition": "Understanding where LLMs fit in the broader AI landscape is crucial for grasping their capabilities and limitations. Artificial Intelligence (AI) is the all-encompassing field for creating intelligent machines, including everything from basic rule-based systems and robot programming to advanced reasoning and problem-solving. A key subset is Machine Learning (ML), where systems learn patterns from data rather than following explicit rules—used in fraud detection, recommendation systems, and spam filters. Within ML, Deep Learning (DL) uses multi-layered neural networks inspired by the human brain to excel at complex tasks like image recognition, speech recognition, and natural language understanding. Generative AI represents systems that create new content rather than just analyzing existing data—generating text, images, music, or code. At the specialized core are Large Language Models (LLMs), a form of Generative AI focused on language, trained on massive text datasets (books, websites, code) to understand and generate human-like text for tasks like writing, translation, summarization, and coding. Examples include GPT-4, Claude, Gemini, and Llama, with ChatGPT being a specific conversational implementation of the GPT architecture.",
+        "keywords": ["artificial intelligence", "machine learning", "deep learning", "generative AI", "LLMs", "neural networks", "hierarchy", "ChatGPT"],
+        "hasViz": true,
+        "vizPath": "visuals/ai-hierarchy.html",
+        "vizIcon": "🤖",
+        "mastery": 0,
+        "visited": false,
+        "question": null
+      },
+        {
+          "id": "llm-large-language-model",
+          "title": "LLM (Large Language Model)",
+          "definition": "A Large Language Model (LLM) is a type of artificial intelligence model specifically designed to understand, generate, and interact with human-like text. These models are \"large\" because they are trained on massive datasets of text and code, containing billions or even trillions of- parameters. This extensive pretraining allows them to learn complex patterns, grammar, and even reasoning abilities, making them general-purpose tools that can be adapted to a wide range of tasks like translation, summarization, and question answering. Many modern LLMs are also multimodal, meaning they can process and integrate information from other modalities like images or audio.",
+          "keywords": [
+            "pretraining",
+            "next-token prediction",
+            "general-purpose",
+            "multimodal"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/ai-hierarchy.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "foundation-model",
+          "title": "Foundation Model",
+          "definition": "A Foundation Model is a large-scale AI model trained on a massive, broad dataset, so named because it serves as a broad foundation for more specialized tasks. This pretraining captures a general \"understanding\" of the data (like grammar, facts, or visual patterns), which can then be adapted (e.g., through fine-tuning) to a wide variety of \"downstream\" tasks like sentiment analysis or medical image diagnosis. LLMs are the most prominent example of foundation models, but this concept also applies to models trained on images, audio, and other modalities.",
+          "keywords": [
+            "general-purpose",
+            "pretraining",
+            "fine-tuning",
+            "adaptability",
+            "transfer learning"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "transformer",
+          "title": "Transformer",
+          "definition": "The Transformer is a neural network architecture that serves as the foundational technology for most modern LLMs, including models like GPT and Claude. Introduced in the 2017 paper \"Attention Is All You Need,\" its key innovation is the \"attention mechanism,\" which allows the model to weigh the importance of different words (tokens) in a sequence, regardless of their distance from each other. This was a major breakthrough, as previous methods (like n-grams) struggled to capture long-range context, often limiting their understanding to the statistical probability of just a few words in a row. The Transformer's design, typically involving encoder and decoder stacks, is also highly parallelizable, which enabled the \"scaling laws\" that allow models to improve predictably as their size and training data increase.",
+          "keywords": [
+            "attention",
+            "encoder/decoder",
+            "scaling laws",
+            "context length"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/transformer.html",
+          "vizIcon": "🔍",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "token",
+          "title": "Token",
+          "definition": "A token is the fundamental unit of text that an LLM processes. Instead of processing text letter by letter or word by word, LLMs use a \"tokenizer\" to break down text into these pieces, which can be whole words (e.g., \"hello\"), subwords (e.g., \"run\" and \"ning\" for \"running\"), or even individual characters. This method, often using techniques like Byte-Pair Encoding (BPE), efficiently handles a large vocabulary, including punctuation, spaces, and unknown words. The \"token\" serves as the fundamental unit of measurement for both billing and the model's context window; the number of tokens in an input or output is a critical factor in determining cost, speed, and whether the text fits.",
+          "keywords": [
+            "tokenization",
+            "byte-pair encoding",
+            "subwords",
+            "token costs"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/tokens.html",
+          "vizIcon": "🔤",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "context-window",
+          "title": "Context Window",
+          "definition": "The context window represents the maximum amount of information (measured in tokens) that an LLM can \"see\" at one time. This includes both the input prompt from the user and the output completion generated by the model. For example, a model with an 8,000-token context window can process a combination of input and output up to that limit. If a conversation or document exceeds this limit, older information is \"forgotten\" or truncated, which can break conversational memory. The size of the context window is a key architectural feature, and larger windows (e.g., 100K+ tokens) allow models to analyze entire documents or maintain very long conversations. Managing this window is a critical part of \"context engineering,\" as high-quality answers depend on providing the right context. However, context is also computationally expensive, creating a key trade-off between quality and cost.",
+          "keywords": [
+            "input vs output tokens",
+            "truncation",
+            "compression strategies"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "knowledge-cutoff",
+          "title": "Knowledge Cutoff",
+          "definition": "The knowledge cutoff is the specific date that marks the end of an LLM's static training data. The model has no internal knowledge of any events, facts, or developments that occurred after this date. For example, the GPT-4o model has a knowledge cutoff of October 2023. Another example is GPT-5, which has a knowledge cutoff of October 1, 2024. This is a fundamental limitation of static pretraining. To provide more current information, LLMs must be augmented with external tools like web browsing (via RAG) to retrieve and incorporate up-to-date facts into their answers.",
+          "keywords": [
+            "training data freeze date",
+            "browsing/RAG to refresh"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "prompt",
+          "title": "Prompt",
+          "definition": "A prompt is the input text, instructions, or queries provided to an LLM to guide it toward a specific response or \"completion.\" In many conversational APIs, this is split into two parts: a high-level \"System Prompt\" that defines the AI's persona and rules (e.g., \"You are an expert copywriter\") and a \"User Prompt\" that contains the specific, in-the-moment question (e.g., \"Write a headline for this product\"). A well-designed prompt is critical for getting a high-quality, relevant output, and the art of crafting them is known as prompt engineering.",
+          "keywords": [
+            "instruction style",
+            "examples",
+            "constraints",
+            "roles"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/prompt-completion.html",
+          "vizIcon": "💬",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "completion",
+          "title": "Completion",
+          "definition": "The completion is the output text generated by an LLM after it processes a prompt. This is the model's \"answer\" or \"response,\" and it is measured in \"output tokens.\" In many applications, this text is \"streamed\" back to the user token by token, creating the effect of the model \"typing\" its response in real-time. This streaming performance is often measured in tokens per second (TPS); for example, a fast model like Claude Haiku might stream at 100+ TPS, while a more complex model might be slower. API providers typically charge more for output tokens than for input tokens. This cost difference is because the \"test-time compute\" (or inference) for generating tokens is sequential and more demanding, as each new token must be predicted one after another, whereas input tokens can be processed in parallel.",
+          "keywords": [
+            "streaming",
+            "stop tokens",
+            "determinism",
+            "output tokens",
+            "tokens per second (TPS)"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/prompt-completion.html",
+          "vizIcon": "💬",
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "hallucination",
+          "title": "Hallucination",
+          "definition": "A hallucination is the phenomenon where an LLM generates text that is factually incorrect, nonsensical, or \"made up,\" but presents it with high confidence. This occurs because the model is a next-token predictor, not a fact database; it prioritizes generating a plausible-sounding sequence of text over factual accuracy. Hallucinations are a major challenge in LLM reliability. They can be mitigated (though not entirely eliminated) by techniques like RAG, which \"grounds\" the model in specific source data, and by prompting the model to admit when it doesn't know an answer.",
+          "keywords": [
+            "detection",
+            "mitigation",
+            "grounding",
+            "next-token prediction"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding Libraries & Packages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #9e9e9e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .intro {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c0c0c0;
+        }
+
+        .ecosystems {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .ecosystem {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .python-eco {
+            border-color: #3b82f6;
+        }
+
+        .html-eco {
+            border-color: #f59e0b;
+        }
+
+        .eco-header {
+            padding: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .python-eco .eco-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: #93c5fd;
+        }
+
+        .html-eco .eco-header {
+            background: linear-gradient(135deg, #7c2d12 0%, #92400e 100%);
+            color: #fbbf24;
+        }
+
+        .eco-content {
+            padding: 20px;
+        }
+
+        .package-source {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .package-source:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .source-name {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .python-eco .source-name {
+            color: #93c5fd;
+        }
+
+        .html-eco .source-name {
+            color: #fbbf24;
+        }
+
+        .source-info {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .command {
+            background: #0f0f0f;
+            padding: 8px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 11px;
+            color: #60a5fa;
+            margin-top: 6px;
+        }
+
+        .workflow {
+            background: linear-gradient(135deg, #1a2a1a 0%, #1a1a2a 100%);
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .workflow-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 12px;
+        }
+
+        .step-icon {
+            background: #10b981;
+            color: #0f0f0f;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.5;
+        }
+
+        .tools {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+
+        .tool-card.python {
+            border-left-color: #3b82f6;
+        }
+
+        .tool-card.html {
+            border-left-color: #f59e0b;
+        }
+
+        .tool-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tool-card.python .tool-title {
+            color: #93c5fd;
+        }
+
+        .tool-card.html .tool-title {
+            color: #fbbf24;
+        }
+
+        .tool-item {
+            font-size: 12px;
+            color: #b0b0b0;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .tool-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .tips {
+            background: #1a1a1a;
+            border: 2px solid #f59e0b;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .tips-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fbbf24;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tip {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #c0c0c0;
+            line-height: 1.5;
+        }
+
+        .tip::before {
+            content: "→";
+            color: #f59e0b;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .ecosystems, .tools {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Finding Libraries & Packages</h1>
+        <div class="subtitle">Discovering and Evaluating Tools for Python and HTML/JS</div>
+
+        <div class="intro">
+            Every programming ecosystem has a package repository where developers share reusable code. Learning to discover, evaluate, and integrate libraries is a universal skill that applies to both Python and web development. The process is the same: search → evaluate → test → integrate. Asking Gemini for recommendations saves hours of research.
+        </div>
+
+        <div class="ecosystems">
+            <!-- PYTHON ECOSYSTEM -->
+            <div class="ecosystem python-eco">
+                <div class="eco-header">🐍 Python Ecosystem</div>
+                <div class="eco-content">
+                    <div class="package-source">
+                        <div class="source-name">PyPI (Python Package Index)</div>
+                        <div class="source-info">Central repository for Python packages. Search at pypi.org or via command line.</div>
+                        <div class="command">pip search "package-name"</div>
+                        <div class="source-info" style="margin-top: 8px;">Install packages with pip command</div>
+                        <div class="command">pip install package-name</div>
+                    </div>
+
+                    <div class="package-source">
+                        <div class="source-name">Checking Package Quality</div>
+                        <div class="source-info">Before installing, check:</div>
+                        <div style="font-size: 12px; color: #c0c0c0; line-height: 1.8; margin-top: 8px;">
+                            • <strong>Stars/Downloads:</strong> Popular packages are usually well-maintained<br>
+                            • <strong>Last Updated:</strong> Recent updates mean active development<br>
+                            • <strong>Documentation:</strong> Good docs = easier to use<br>
+                            • <strong>License:</strong> MIT, Apache, GPL—understand restrictions
+                        </div>
+                    </div>
+
+                    <div class="package-source">
+                        <div class="source-name">Ask Gemini</div>
+                        <div class="source-info">Let AI help with recommendations:</div>
+                        <div class="command" style="margin-top: 6px;">
+                            "What's the best Python library<br>
+                            for data visualization?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTML/JS ECOSYSTEM -->
+            <div class="ecosystem html-eco">
+                <div class="eco-header">🌐 HTML/JS Ecosystem</div>
+                <div class="eco-content">
+                    <div class="package-source">
+                        <div class="source-name">npm (Node Package Manager)</div>
+                        <div class="source-info">Search at npmjs.com for JavaScript packages</div>
+                        <div class="command">npm install package-name</div>
+                        <div class="source-info" style="margin-top: 8px;">Note: Requires Node.js locally, not for Gemini Canvas</div>
+                    </div>
+
+                    <div class="package-source">
+                        <div class="source-name">CDN (Content Delivery Network)</div>
+                        <div class="source-info">For web projects, use CDN links instead:</div>
+                        <div class="command" style="margin-top: 6px;">
+                            &lt;script src="https://cdn.example.com/lib.js"&gt;<br>
+                            &lt;/script&gt;
+                        </div>
+                        <div class="source-info" style="margin-top: 8px;">Popular CDNs: cdnjs.com, unpkg.com, jsDelivr</div>
+                    </div>
+
+                    <div class="package-source">
+                        <div class="source-name">Evaluating JS Libraries</div>
+                        <div class="source-info">Check before using:</div>
+                        <div style="font-size: 12px; color: #c0c0c0; line-height: 1.8; margin-top: 8px;">
+                            • <strong>Bundle Size:</strong> Smaller = faster load<br>
+                            • <strong>Browser Support:</strong> Works on your target browsers?<br>
+                            • <strong>Dependencies:</strong> Does it need other libraries?<br>
+                            • <strong>Documentation:</strong> Clear examples?
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workflow">
+            <div class="workflow-title">
+                <span>🔄</span>
+                <span>Universal Library-Finding Workflow</span>
+            </div>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-icon">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Define Your Need</div>
+                        <div class="step-desc">What problem are you solving? (e.g., "Create charts", "Handle dates", "Validate forms")</div>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-icon">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Ask Gemini for Recommendations</div>
+                        <div class="step-desc">Gemini knows popular libraries across ecosystems. It saves hours of research and suggests the best options for your use case.</div>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-icon">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Search the Repository</div>
+                        <div class="step-desc">For Python: PyPI. For JS: npmjs.com or CDN sites. Check stats: downloads, last update, stars.</div>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-icon">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Read Documentation</div>
+                        <div class="step-desc">Visit the official docs and GitHub repo. Look for examples, API reference, and common issues.</div>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-icon">5</div>
+                    <div class="step-content">
+                        <div class="step-title">Install & Test</div>
+                        <div class="step-desc">Install the package and test it with a simple example. Does it solve your problem? Is it easy to use?</div>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-icon">6</div>
+                    <div class="step-content">
+                        <div class="step-title">Ask Gemini for Integration Help</div>
+                        <div class="step-desc">Once you've chosen a library, ask Gemini "Show me how to use [library] to [task]". It can generate working examples instantly.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools">
+            <div class="tool-card python">
+                <div class="tool-title">Popular Python Libraries</div>
+                <div class="tool-item"><strong>Data:</strong> pandas, numpy, polars</div>
+                <div class="tool-item"><strong>Visualization:</strong> matplotlib, seaborn, plotly</div>
+                <div class="tool-item"><strong>Machine Learning:</strong> scikit-learn, tensorflow, pytorch</div>
+                <div class="tool-item"><strong>Web:</strong> Flask, Django, FastAPI</div>
+                <div class="tool-item"><strong>Dates/Time:</strong> datetime, dateutil</div>
+                <div class="tool-item"><strong>Testing:</strong> pytest, unittest</div>
+            </div>
+
+            <div class="tool-card html">
+                <div class="tool-title">Popular JavaScript Libraries</div>
+                <div class="tool-item"><strong>UI Frameworks:</strong> React, Vue, Alpine.js</div>
+                <div class="tool-item"><strong>Styling:</strong> Tailwind CSS, Bootstrap</div>
+                <div class="tool-item"><strong>Charts:</strong> Chart.js, D3.js, Plotly.js</div>
+                <div class="tool-item"><strong>Dates:</strong> date-fns, moment.js, day.js</div>
+                <div class="tool-item"><strong>Validation:</strong> Joi, yup, zod</div>
+                <div class="tool-item"><strong>Animations:</strong> GSAP, Three.js</div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <div class="tips-title">
+                <span>💡</span>
+                <span>Pro Tips for Finding Libraries</span>
+            </div>
+            <div class="tips-list">
+                <div class="tip">Always ask Gemini first—it often knows the perfect library for your task</div>
+                <div class="tip">Check "last updated" date—old libraries may have bugs or security issues</div>
+                <div class="tip">For web projects in Gemini Canvas, use CDN links, not npm packages</div>
+                <div class="tip">Read the GitHub README and issues—real users report problems there</div>
+                <div class="tip">Start small—test with a simple example before integrating into your project</div>
+                <div class="tip">Check the license—MIT and Apache are free; GPL has restrictions</div>
+                <div class="tip">Prefer active communities—more users = more answers to your questions</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

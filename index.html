@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive AI Course</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .chapter-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(79, 70, 229, 0.4);
+        }
+
+        .chapter-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .chapter-card.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring text {
+            transform: rotate(90deg);
+            transform-origin: center;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 py-8">
+        <div class="max-w-6xl mx-auto px-6">
+            <h1 class="text-4xl font-bold text-white mb-2">Interactive AI Course</h1>
+            <p class="text-gray-400">Learn AI, Machine Learning, and LLMs through interactive concepts</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-12">
+
+        <!-- Overall Progress -->
+        <div class="mb-12 bg-gray-800 border border-gray-700 rounded-lg p-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xl font-semibold text-white">Your Progress</h2>
+                <span id="overall-progress-text" class="text-gray-400">0/0 terms completed</span>
+            </div>
+            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div id="overall-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Modules Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Module 1 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-indigo-500" onclick="openChapter(1)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-indigo-400 font-semibold mb-1">MODULE 1</div>
+                        <h3 class="text-xl font-bold text-white mb-2">AI Foundations & Core Concepts</h3>
+                        <p class="text-gray-400 text-sm">Understand what LLMs are and how they work at a basic level</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-1" class="progress-ring-circle text-indigo-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-1">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-1-progress" class="text-sm text-gray-400">0/10 terms</span>
+                    <span class="text-indigo-400 font-medium">Start Reading →</span>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-emerald-500" onclick="openChapter(2)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-emerald-400 font-semibold mb-1">MODULE 2</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Practical Prompting for Analysts</h3>
+                        <p class="text-gray-400 text-sm">Master the fundamentals of communicating with AI effectively</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-2" class="progress-ring-circle text-emerald-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-2">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-2-progress" class="text-sm text-gray-400">0/13 terms</span>
+                    <span class="text-emerald-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-blue-500" onclick="openChapter(3)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-blue-400 font-semibold mb-1">MODULE 3</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Advanced Reasoning & Problem-Solving</h3>
+                        <p class="text-gray-400 text-sm">Use AI to break down complex analytical tasks</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-3" class="progress-ring-circle text-blue-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-3">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-3-progress" class="text-sm text-gray-400">0/7 terms</span>
+                    <span class="text-blue-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-amber-500" onclick="openChapter(4)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-amber-400 font-semibold mb-1">MODULE 4</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Tools, Agents & Automation</h3>
+                        <p class="text-gray-400 text-sm">Leverage AI to access data and automate workflows</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-4" class="progress-ring-circle text-amber-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-4">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-4-progress" class="text-sm text-gray-400">0/10 terms</span>
+                    <span class="text-amber-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-purple-500" onclick="openChapter(5)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-purple-400 font-semibold mb-1">MODULE 5</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Coding with AI Assistants</h3>
+                        <p class="text-gray-400 text-sm">Use AI to generate, debug, and improve code</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-5" class="progress-ring-circle text-purple-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-5">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-5-progress" class="text-sm text-gray-400">0/10 terms</span>
+                    <span class="text-purple-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-orange-500" onclick="openChapter(6)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-orange-400 font-semibold mb-1">MODULE 6</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Hands On Coding with Gemini</h3>
+                        <p class="text-gray-400 text-sm">Practical coding exercises using Google Gemini AI</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-6" class="progress-ring-circle text-orange-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-6">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-6-progress" class="text-sm text-gray-400">0/0 terms</span>
+                    <span class="text-orange-400 font-medium">Coming Soon →</span>
+                </div>
+            </div>
+
+            <!-- Module 7 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-pink-500" onclick="openChapter(7)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-pink-400 font-semibold mb-1">MODULE 7</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Choosing & Using AI Platforms</h3>
+                        <p class="text-gray-400 text-sm">Navigate the AI tool landscape and select the right tools</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-7" class="progress-ring-circle text-pink-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-7">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-7-progress" class="text-sm text-gray-400">0/15 terms</span>
+                    <span class="text-pink-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+            <!-- Module 8 -->
+            <div class="chapter-card bg-gray-800 border-2 border-gray-700 rounded-xl p-6 hover:border-cyan-500" onclick="openChapter(8)">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="text-sm text-cyan-400 font-semibold mb-1">MODULE 8</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Safety, Quality & Best Practices</h3>
+                        <p class="text-gray-400 text-sm">Use AI responsibly and ensure quality outputs</p>
+                    </div>
+                    <div class="ml-4">
+                        <svg class="progress-ring w-16 h-16">
+                            <circle class="text-gray-700" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                            <circle id="progress-circle-8" class="progress-ring-circle text-cyan-500" stroke="currentColor" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"
+                                stroke-dasharray="176" stroke-dashoffset="176"/>
+                            <text x="32" y="37" class="text-sm font-bold fill-white text-anchor-middle" text-anchor="middle" id="progress-percent-8">0%</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <span id="chapter-8-progress" class="text-sm text-gray-400">0/9 terms</span>
+                    <span class="text-cyan-400 font-medium">Continue →</span>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Load progress from localStorage for all modules
+        async function loadProgress() {
+            const chapters = [
+                { num: 1, defaultTotal: 10 },
+                { num: 2, defaultTotal: 13 },
+                { num: 3, defaultTotal: 7 },
+                { num: 4, defaultTotal: 10 },
+                { num: 5, defaultTotal: 10 },
+                { num: 6, defaultTotal: 0 },
+                { num: 7, defaultTotal: 15 },
+                { num: 8, defaultTotal: 9 }
+            ];
+
+            let overallRead = 0;
+            let overallTotal = 0;
+
+            // Load progress for each module
+            for (const chapter of chapters) {
+                try {
+                    // Fetch chapter data to get actual term count
+                    const response = await fetch(`data/chapter${chapter.num}.json`);
+                    let total = chapter.defaultTotal;
+                    if (response.ok) {
+                        const data = await response.json();
+                        total = data.sections.reduce((sum, section) => sum + section.terms.length, 0);
+                    }
+
+                    // Get progress from localStorage
+                    const progressData = JSON.parse(localStorage.getItem(`chapter-${chapter.num}-progress`) || '{"terms": []}');
+                    const readCount = progressData.terms ? progressData.terms.filter(t => t.visited).length : 0;
+                    const percentage = total > 0 ? Math.round((readCount / total) * 100) : 0;
+
+                    // Update card
+                    document.getElementById(`chapter-${chapter.num}-progress`).textContent = `${readCount}/${total} terms`;
+                    document.getElementById(`progress-percent-${chapter.num}`).textContent = `${percentage}%`;
+
+                    // Update progress circle
+                    const circumference = 2 * Math.PI * 28;
+                    const offset = circumference - (percentage / 100) * circumference;
+                    document.getElementById(`progress-circle-${chapter.num}`).style.strokeDashoffset = offset;
+
+                    // Add to overall totals
+                    overallRead += readCount;
+                    overallTotal += total;
+
+                } catch (error) {
+                    console.error(`Error loading module ${chapter.num}:`, error);
+                }
+            }
+
+            // Update overall progress
+            const overallPercentage = overallTotal > 0 ? Math.round((overallRead / overallTotal) * 100) : 0;
+            document.getElementById('overall-progress-text').textContent = `${overallRead}/${overallTotal} terms completed`;
+            document.getElementById('overall-progress-bar').style.width = `${overallPercentage}%`;
+        }
+
+        function openChapter(chapterNum) {
+            window.location.href = `chapter.html?chapter=${chapterNum}`;
+        }
+
+        // Load progress on page load
+        document.addEventListener('DOMContentLoaded', loadProgress);
+    </script>
+
+</body>
+</html>

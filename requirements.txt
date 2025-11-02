@@ -1,0 +1,16 @@
+# Interactive AI Course - No runtime dependencies required
+# This project is a static web application with a Python utility for content generation
+
+# Python Standard Library modules used:
+# - json (built-in)
+# - re (built-in)
+
+# Optional: For local development/testing
+# Uncomment if you want to run a local web server:
+# http.server (built-in Python module)
+
+# To run the Markdown to JSON converter:
+# python convert_md_to_json.py
+
+# No external Python packages are required for the course itself.
+# The application runs entirely in the browser with HTML/CSS/JavaScript.

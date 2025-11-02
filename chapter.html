@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 - Interactive AI Course</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/chapter.css">
+</head>
+<body class="bg-gray-900 text-gray-200 overflow-hidden">
+
+    <!-- Top Header -->
+    <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                ← <span>Back to Overview</span>
+            </a>
+            <div class="h-6 w-px bg-gray-600"></div>
+            <h1 id="chapter-title" class="text-lg font-semibold text-white">Loading...</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div id="progress-indicator" class="text-sm text-gray-400">
+                <span id="current-term-num">1</span>/<span id="total-terms">0</span> terms
+                <span class="ml-2 text-indigo-400">(<span id="read-count">0</span>/<span id="total-actual">0</span> read)</span>
+                <span id="progress-percentage" class="ml-2 text-cyan-400 font-semibold" style="writing-mode: horizontal-tb; transform: rotate(0deg);">0%</span>
+            </div>
+            <button id="reset-progress-btn" class="text-xs text-gray-500 hover:text-red-400 transition-colors px-3 py-1 rounded border border-gray-600 hover:border-red-400">
+                Reset Progress
+            </button>
+            <div class="text-xs text-gray-500">Use ← → or ↑ ↓ keys to navigate</div>
+        </div>
+    </header>
+
+    <!-- Main Split View -->
+    <div class="flex h-[calc(100vh-57px)]">
+
+        <!-- LEFT: Visualization Panel -->
+        <div id="viz-panel" class="w-1/2 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="flex-1 flex items-center justify-center overflow-hidden">
+                <!-- Default state: no visualization -->
+                <div id="viz-placeholder" class="text-center p-12">
+                    <div class="text-6xl mb-4">📖</div>
+                    <p class="text-gray-400 text-lg">No visualization for this term</p>
+                    <p class="text-gray-500 text-sm mt-2">Navigate to a term with an interactive demo</p>
+                </div>
+
+                <!-- Active visualization iframe -->
+                <iframe id="viz-frame" class="w-full h-full hidden" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- RIGHT: Terms Panel (Scrollable) -->
+        <div id="terms-panel" class="w-1/2 overflow-y-auto">
+            <div class="max-w-3xl mx-auto py-8 px-12">
+                <!-- Terms will be loaded here -->
+                <div id="terms-container" class="space-y-6">
+                    <!-- Loading state -->
+                    <div class="text-center py-24">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4"></div>
+                        <p class="text-gray-400">Loading chapter...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/chapter.js"></script>
+</body>
+</html>

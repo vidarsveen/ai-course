@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain of Thought in Modern LLMs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .step-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            background: #1f2937;
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step.input {
+            border-left-color: #60a5fa;
+        }
+
+        .step.reasoning {
+            border-left-color: #f59e0b;
+        }
+
+        .step.output {
+            border-left-color: #34d399;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            width: 24px;
+            height: 24px;
+            background: #111827;
+            border: 2px solid #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #6366f1;
+        }
+
+        .step.input .step-number {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .step.reasoning .step-number {
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .step.output .step-number {
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #9ca3af;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content {
+            color: #d1d5db;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .code-block {
+            background: #111827;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: #a1a1a1;
+        }
+
+        .code-block .prompt {
+            color: #60a5fa;
+        }
+
+        .code-block .reasoning {
+            color: #f59e0b;
+        }
+
+        .code-block .answer {
+            color: #34d399;
+        }
+
+        .tool-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        .tool-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .tool-feature {
+            margin: 0.75rem 0;
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        .feature-label {
+            font-weight: 500;
+            color: #a1a1a1;
+            margin-bottom: 0.25rem;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #6366f1;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .tool-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .key-insight {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+            color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-white mb-2">Chain of Thought in Modern LLMs</h1>
+            <p class="text-gray-400">How GPT, Claude, and Gemini leverage step-by-step reasoning</p>
+        </header>
+
+        <!-- General CoT Flow -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-4">The CoT Process: Step-by-Step</h2>
+
+            <div class="step-flow">
+                <!-- Step 1: Input -->
+                <div class="step input">
+                    <div class="step-number">1</div>
+                    <div class="step-label">User Input</div>
+                    <div class="step-content">
+                        You ask a complex question. The prompt can explicitly request step-by-step thinking with phrases like "Let's think step by step" or "Show your work."
+                    </div>
+                    <div class="code-block">
+                        <div class="prompt">"Sarah has twice as many apples as Tom. Tom has 5 apples. How many apples do they have together? Let's think step by step."</div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Internal Reasoning -->
+                <div class="step reasoning">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Internal Reasoning (Scratchpad)</div>
+                    <div class="step-content">
+                        The model breaks down the problem into intermediate steps. This "scratchpad" is generated token-by-token, allowing the model to catch errors as it goes.
+                    </div>
+                    <div class="code-block">
+                        <div class="reasoning">Step 1: Tom has 5 apples.</div>
+                        <div class="reasoning">Step 2: Sarah has twice as many, so Sarah has 5 × 2 = 10 apples.</div>
+                        <div class="reasoning">Step 3: Together they have 5 + 10 = 15 apples.</div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Final Answer -->
+                <div class="step output">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Final Answer</div>
+                    <div class="step-content">
+                        After completing the reasoning, the model generates the final, clean answer. The user sees both the scratchpad AND the answer, or sometimes just the answer depending on the tool.
+                    </div>
+                    <div class="code-block">
+                        <div class="answer">Answer: Sarah and Tom have 15 apples together.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>Why This Works:</strong> By explicitly generating intermediate reasoning, the model is more likely to arrive at the correct answer. It's not just pattern-matching; it's actually working through the logic. This is especially powerful for math, logic puzzles, and multi-step problems.
+            </div>
+        </section>
+
+        <!-- How Modern Tools Implement CoT -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">How Modern Chat Tools Use CoT</h2>
+
+            <div class="tool-comparison">
+                <!-- ChatGPT / GPT -->
+                <div class="tool-card">
+                    <div class="tool-name">ChatGPT (GPT-4o)</div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Approach</div>
+                        <div>Supports CoT implicitly and explicitly. Users can request step-by-step thinking.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Visibility</div>
+                        <div>Shows reasoning in the chat, allowing users to see and critique each step.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Best For</div>
+                        <div>Math problems, debugging, explaining complex concepts.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Example Prompt</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">"Solve this step by step: If X = 10..."</div>
+                    </div>
+                </div>
+
+                <!-- Claude -->
+                <div class="tool-card">
+                    <div class="tool-name">Claude (Anthropic)</div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Approach</div>
+                        <div>Naturally inclined to reason through problems. No special prompt needed; it's built into training.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Visibility</div>
+                        <div>Shows detailed reasoning by default, making the thinking process transparent.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Best For</div>
+                        <div>Complex analysis, writing, research, and problems requiring careful thought.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Example Prompt</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">"Analyze this situation carefully..."</div>
+                    </div>
+                </div>
+
+                <!-- Gemini -->
+                <div class="tool-card">
+                    <div class="tool-name">Gemini (Google)</div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Approach</div>
+                        <div>Integrates CoT as part of its reasoning capabilities. Also supports "thinking" tokens for internal reasoning.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Visibility</div>
+                        <div>Some reasoning is visible, though more advanced reasoning happens internally.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Best For</div>
+                        <div>Information retrieval, search-based questions, and multi-modal reasoning.</div>
+                    </div>
+                    <div class="tool-feature">
+                        <div class="feature-label">Example Prompt</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">"Think about this carefully before answering..."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Tips -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6">Practical Tips for Using CoT</h2>
+
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                    <h3 class="text-base font-semibold text-indigo-300 mb-2">Be Explicit When You Need It</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        For complex tasks, explicitly ask for step-by-step reasoning: "Let's think step by step" or "Show your working." Most modern LLMs will respond by generating intermediate reasoning.
+                    </p>
+                </div>
+
+                <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                    <h3 class="text-base font-semibold text-indigo-300 mb-2">Verify Intermediate Steps</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        When you see the reasoning, check each step for correctness. Even LLMs can make mistakes in their logic, but seeing the reasoning allows you to catch and correct them.
+                    </p>
+                </div>
+
+                <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                    <h3 class="text-base font-semibold text-indigo-300 mb-2">Use for Knowledge Work</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        CoT is especially effective for tasks requiring logic, math, debugging, and complex decision-making. It's less necessary for creative or open-ended tasks.
+                    </p>
+                </div>
+
+                <div class="p-4 bg-gray-800 border-l-4 border-indigo-400 rounded">
+                    <h3 class="text-base font-semibold text-indigo-300 mb-2">Combine with Other Techniques</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        CoT pairs well with other prompting techniques like few-shot learning (providing examples) or specifying output format. You can ask: "Solve this step by step, then format the answer as JSON."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

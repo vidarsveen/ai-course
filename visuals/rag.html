@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Concepts Explorer - RAG</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Original token styles (kept for consistency) */
+        .token-box {
+            background-color: #374151; /* gray-700 */
+            border: 1px solid #4f46e5; /* indigo-600 */
+            color: #e0e7ff; /* indigo-100 */
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'monospace';
+            font-weight: 500;
+            margin: 2px;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        /* === NEW STYLES FOR RAG === */
+
+        /* Style for data chunks */
+        .chunk-box {
+            background-color: #374151; /* gray-700 */
+            border: 1px solid #4b5563; /* gray-600 */
+            color: #d1d5db; /* gray-300 */
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .chunk-box .chunk-title {
+            font-weight: 600;
+            color: #9ca3af; /* gray-400 */
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            display: block;
+            font-family: 'monospace';
+        }
+
+        /* Style for the chunk that gets "retrieved" */
+        .chunk-box.retrieved {
+            border-color: #6366f1; /* indigo-500 */
+            background-color: #3730a3; /* indigo-800 */
+            color: #e0e7ff; /* indigo-100 */
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.25);
+            transform: scale(1.02);
+        }
+        .chunk-box.retrieved .chunk-title {
+            color: #c7d2fe; /* indigo-200 */
+        }
+
+        /* Style for the final injected prompt */
+        .prompt-box {
+            background-color: #111827; /* gray-900 */
+            border: 1px dashed #4b5563; /* gray-600 */
+            color: #d1d5db; /* gray-300 */
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'monospace';
+            font-size: 0.9rem;
+            white-space: pre-wrap; /* Keeps formatting */
+            line-height: 1.7;
+        }
+        .prompt-box .context-injection {
+            color: #93c5fd; /* blue-300 */
+            background-color: #1e3a8a; /* blue-800 / blue-950 */
+            padding: 10px;
+            border-radius: 4px;
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #1d4ed8; /* blue-700 */
+        }
+        .prompt-box .user-query-part {
+            color: #a7f3d0; /* emerald-200 */
+            font-weight: 600;
+        }
+        .prompt-box .system-instruction {
+            color: #fca5a5; /* red-300 */
+        }
+
+        /* Style for the final LLM output */
+        .llm-output {
+            background-color: #1f2937; /* gray-800 */
+            border-left: 4px solid #16a34a; /* green-600 */
+            color: #e5e7eb; /* gray-200 */
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-inter p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-3xl mx-auto"> <!-- Centered single column -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Interactive LLM Concepts</h1>
+            <p class="text-lg text-gray-400 mt-2">Retrieval-Augmented Generation (RAG) Explorer</p>
+        </header>
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- === RAG CARD === -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700 flex flex-col">
+                <h2 class="text-2xl font-bold text-white mb-4">The RAG Principle</h2>
+
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    <strong>Retrieval-Augmented Generation (RAG)</strong> is a technique to make LLMs "smarter" by giving them external knowledge *before* they answer a question. This makes hallucinations less likely and provides up-to-date, verifiable information.
+                    <br>Here is the 5-step flow.
+                </p>
+
+                <!-- Hard-coded RAG Steps -->
+                <div class="mt-4 mb-6 space-y-8">
+
+                    <!-- Step 1: Chunking -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Step 1: Knowledge Base, Embedding & Chunking</label>
+                        <p class="text-gray-300 my-2">
+                            First, we take large documents and break them into smaller "chunks." Each chunk is then passed through an <strong>embedding</strong> model to convert its semantic meaning into a numerical vector. These vectors are stored in a <strong>Vector Database</strong>.
+                        </p>
+                        <div class="p-4 bg-gray-900 rounded-md">
+                            <div class="chunk-box">
+                                <span class="chunk-title">[Chunk 1: History]</span>
+                                The Eiffel Tower was designed by Gustave Eiffel and built from 1887 to 1889. It served as the main entrance for the 1889 World's Fair.
+                            </div>
+                            <div class="chunk-box">
+                                <span class="chunk-title">[Chunk 2: Photosynthesis]</span>
+                                Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy, through a process that converts water and carbon dioxide into oxygen and sugars (like glucose).
+                            </div>
+                            <div class="chunk-box">
+                                <span class="chunk-title">[Chunk 3: Mars]</span>
+                                Mars is the fourth planet from the Sun. It is often called the "Red Planet" because the iron oxide prevalent on its surface gives it a reddish appearance.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: User Query -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Step 2: User Query Embedding</label>
+                        <p class="text-gray-300 my-2">
+                            When a user asks a question, that query is *also* converted into an <strong>embedding vector</strong> using the exact same model. This creates a numerical representation of the user's *intent* and *meaning*.
+                        </p>
+                        <div class="p-4 bg-gray-900 rounded-md flex flex-wrap items-start">
+                            <span class="text-gray-400 mr-2">Query:</span>
+                            <span class="token-box">How</span>
+                            <span class="token-box">do</span>
+                            <span class="token-box">plants</span>
+                            <span class="token-box">make</span>
+                            <span class="token-box">food</span>
+                            <span class="token-box punct">?</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Retrieval -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Step 3: Retrieval (Semantic Search)</label>
+                        <p class="text-gray-300 my-2">
+                            We then use <strong>semantic search</strong> to compare the user's query vector against all the chunk vectors in our database. The system uses a metric like <strong>Cosine Similarity</strong>—which measures the angle between the vectors—to find the vector (and its corresponding text chunk) that is mathematically closest in meaning to the query. In this case, the query "How do plants make food?" is semantically closest to <strong>Chunk 2</strong>.
+                        </p>
+                        <div class="p-4 bg-gray-900 rounded-md">
+                            <!-- Non-relevant chunks -->
+                            <div class="chunk-box" style="opacity: 0.4;">
+                                <span class="chunk-title">[Chunk 1: History]</span>
+                                The Eiffel Tower was designed by Gustave Eiffel and built from 1887 to 1889...
+                            </div>
+                            <!-- The retrieved chunk! -->
+                            <div class="chunk-box retrieved">
+                                <span class="chunk-title">[Chunk 2: Photosynthesis]</span>
+                                Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy, through a process that converts water and carbon dioxide into oxygen and sugars (like glucose).
+                            </div>
+                            <!-- Non-relevant chunks -->
+                            <div class="chunk-box" style="opacity: 0.4;">
+                                <span class="chunk-title">[Chunk 3: Mars]</span>
+                                Mars is the fourth planet from the Sun. It is often called the "Red Planet"...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Augmentation (Context Injection) -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Step 4: Augmentation & Context Injection</label>
+                        <p class="text-gray-300 my-2">
+                            This is the "Augmented" part. We build a new prompt for the LLM. This prompt *injects* the retrieved chunk as **"context"** and instructs the LLM to use this context to answer the user's original query.
+                        </p>
+                        <div class="prompt-box">
+<span class="system-instruction">You are a helpful assistant. Answer the user's question based *only* on the provided context.</span>
+
+Here is the context:
+<span class="context-injection">
+Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy, through a process that converts water and carbon dioxide into oxygen and sugars (like glucose).
+</span>
+Here is the user's question:
+<span class="user-query-part">
+How do plants make food?
+</span>
+</div>
+                    </div>
+
+                    <!-- Step 5: Generation -->
+                    <div>
+                        <label class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Step 5: Generation (Grounded Answer)</label>
+                        <p class="text-gray-300 my-2">
+                            Finally, the LLM generates an answer. Because it's "grounded" in the provided context, the answer is accurate, factual, and directly related to the source material, avoiding guesswork or hallucinations.
+                        </p>
+                        <div class="llm-output">
+                            Based on the provided context, plants make food using a process called photosynthesis. This process converts light energy into chemical energy by using water and carbon dioxide to create oxygen and sugars, like glucose.
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Keywords -->
+                <div class="mt-auto pt-4 border-t border-gray-700">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Keywords</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">RAG</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">retrieval-augmented</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">semantic search</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">chunking</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">context injection</span>
+                        <span class="text-xs bg-gray-700 text-blue-300 px-2 py-0.5 rounded-full font-mono">vector database</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- No script tag is needed as this is a static info page -->
+
+</body>
+</html>
+

@@ -1,0 +1,113 @@
+{
+  "chapter": 3,
+  "title": "Module 3: Advanced Reasoning & Problem-Solving",
+  "description": "Use AI to break down complex analytical tasks",
+  "sections": [
+    {
+      "type": "section",
+      "title": "Advanced Reasoning Techniques",
+      "terms": [
+        {
+          "id": "cot-chain-of-thought",
+          "title": "CoT (Chain of Thought)",
+          "definition": "Chain of Thought (CoT) is a prompting technique that significantly improves an LLM's reasoning ability on complex tasks by instructing it to \"think step-by-step.\" Instead of just providing a final answer, the model is prompted to first generate the intermediate reasoning, logic, or calculations it used to arrive at the solution. This \"scratchpad\" of reasoning helps the model stay on track and avoid errors, especially in math, logic puzzles, and multi-step problems. The final, clean answer can then be extracted from this more detailed output.",
+          "keywords": [
+            "step-by-step reasoning",
+            "scratchpad vs. concise answers"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/cot-modern-llms.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "inference-budget-test-time-compute",
+          "title": "Inference Budget (Test-Time Compute)",
+          "definition": "Inference budget, also called test-time compute, is the amount of computation an AI system spends after training to produce an answer—measured in tokens generated, internal \"thinking\" steps, tool calls, and wall-clock time. Before today's LLM era, most NLP systems (n-grams, feature-engineered classifiers, early RNNs/CNNs) ran a single, fixed forward pass at inference with minimal deliberation, no external tools, and little ability to trade more time for better quality. Modern LLMs, by contrast, can spend extra compute at inference to reason better: they may \"think\" via hidden intermediate tokens, plan-then-solve, branch and vote via self-consistency, retrieve documents (RAG), call tools, or run multi-step agents. Many products now expose this as a user setting (e.g., concise/fast vs. thorough/slow), effectively letting you choose a larger or smaller inference budget per query. Increasing test-time compute typically improves faithfulness, complex reasoning, and code/math reliability.",
+          "keywords": [
+            "test-time compute",
+            "inference time",
+            "planning-then-solving",
+            "self-consistency",
+            "thinking tokens",
+            "tool calls",
+            "latency vs. quality trade-off",
+            "reasoning depth"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "prompt-chaining",
+          "title": "Prompt Chaining",
+          "definition": "Prompt chaining is a technique for breaking down a complex task into a series of simpler, sequential LLM calls. The output from the first prompt (chain 1) is captured and used as part of the input for the second prompt (chain 2), and so on. This creates a multi-step workflow. For instance, a chain might first extract keywords from a document, then use those keywords to search the web, and finally use the search results to write a summary. This stepwise approach improves reliability and allows for more complex reasoning than a single, massive prompt.",
+          "keywords": [
+            "stepwise workflows",
+            "intermediate summaries"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "react-reason-+-act",
+          "title": "ReAct (Reason + Act)",
+          "definition": "ReAct is an \"agentic\" pattern that combines reasoning with action in an iterative loop. When given a complex goal, a ReAct agent first \"Reasons\" (using Chain of Thought) to form a plan and identify the next \"Act\" (a tool call). After executing the tool, it receives an \"Observation\" (the tool's output). The agent then loops, feeding this observation back into its reasoning step to assess progress, update its plan, and decide on the next action. This \"think-act loop\" continues until the final goal is achieved, allowing the agent to dynamically react to new information.",
+          "keywords": [
+            "think-act loops",
+            "observations",
+            "tool feedback"
+          ],
+          "hasViz": false,
+          "vizPath": null,
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "planning",
+          "title": "Planning",
+          "definition": "Planning is the cognitive process an agent uses to break down a large, ambiguous goal (e.g., \"plan a vacation\") into a smaller, concrete list of actionable steps. This \"decomposition\" is a critical reasoning task for the LLM. The agent might generate an explicit \"task list\" and then execute each item, or it might plan one step at a time using a ReAct-style loop. The quality of the agent's plan is often the single biggest determinant of its success.",
+          "keywords": [
+            "decomposition",
+            "task lists",
+            "evaluation"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/agents-orchestration.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        },
+        {
+          "id": "evaluation-metrics",
+          "title": "Evaluation Metrics",
+          "definition": "Evaluation metrics are the quantitative measures used to assess how well an LLM is performing. These can include traditional measures like \"accuracy\" on a set of questions. However, for generative models, new metrics are needed, such as \"faithfulness\" (does the summary match the source?), \"latency\" (how fast is the response?), and \"cost\" (how much did the API call cost?). Developers use these \"evals\" to test changes and ensure the model's quality, safety, and efficiency are improving.",
+          "keywords": [
+            "accuracy",
+            "faithfulness",
+            "latency",
+            "cost"
+          ],
+          "hasViz": true,
+          "vizPath": "visuals/safety-quality-system.html",
+          "vizIcon": null,
+          "mastery": 0,
+          "visited": false,
+          "question": null
+        }
+      ]
+    }
+  ]
+}
