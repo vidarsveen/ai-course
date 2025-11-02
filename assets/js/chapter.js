@@ -134,8 +134,8 @@ function activateTerm(index) {
 
     currentTermIndex = index;
 
-    // Reset mobile swipe state when navigating to new term
-    isMobileSwipeActive = false;
+    // Reset mobile viz state when navigating to new term
+    isMobileVizShowing = false;
     hideMobileVisualization();
 
     // Clear any existing focus timer

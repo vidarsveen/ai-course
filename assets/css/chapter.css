@@ -230,7 +230,7 @@ body {
         border-right: none;
     }
 
-    #viz-panel.mobile-swipe-active {
+    #viz-panel.mobile-viz-active {
         transform: translateX(0%);
     }
 
@@ -244,7 +244,7 @@ body {
         transform: translateX(0%);
     }
 
-    #terms-panel.mobile-swipe-hidden {
+    #terms-panel.mobile-viz-hidden {
         transform: translateX(-100%);
     }
 
