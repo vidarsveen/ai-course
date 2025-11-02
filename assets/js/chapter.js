@@ -172,6 +172,16 @@ function activateTerm(index) {
         showPlaceholder();
     }
 
+    // Show/hide mobile toggle button based on whether term has visualization
+    const toggleBtn = document.getElementById('mobile-viz-toggle');
+    if (toggleBtn) {
+        if (currentTerm.type === 'term' && currentTerm.hasViz) {
+            toggleBtn.style.display = 'flex';
+        } else {
+            toggleBtn.style.display = 'none';
+        }
+    }
+
     // Calculate which term number this is (excluding section headers)
     if (currentTerm.type === 'term') {
         const termsBeforeCurrent = allTerms.slice(0, index).filter(t => t.type === 'term').length;
