@@ -5,10 +5,8 @@ let currentTermIndex = 0;
 let chapterNum = 1;
 let focusTimer = null;  // Timer for 10-second focus requirement
 
-// ===== MOBILE SWIPE STATE =====
-let touchStartX = 0;
-let touchEndX = 0;
-let isMobileSwipeActive = false;  // Track if visualization is currently swiped in
+// ===== MOBILE TOGGLE STATE =====
+let isMobileVizShowing = false;  // Track if visualization is currently visible on mobile
 
 // ===== DOM ELEMENTS =====
 const termsContainer = document.getElementById('terms-container');
@@ -252,14 +250,9 @@ function setupEventListeners() {
         });
     }
 
-    // Mobile swipe handlers (only on mobile)
+    // Create mobile toggle button (only on mobile)
     if (window.innerWidth < 768) {
-        const mainFlexContainer = document.querySelector('.flex[style*="h-\\[calc"]') || document.querySelector('.flex');
-
-        if (mainFlexContainer) {
-            mainFlexContainer.addEventListener('touchstart', handleTouchStart, false);
-            mainFlexContainer.addEventListener('touchend', handleTouchEnd, false);
-        }
+        createMobileToggleButton();
     }
 }
 
@@ -276,34 +269,38 @@ function showPlaceholder() {
     vizFrame.src = '';
 }
 
-// ===== MOBILE SWIPE HANDLERS =====
-function handleTouchStart(e) {
-    touchStartX = e.changedTouches[0].screenX;
+// ===== MOBILE TOGGLE BUTTON =====
+function createMobileToggleButton() {
+    const mainContainer = document.querySelector('.flex');
+    if (!mainContainer) return;
+
+    // Create toggle button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'mobile-viz-toggle';
+    toggleBtn.className = 'mobile-viz-toggle';
+    toggleBtn.setAttribute('aria-label', 'Toggle visualization');
+    toggleBtn.innerHTML = '→';
+
+    // Add to main container
+    mainContainer.appendChild(toggleBtn);
+
+    // Add click handler
+    toggleBtn.addEventListener('click', handleMobileToggle);
 }
 
-function handleTouchEnd(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}
-
-function handleSwipe() {
-    const swipeThreshold = 50;  // Minimum swipe distance
-    const difference = touchStartX - touchEndX;
+function handleMobileToggle() {
     const currentTerm = allTerms[currentTermIndex];
 
-    // Only handle swipe if current term has visualization
+    // Only toggle if current term has visualization
     if (!currentTerm || currentTerm.type === 'section' || !currentTerm.hasViz) {
         return;
     }
 
-    // Swipe left (show visualization)
-    if (difference > swipeThreshold && !isMobileSwipeActive) {
-        isMobileSwipeActive = true;
+    isMobileVizShowing = !isMobileVizShowing;
+
+    if (isMobileVizShowing) {
         showMobileVisualization();
-    }
-    // Swipe right (hide visualization)
-    else if (difference < -swipeThreshold && isMobileSwipeActive) {
-        isMobileSwipeActive = false;
+    } else {
         hideMobileVisualization();
     }
 }
@@ -311,42 +308,34 @@ function handleSwipe() {
 function showMobileVisualization() {
     const vizPanel = document.getElementById('viz-panel');
     const termsPanel = document.getElementById('terms-panel');
+    const toggleBtn = document.getElementById('mobile-viz-toggle');
 
-    if (vizPanel && termsPanel) {
-        vizPanel.classList.add('mobile-swipe-active');
-        termsPanel.classList.add('mobile-swipe-hidden');
-        updateSwipeIndicator(true);
+    if (vizPanel) {
+        vizPanel.classList.add('mobile-viz-active');
+    }
+    if (termsPanel) {
+        termsPanel.classList.add('mobile-viz-hidden');
+    }
+    if (toggleBtn) {
+        toggleBtn.innerHTML = '←';
+        toggleBtn.classList.add('active');
     }
 }
 
 function hideMobileVisualization() {
     const vizPanel = document.getElementById('viz-panel');
     const termsPanel = document.getElementById('terms-panel');
+    const toggleBtn = document.getElementById('mobile-viz-toggle');
 
-    if (vizPanel && termsPanel) {
-        vizPanel.classList.remove('mobile-swipe-active');
-        termsPanel.classList.remove('mobile-swipe-hidden');
-        updateSwipeIndicator(false);
+    if (vizPanel) {
+        vizPanel.classList.remove('mobile-viz-active');
     }
-}
-
-function updateSwipeIndicator(isVizShowing) {
-    let indicator = document.getElementById('swipe-indicator');
-
-    if (!indicator) {
-        indicator = document.createElement('div');
-        indicator.id = 'swipe-indicator';
-        indicator.className = 'mobile-swipe-indicator';
-        const termsPanel = document.getElementById('terms-panel');
-        if (termsPanel) {
-            termsPanel.appendChild(indicator);
-        }
+    if (termsPanel) {
+        termsPanel.classList.remove('mobile-viz-hidden');
     }
-
-    if (isVizShowing) {
-        indicator.textContent = '← Swipe back to content';
-    } else {
-        indicator.textContent = '← Swipe for visualization';
+    if (toggleBtn) {
+        toggleBtn.innerHTML = '→';
+        toggleBtn.classList.remove('active');
     }
 }
 

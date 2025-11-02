@@ -171,9 +171,48 @@ body {
     }
 }
 
+/* ===== MOBILE TOGGLE BUTTON ===== */
+
+.mobile-viz-toggle {
+    display: none;
+    position: fixed;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(99, 102, 241, 0.9);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 15;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-viz-toggle:hover {
+    background-color: rgba(99, 102, 241, 1);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.mobile-viz-toggle.active {
+    left: auto;
+    right: 12px;
+}
+
 /* ===== MOBILE SWIPE LAYOUT (<768px) ===== */
 
 @media (max-width: 768px) {
+    .mobile-viz-toggle {
+        display: flex;
+    }
     .flex {
         flex-direction: column;
         position: relative;
@@ -235,6 +274,11 @@ body {
     /* Hide swipe indicator on desktop */
     .mobile-swipe-indicator {
         display: none;
+    }
+
+    /* Hide mobile toggle button on desktop */
+    .mobile-viz-toggle {
+        display: none !important;
     }
 
     #viz-panel {
